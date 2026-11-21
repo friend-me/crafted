@@ -1,0 +1,1675 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MTOJ · 在相思树下的域</title>
+<meta name="description" content="MTOJ（在相思树下的域）—— 并非 OI 的 OJ。坚持用人阴人，传承神经精神。">
+<meta property="og:title" content="MTOJ · 在相思树下的域">
+<meta property="og:description" content="并非 OI 的 OJ。当你闲得慌时，MTOJ 是个很好的乐子。">
+<meta property="og:type" content="website">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpolygon points='50,3 95,26 95,74 50,97 5,74 5,26' fill='%235F9FD6'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Math&display=swap" rel="stylesheet">
+<!-- 霞鹜文楷 Lite：开源楷体，诗歌用 -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lxgw-wenkai-lite-webfont@1.7.0/style.css">
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  :root{
+    --bg:#060B14;
+    --card:rgba(15,30,51,.62);
+    --card-border:rgba(95,159,214,.18);
+    --primary:#5F9FD6;
+    --primary-bright:#7FB8E8;
+    --accent:#8B7FE8;
+    --pink:#ED5F82;
+    --pink-deep:#D94469;
+    --pink-ink:#20050C;
+    --text:#E6F0FA;
+    --text-dim:#8AA3BF;
+    --text-dimmer:#5A7191;
+    --math:"STIX Two Math","Cambria Math","Latin Modern Math","TeX Gyre Termes Math","Noto Sans Math","Apple Symbols","Segoe UI Symbol",serif;
+    --kai:"LXGW WenKai Lite","Kaiti SC","STKaiti","KaiTi","楷体","Kaiti TC","BiauKai","Songti SC","STSong","SimSun",serif;
+  }
+  html{scroll-behavior:smooth}
+  body{
+    background:var(--bg);
+    color:var(--text);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","HarmonyOS Sans SC","Source Han Sans SC","Noto Sans CJK SC","Microsoft YaHei",sans-serif;
+    line-height:1.7;
+    overflow-x:hidden;
+    -webkit-font-smoothing:antialiased;
+  }
+  ::selection{background:rgba(237,95,130,.35);color:#fff}
+
+  /* 黑板粗体 */
+  .bb{
+    font-family:var(--math);
+    font-weight:400;
+    letter-spacing:.04em;
+    font-feature-settings:"ss01";
+  }
+
+  /* ---------- 背景层 ---------- */
+  #bgCanvas{
+    position:fixed;inset:0;z-index:0;pointer-events:none;
+    opacity:.55;
+  }
+  .bg-grid{
+    position:fixed;inset:0;z-index:0;pointer-events:none;
+    background-image:
+      linear-gradient(rgba(95,159,214,.06) 1px,transparent 1px),
+      linear-gradient(90deg,rgba(95,159,214,.06) 1px,transparent 1px);
+    background-size:56px 56px;
+    -webkit-mask-image:radial-gradient(ellipse 90% 70% at 50% 0%,#000 25%,transparent 100%);
+    mask-image:radial-gradient(ellipse 90% 70% at 50% 0%,#000 25%,transparent 100%);
+  }
+  .bg-glow{position:fixed;border-radius:50%;filter:blur(120px);z-index:0;pointer-events:none}
+  .glow-1{width:720px;height:720px;background:rgba(95,159,214,.17);top:-240px;left:-200px}
+  .glow-2{width:640px;height:640px;background:rgba(139,127,232,.13);top:200px;right:-240px}
+  .glow-3{width:520px;height:520px;background:rgba(95,159,214,.10);bottom:-220px;left:30%}
+
+  /* 鼠标聚光 */
+  .spotlight{
+    position:fixed;left:0;top:0;width:640px;height:640px;
+    border-radius:50%;pointer-events:none;z-index:1;
+    background:radial-gradient(circle,rgba(95,159,214,.10),rgba(139,127,232,.05) 40%,transparent 65%);
+    transform:translate(-50%,-50%);
+    opacity:0;transition:opacity .4s;
+    mix-blend-mode:screen;
+    will-change:transform;
+  }
+
+  /* 滚动进度 */
+  .progress-bar{
+    position:fixed;top:0;left:0;height:3px;width:0;z-index:300;
+    background:linear-gradient(90deg,var(--primary),var(--accent),var(--pink));
+    box-shadow:0 0 12px rgba(237,95,130,.5);
+    transition:width .08s linear;
+  }
+
+  /* ---------- 导航 ---------- */
+  .nav{
+    position:sticky;top:0;z-index:100;
+    backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+    background:rgba(6,11,20,.55);
+    border-bottom:1px solid transparent;
+    transition:background .3s,border-color .3s;
+  }
+  .nav.scrolled{background:rgba(6,11,20,.88);border-bottom-color:rgba(95,159,214,.15)}
+  .nav-inner{
+    max-width:1180px;margin:0 auto;padding:0 24px;height:64px;
+    display:flex;align-items:center;gap:26px;
+  }
+  .brand{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--text);flex:none}
+  .hex-mini{
+    width:22px;height:25px;
+    background:linear-gradient(135deg,var(--primary),var(--accent));
+    clip-path:polygon(50% 0%,100% 25%,100% 75%,50% 100%,0% 75%,0% 25%);
+    box-shadow:0 0 14px rgba(95,159,214,.5);
+  }
+  .brand-text{font-size:18px;line-height:1;color:#DCEBF9}
+  .nav-links{display:flex;gap:22px;margin-left:auto}
+  .nav-links a{
+    color:var(--text-dim);text-decoration:none;font-size:14px;
+    transition:color .2s;position:relative;padding:6px 0;
+  }
+  .nav-links a::after{
+    content:'';position:absolute;left:0;right:0;bottom:0;height:2px;
+    background:linear-gradient(90deg,var(--primary),var(--accent));
+    transform:scaleX(0);transform-origin:left;transition:transform .25s;
+    border-radius:2px;
+  }
+  .nav-links a:hover,.nav-links a.active{color:var(--primary-bright)}
+  .nav-links a.active::after{transform:scaleX(1)}
+  .nav-cta{
+    flex:none;
+    padding:8px 18px;border-radius:9px;
+    background:linear-gradient(135deg,var(--primary),#4A87C0);
+    color:#04101F;font-size:14px;font-weight:700;text-decoration:none;
+    transition:transform .2s,box-shadow .2s;
+  }
+  .nav-cta:hover{transform:translateY(-1px);box-shadow:0 8px 20px -8px rgba(95,159,214,.7)}
+
+  /* ---------- Hero ---------- */
+  .hero{
+    position:relative;z-index:1;
+    max-width:1180px;margin:0 auto;
+    padding:80px 24px 20px;
+  }
+  .hex-float{
+    position:absolute;pointer-events:none;z-index:0;
+    background:rgba(95,159,214,.045);
+    border:1px solid rgba(95,159,214,.14);
+    clip-path:polygon(50% 0%,100% 25%,100% 75%,50% 100%,0% 75%,0% 25%);
+    animation:floatY 9s ease-in-out infinite;
+  }
+  .hf1{width:150px;height:170px;left:2%;top:14%;animation-delay:0s}
+  .hf2{width:90px;height:102px;right:6%;top:12%;animation-delay:-3s;background:rgba(139,127,232,.05);border-color:rgba(139,127,232,.16)}
+  .hf3{width:56px;height:64px;right:24%;bottom:6%;animation-delay:-6s}
+  @keyframes floatY{
+    0%,100%{transform:translateY(0) rotate(0deg)}
+    50%{transform:translateY(-22px) rotate(8deg)}
+  }
+
+  .hero-grid{
+    display:grid;
+    grid-template-columns:1.06fr .94fr;
+    gap:52px;
+    align-items:center;
+    position:relative;z-index:1;
+  }
+  .hero-left{text-align:left}
+  .hero-badge{
+    display:inline-block;padding:6px 16px;border-radius:999px;
+    border:1px solid rgba(95,159,214,.35);
+    background:rgba(95,159,214,.08);
+    color:var(--primary-bright);
+    font-size:13px;letter-spacing:.04em;
+    margin-bottom:24px;
+  }
+  .hero-brand-row{
+    display:flex;align-items:center;gap:22px;
+    margin-bottom:10px;flex-wrap:wrap;
+  }
+  .hex-logo-wrap{
+    position:relative;width:92px;height:102px;flex:none;
+    display:flex;align-items:center;justify-content:center;
+  }
+  .hex-logo-wrap::before{
+    content:'';position:absolute;inset:-12px;
+    border-radius:50%;
+    background:conic-gradient(from 0deg,transparent,rgba(95,159,214,.55),transparent 40%,rgba(139,127,232,.45),transparent 70%);
+    filter:blur(13px);
+    animation:spin 8s linear infinite;
+    z-index:-1;
+  }
+  @keyframes spin{to{transform:rotate(360deg)}}
+  .hex-logo{
+    width:78px;height:88px;
+    background:linear-gradient(135deg,var(--primary),var(--accent));
+    clip-path:polygon(50% 0%,100% 25%,100% 75%,50% 100%,0% 75%,0% 25%);
+    display:flex;align-items:center;justify-content:center;
+    filter:drop-shadow(0 0 26px rgba(95,159,214,.55));
+    animation:pulseGlow 3.6s ease-in-out infinite;
+  }
+  @keyframes pulseGlow{
+    0%,100%{filter:drop-shadow(0 0 22px rgba(95,159,214,.4))}
+    50%{filter:drop-shadow(0 0 40px rgba(95,159,214,.75))}
+  }
+  .hex-logo .bb{font-size:26px;color:#06101F;letter-spacing:.02em}
+  .hero-title{
+    font-size:clamp(48px,7.6vw,86px);
+    line-height:.95;
+    letter-spacing:.01em;
+    background:linear-gradient(180deg,#EAF4FF 0%,#9ECBF0 45%,#5F9FD6 100%);
+    background-size:100% 200%;
+    -webkit-background-clip:text;background-clip:text;color:transparent;
+    animation:sheen 6s ease-in-out infinite;
+    white-space:nowrap;
+  }
+  @keyframes sheen{
+    0%,100%{background-position:0% 0%}
+    50%{background-position:0% 100%}
+  }
+  .hero-cn{
+    font-size:clamp(14px,2.1vw,18px);
+    color:var(--text-dim);letter-spacing:.24em;
+    margin-bottom:20px;
+  }
+  .hero-slogan{
+    font-size:clamp(19px,2.8vw,26px);
+    font-weight:700;color:#D8E9F8;margin-bottom:12px;
+    line-height:1.5;
+  }
+  .hero-desc{
+    color:var(--text-dim);font-size:15.5px;
+    max-width:520px;margin-bottom:26px;
+  }
+  .hero-btns{display:flex;gap:14px;justify-content:flex-start;flex-wrap:wrap}
+  .btn{
+    display:inline-flex;align-items:center;justify-content:center;gap:8px;
+    padding:13px 26px;border-radius:12px;
+    font-size:15px;font-weight:700;text-decoration:none;
+    border:1px solid transparent;
+    transition:transform .2s,box-shadow .2s,background .2s;
+  }
+  .btn-pink{
+    background:linear-gradient(135deg,var(--pink),var(--pink-deep));
+    color:var(--pink-ink);
+    box-shadow:0 8px 24px -8px rgba(237,95,130,.55);
+  }
+  .btn-pink:hover{
+    transform:translateY(-2px);
+    box-shadow:0 14px 34px -8px rgba(237,95,130,.85);
+  }
+  .btn-ghost{
+    border-color:rgba(95,159,214,.35);
+    color:var(--primary-bright);
+    background:rgba(95,159,214,.06);
+  }
+  .btn-ghost:hover{background:rgba(95,159,214,.14);transform:translateY(-2px)}
+  .hero-hint{margin-top:14px;font-size:13px;color:var(--text-dimmer)}
+
+  /* Hero 右侧 */
+  .hero-right{display:flex;flex-direction:column;gap:12px;min-width:0}
+  .terminal{
+    width:100%;text-align:left;
+    border-radius:12px;overflow:hidden;
+    border:1px solid rgba(95,159,214,.2);
+    background:rgba(8,16,28,.75);
+    backdrop-filter:blur(10px);
+    box-shadow:0 20px 50px -20px rgba(0,0,0,.8);
+  }
+  .term-bar{
+    display:flex;align-items:center;gap:7px;
+    padding:10px 14px;
+    background:rgba(95,159,214,.07);
+    border-bottom:1px solid rgba(95,159,214,.12);
+  }
+  .term-dot{width:10px;height:10px;border-radius:50%;background:#3A4A5E}
+  .term-dot.r{background:#E06C75}
+  .term-dot.y{background:#E5C07B}
+  .term-dot.g{background:#98C379}
+  .term-title{margin-left:8px;font-size:12px;color:var(--text-dimmer);letter-spacing:.05em}
+  .term-body{
+    padding:15px 17px;font-family:"JetBrains Mono","Fira Code",Consolas,"Courier New",monospace;
+    font-size:13px;line-height:1.9;color:#B9CDE3;
+  }
+  .term-line{opacity:0;translate:0 6px;transition:opacity .5s,translate .5s}
+  .term-line.on{opacity:1;translate:0 0}
+  .term-prompt{color:var(--primary)}
+  .term-cmd{color:#DCEBF9}
+  .term-out{color:var(--text-dim)}
+  .term-cursor{
+    display:inline-block;width:8px;height:14px;background:var(--primary-bright);
+    vertical-align:-2px;margin-left:2px;
+    animation:blink 1.05s steps(1) infinite;
+  }
+  @keyframes blink{50%{opacity:0}}
+
+  .hero-side-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+  .side-card{
+    padding:11px 10px;border-radius:12px;
+    border:1px solid var(--card-border);
+    background:var(--card);
+    text-align:center;
+    backdrop-filter:blur(10px);
+  }
+  .side-card span{display:block;font-size:11px;color:var(--text-dimmer);letter-spacing:.08em;margin-bottom:4px}
+  .side-card strong{font-size:12.5px;color:#C8DDF2;font-weight:600;line-height:1.4;display:block}
+
+  /* ---------- 数据条 ---------- */
+  .stats{
+    position:relative;z-index:1;
+    max-width:1000px;margin:0 auto;padding:6px 24px 12px;
+    display:grid;grid-template-columns:repeat(4,1fr);gap:12px;
+  }
+  .stat{
+    text-align:center;padding:20px 10px;border-radius:14px;
+    border:1px solid var(--card-border);
+    background:var(--card);
+    backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+    transition:border-color .3s,box-shadow .3s,transform .3s;
+  }
+  .stat:hover{border-color:rgba(95,159,214,.4);box-shadow:0 16px 34px -18px rgba(95,159,214,.5);transform:translateY(-3px)}
+  .stat-num{
+    font-size:clamp(26px,4.4vw,36px);font-weight:800;line-height:1.1;
+    background:linear-gradient(180deg,#EAF4FF,#5F9FD6);
+    -webkit-background-clip:text;background-clip:text;color:transparent;
+  }
+  .stat-label{font-size:12.5px;color:var(--text-dim);margin-top:4px}
+
+  /* ---------- Marquee ---------- */
+  .marquee{
+    position:relative;z-index:1;
+    overflow:hidden;padding:10px 0;margin-top:4px;
+    border-top:1px solid rgba(95,159,214,.12);
+    border-bottom:1px solid rgba(95,159,214,.12);
+    background:rgba(10,20,35,.4);
+    -webkit-mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent);
+    mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent);
+  }
+  .marquee-track{
+    display:flex;width:max-content;
+    animation:marquee 34s linear infinite;
+  }
+  .marquee-group{display:flex;align-items:center;gap:44px;padding-right:44px}
+  .marquee-group span{
+    font-size:13.5px;font-weight:700;letter-spacing:.14em;
+    color:rgba(138,163,191,.85);white-space:nowrap;
+    display:inline-flex;align-items:center;gap:44px;
+  }
+  .marquee-group span::after{
+    content:'';width:6px;height:6px;transform:rotate(45deg);
+    background:rgba(95,159,214,.55);flex:none;
+  }
+  @keyframes marquee{to{transform:translateX(-50%)}}
+
+  /* ---------- 通用 Section（整体收紧） ---------- */
+  .section{
+    position:relative;z-index:1;
+    max-width:1120px;margin:0 auto;padding:64px 24px;
+    scroll-margin-top:80px;
+  }
+  .section-head{text-align:center;margin-bottom:36px}
+  .kicker{
+    display:inline-block;font-size:12px;font-weight:700;
+    letter-spacing:.18em;color:var(--primary);
+    margin-bottom:12px;padding:4px 12px;border-radius:6px;
+    background:rgba(95,159,214,.09);
+    border:1px solid rgba(95,159,214,.2);
+  }
+  .section-head h2{
+    font-size:clamp(26px,3.6vw,34px);font-weight:800;
+    letter-spacing:-.01em;margin-bottom:12px;
+  }
+  .section-head p{color:var(--text-dim);font-size:15px}
+
+  /* ---------- 理念（两栏紧凑） ---------- */
+  #philosophy{padding-top:56px;padding-bottom:56px}
+  .philosophy-card{
+    display:grid;
+    grid-template-columns:.92fr 1.08fr;
+    gap:40px;
+    align-items:center;
+    padding:40px 40px;
+    border-radius:22px;
+    background:linear-gradient(135deg,rgba(95,159,214,.12),rgba(139,127,232,.07));
+    border:1px solid rgba(95,159,214,.22);
+    position:relative;overflow:hidden;
+  }
+  .philosophy-card::before{
+    content:'';position:absolute;top:-60%;left:-20%;width:140%;height:220%;
+    background:radial-gradient(circle,rgba(95,159,214,.12),transparent 55%);
+    animation:quoteDrift 12s ease-in-out infinite alternate;
+    pointer-events:none;
+  }
+  @keyframes quoteDrift{
+    from{transform:translate(-6%,-4%)}
+    to{transform:translate(6%,4%)}
+  }
+  .ph-left{position:relative;z-index:1}
+  .ph-left h2{
+    font-size:clamp(24px,3.2vw,32px);
+    line-height:1.28;font-weight:800;
+    margin-top:12px;
+  }
+  .ph-right{
+    position:relative;z-index:1;
+    border-left:1px solid rgba(95,159,214,.18);
+    padding-left:40px;
+  }
+  .ph-quote{
+    font-size:clamp(17px,2.2vw,21px);
+    font-weight:600;color:#DCEBF9;line-height:1.55;
+    margin-bottom:12px;
+  }
+  .ph-desc{color:var(--text-dim);font-size:14.5px;margin-bottom:16px;line-height:1.8}
+  .ph-tags{display:flex;gap:8px;flex-wrap:wrap}
+  .ph-tag{
+    font-size:12px;padding:4px 12px;border-radius:999px;
+    border:1px solid rgba(95,159,214,.28);
+    color:var(--primary-bright);
+    background:rgba(95,159,214,.08);
+  }
+
+  /* ---------- 特点 ---------- */
+  .feature-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}
+  .feature-card{
+    padding:28px 26px;border-radius:16px;
+    background:var(--card);
+    border:1px solid var(--card-border);
+    backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+    position:relative;overflow:hidden;
+    transition:border-color .3s,box-shadow .3s;
+    transform-style:preserve-3d;
+    will-change:transform;
+  }
+  .feature-card::before{
+    content:'';position:absolute;top:0;left:0;right:0;height:1px;
+    background:linear-gradient(90deg,transparent,rgba(95,159,214,.6),transparent);
+    opacity:0;transition:opacity .3s;
+  }
+  .feature-card::after{
+    content:'';position:absolute;inset:0;pointer-events:none;
+    background:radial-gradient(320px circle at var(--mx,50%) var(--my,50%),rgba(95,159,214,.13),transparent 60%);
+    opacity:0;transition:opacity .3s;
+  }
+  .feature-card:hover{border-color:rgba(95,159,214,.42);box-shadow:0 24px 50px -26px rgba(95,159,214,.55)}
+  .feature-card:hover::before,.feature-card:hover::after{opacity:1}
+  .feat-icon{
+    display:inline-block;font-size:12px;font-weight:800;
+    color:var(--primary);letter-spacing:.1em;
+    padding:2px 9px;margin-bottom:14px;
+    border:1px solid rgba(95,159,214,.3);border-radius:6px;
+    position:relative;z-index:1;
+  }
+  .feature-card h3{font-size:19px;margin-bottom:10px;font-weight:700;position:relative;z-index:1}
+  .feature-card p{color:var(--text-dim);font-size:14.5px;position:relative;z-index:1;line-height:1.75}
+  .feat-bg-num{
+    position:absolute;right:14px;bottom:2px;
+    font-size:84px;font-weight:900;line-height:1;
+    color:rgba(95,159,214,.05);
+    pointer-events:none;user-select:none;
+  }
+
+  /* ---------- 诗歌 + 命名野史（并排两栏） ---------- */
+  .poem-naming-grid{
+    display:grid;
+    grid-template-columns:1.05fr .95fr;
+    gap:20px;
+    align-items:stretch;
+  }
+  .poem-card{
+    padding:36px 34px 32px;
+    border-radius:20px;
+    background:radial-gradient(ellipse at 0% 0%,rgba(95,159,214,.14),transparent 65%),var(--card);
+    border:1px solid var(--card-border);
+    backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+    position:relative;overflow:hidden;
+    text-align:left;
+    display:flex;flex-direction:column;
+  }
+  .poem-card h2{
+    font-family:var(--kai);
+    font-size:clamp(26px,3.4vw,34px);
+    font-weight:400;
+    letter-spacing:.1em;
+    color:#EAF4FF;
+    margin-bottom:6px;
+    text-align:left;
+  }
+  .poem-card h2::after{
+    content:'';
+    display:block;
+    width:44px;height:2px;
+    margin:14px 0 0;
+    background:linear-gradient(90deg,var(--primary),var(--pink));
+    border-radius:2px;
+    opacity:.9;
+  }
+  .poem{
+    font-family:var(--kai);
+    margin-top:22px;
+  }
+  .poem p{
+    font-size:clamp(16px,2.1vw,19px);line-height:2.05;
+    color:#D6E5F5;letter-spacing:.14em;
+    font-weight:400;
+  }
+  .poem-line{display:block;opacity:0;translate:0 14px;transition:opacity .7s,translate .7s}
+  .poem-line.on{opacity:1;translate:0 0}
+  .poem-note{
+    margin-top:22px;
+    padding-top:18px;
+    border-top:1px dashed rgba(95,159,214,.25);
+    color:var(--text-dim);font-size:13.5px;line-height:1.9;
+    letter-spacing:.02em;
+    position:relative;z-index:1;
+  }
+  .poem-note::before{
+    content:'· 背景 ·';
+    display:block;
+    font-size:11px;letter-spacing:.18em;
+    color:var(--primary);
+    margin-bottom:10px;
+    font-weight:700;
+  }
+
+  .naming-card{
+    padding:36px 34px 32px;
+    border-radius:20px;
+    background:var(--card);
+    border:1px solid var(--card-border);
+    backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+    position:relative;overflow:hidden;
+    display:flex;flex-direction:column;
+  }
+  .naming-card .kicker{margin-bottom:10px}
+  .naming-card h2{
+    font-size:clamp(24px,3.2vw,32px);
+    font-weight:800;
+    letter-spacing:-.01em;
+    margin-bottom:8px;
+    text-align:left;
+  }
+  .naming-sub{
+    color:var(--text-dim);font-size:13.5px;
+    margin-bottom:26px;line-height:1.6;
+  }
+  .timeline{position:relative;padding-left:24px;flex:1}
+  .timeline::before{
+    content:'';position:absolute;left:5px;top:6px;bottom:6px;width:2px;
+    background:linear-gradient(180deg,var(--primary),rgba(139,127,232,.4),transparent);
+  }
+  .tl-item{position:relative;margin-bottom:24px}
+  .tl-item:last-child{margin-bottom:0}
+  .tl-dot{
+    position:absolute;left:-24px;top:6px;width:12px;height:12px;
+    border-radius:50%;background:var(--primary);
+    box-shadow:0 0 0 4px rgba(95,159,214,.15),0 0 14px rgba(95,159,214,.6);
+  }
+  .tl-item.warn .tl-dot{
+    background:var(--accent);
+    box-shadow:0 0 0 4px rgba(139,127,232,.15),0 0 14px rgba(139,127,232,.6);
+  }
+  .tl-body h3{font-size:16.5px;margin-bottom:5px;font-weight:700}
+  .tl-body p{color:var(--text-dim);font-size:13.5px;line-height:1.8}
+  .tl-body a{color:var(--primary-bright);text-decoration:none;border-bottom:1px dashed rgba(127,184,232,.4)}
+  .tl-body a:hover{color:#A9D4F7}
+
+  /* ---------- 比赛 ---------- */
+  .contest-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+  .contest-card{
+    display:flex;flex-direction:column;
+    text-decoration:none;color:inherit;
+    padding:26px 24px;border-radius:14px;
+    background:var(--card);
+    border:1px solid var(--card-border);
+    backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+    position:relative;overflow:hidden;
+    transition:border-color .3s,background .3s,box-shadow .3s;
+    transform-style:preserve-3d;
+    will-change:transform;
+  }
+  .contest-card::before{
+    content:'';position:absolute;inset:0;border-radius:14px;padding:1px;
+    background:linear-gradient(135deg,rgba(95,159,214,.7),rgba(139,127,232,.55),rgba(95,159,214,.1));
+    -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);
+    -webkit-mask-composite:xor;mask-composite:exclude;
+    opacity:0;transition:opacity .3s;pointer-events:none;
+  }
+  .contest-card::after{
+    content:'';position:absolute;inset:0;pointer-events:none;
+    background:radial-gradient(360px circle at var(--mx,50%) var(--my,50%),rgba(95,159,214,.16),transparent 60%);
+    opacity:0;transition:opacity .3s;
+  }
+  .contest-card:hover{
+    border-color:rgba(95,159,214,.35);
+    background:rgba(20,38,62,.78);
+    box-shadow:0 24px 50px -26px rgba(95,159,214,.55);
+  }
+  .contest-card:hover::before,.contest-card:hover::after{opacity:1}
+  .contest-num{
+    position:absolute;right:20px;top:12px;
+    font-size:42px;font-weight:900;line-height:1;
+    color:rgba(95,159,214,.09);
+    pointer-events:none;
+  }
+  .contest-tag{
+    display:inline-block;font-size:11.5px;font-weight:800;
+    letter-spacing:.08em;color:var(--primary-bright);
+    padding:2px 9px;margin-bottom:12px;border-radius:5px;
+    background:rgba(95,159,214,.12);
+    border:1px solid rgba(95,159,214,.25);
+    position:relative;z-index:1;align-self:flex-start;
+  }
+  .contest-card h3{font-size:18px;margin-bottom:10px;font-weight:700;position:relative;z-index:1}
+  .contest-preview{
+    font-size:13px;color:var(--text-dim);line-height:1.65;
+    margin-bottom:14px;padding-left:11px;
+    border-left:2px solid rgba(95,159,214,.25);
+    position:relative;z-index:1;flex:1;
+  }
+  .contest-arrow{
+    font-size:13px;color:var(--primary);position:relative;z-index:1;
+    display:inline-flex;align-items:center;gap:5px;
+    transition:gap .25s;
+  }
+  .contest-card:hover .contest-arrow{gap:10px}
+
+  /* ---------- 一些有趣的题 ---------- */
+  .problem-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+  .problem-card{
+    display:flex;flex-direction:column;
+    text-decoration:none;color:inherit;
+    padding:22px 20px 18px;border-radius:14px;
+    background:var(--card);
+    border:1px solid var(--card-border);
+    backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+    position:relative;overflow:hidden;
+    transition:border-color .3s,background .3s,box-shadow .3s;
+    transform-style:preserve-3d;will-change:transform;
+  }
+  .problem-card::before{
+    content:'';position:absolute;inset:0;border-radius:14px;padding:1px;
+    background:linear-gradient(135deg,rgba(95,159,214,.7),rgba(139,127,232,.55),rgba(95,159,214,.1));
+    -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);
+    -webkit-mask-composite:xor;mask-composite:exclude;
+    opacity:0;transition:opacity .3s;pointer-events:none;
+  }
+  .problem-card::after{
+    content:'';position:absolute;inset:0;pointer-events:none;
+    background:radial-gradient(300px circle at var(--mx,50%) var(--my,50%),rgba(95,159,214,.15),transparent 60%);
+    opacity:0;transition:opacity .3s;
+  }
+  .problem-card:hover{
+    border-color:rgba(95,159,214,.35);
+    background:rgba(20,38,62,.78);
+    box-shadow:0 24px 50px -26px rgba(95,159,214,.55);
+  }
+  .problem-card:hover::before,.problem-card:hover::after{opacity:1}
+  .problem-top{
+    display:flex;align-items:center;justify-content:space-between;
+    margin-bottom:11px;position:relative;z-index:1;
+  }
+  .p-tag{
+    font-size:11px;font-weight:800;letter-spacing:.12em;
+    color:var(--primary-bright);
+    padding:2px 8px;border-radius:4px;
+    background:rgba(95,159,214,.13);
+    border:1px solid rgba(95,159,214,.28);
+  }
+  .p-idx{
+    font-size:11.5px;font-weight:700;color:var(--text-dimmer);letter-spacing:.06em;
+  }
+  .problem-card h3{
+    font-size:15.5px;font-weight:700;line-height:1.45;
+    margin-bottom:10px;position:relative;z-index:1;
+    word-break:break-word;
+  }
+  .p-preview{
+    font-size:13px;color:var(--text-dim);line-height:1.7;
+    padding-left:11px;border-left:2px solid rgba(95,159,214,.28);
+    margin-bottom:12px;position:relative;z-index:1;
+    flex:1;
+  }
+  .p-preview .p-line{display:block}
+  .p-open{
+    font-size:12.5px;color:var(--primary);position:relative;z-index:1;
+    display:inline-flex;align-items:center;gap:5px;
+    transition:gap .25s;
+  }
+  .problem-card:hover .p-open{gap:8px}
+
+  /* ---------- 精选板绘 ---------- */
+  .gallery-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+  .gallery-item{
+    border-radius:14px;overflow:hidden;
+    background:var(--card);
+    border:1px solid var(--card-border);
+    transition:border-color .3s,box-shadow .3s,transform .3s;
+    cursor:zoom-in;
+  }
+  .gallery-item:hover{
+    border-color:rgba(95,159,214,.45);
+    box-shadow:0 24px 50px -26px rgba(95,159,214,.55);
+    transform:translateY(-3px);
+  }
+  .gallery-frame{
+    position:relative;aspect-ratio:16/9;
+    background:
+      radial-gradient(circle at 30% 30%,rgba(95,159,214,.12),transparent 60%),
+      radial-gradient(circle at 70% 70%,rgba(139,127,232,.1),transparent 60%),
+      rgba(8,16,28,.7);
+    overflow:hidden;
+  }
+  .gallery-frame img{
+    width:100%;height:100%;object-fit:cover;display:block;
+    transition:transform .5s cubic-bezier(.2,.7,.2,1),opacity .4s;
+  }
+  .gallery-item:hover .gallery-frame img{transform:scale(1.05)}
+  .gallery-fallback{
+    position:absolute;inset:0;
+    display:none;flex-direction:column;align-items:center;justify-content:center;
+    gap:10px;text-align:center;padding:20px;
+    color:var(--text-dim);font-size:13px;line-height:1.7;
+  }
+  .gallery-fallback a{
+    color:var(--primary-bright);text-decoration:none;
+    border-bottom:1px dashed rgba(127,184,232,.5);padding-bottom:1px;
+  }
+  .gallery-fallback a:hover{color:#A9D4F7}
+  .img-error img{display:none}
+  .img-error .gallery-fallback{display:flex}
+  .gallery-caption{
+    display:flex;align-items:center;justify-content:space-between;
+    padding:11px 15px;
+    border-top:1px solid rgba(95,159,214,.1);
+  }
+  .gallery-tag{
+    font-size:11.5px;font-weight:800;letter-spacing:.08em;
+    color:var(--primary-bright);
+    padding:2px 8px;border-radius:4px;
+    background:rgba(95,159,214,.12);
+    border:1px solid rgba(95,159,214,.25);
+  }
+  .gallery-name{font-size:13px;color:var(--text-dim);font-weight:600}
+  .gallery-zoom{
+    font-size:11.5px;color:var(--text-dimmer);letter-spacing:.06em;
+    display:inline-flex;align-items:center;gap:4px;
+  }
+
+  /* ---------- 灯箱 ---------- */
+  .lightbox{
+    position:fixed;inset:0;z-index:500;
+    background:rgba(3,7,14,.94);
+    backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+    display:flex;align-items:center;justify-content:center;
+    opacity:0;visibility:hidden;
+    transition:opacity .3s,visibility .3s;
+    padding:32px;
+  }
+  .lightbox.open{opacity:1;visibility:visible}
+  .lightbox img{
+    max-width:92vw;max-height:82vh;
+    border-radius:12px;
+    box-shadow:0 30px 80px -20px rgba(0,0,0,.9),0 0 0 1px rgba(95,159,214,.3);
+    transform:scale(.96);transition:transform .3s;
+  }
+  .lightbox.open img{transform:scale(1)}
+  .lightbox-cap{
+    position:absolute;left:0;right:0;bottom:22px;text-align:center;
+    color:var(--text-dim);font-size:13.5px;letter-spacing:.08em;
+  }
+  .lightbox-cap a{
+    color:var(--primary-bright);text-decoration:none;
+    margin-left:12px;border-bottom:1px dashed rgba(127,184,232,.5);
+  }
+  .lightbox-close{
+    position:absolute;top:20px;right:20px;
+    width:44px;height:44px;border-radius:12px;
+    border:1px solid rgba(95,159,214,.35);
+    background:rgba(10,20,35,.85);
+    color:var(--primary-bright);font-size:20px;cursor:pointer;
+    display:flex;align-items:center;justify-content:center;
+    transition:background .2s,transform .2s;
+  }
+  .lightbox-close:hover{background:rgba(95,159,214,.2);transform:rotate(90deg)}
+
+  /* ---------- 关于 ---------- */
+  .info-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+  .info-card{
+    padding:22px 16px;border-radius:14px;text-align:center;
+    background:var(--card);border:1px solid var(--card-border);
+    transition:border-color .3s,transform .3s,box-shadow .3s;
+  }
+  .info-card:hover{border-color:rgba(95,159,214,.4);transform:translateY(-3px);box-shadow:0 18px 36px -20px rgba(95,159,214,.5)}
+  .info-card h4{
+    font-size:12px;color:var(--primary);letter-spacing:.08em;
+    margin-bottom:8px;font-weight:700;
+  }
+  .info-card p{font-size:14px;color:#C8DDF2;font-weight:600}
+
+  /* ---------- CTA ---------- */
+  .cta-section{position:relative;z-index:1;padding:16px 24px 64px}
+  .cta-card{
+    max-width:900px;margin:0 auto;padding:44px 36px;text-align:center;
+    border-radius:24px;
+    background:linear-gradient(135deg,rgba(95,159,214,.16),rgba(139,127,232,.1));
+    border:1px solid rgba(95,159,214,.28);
+    backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+    position:relative;overflow:hidden;
+  }
+  .cta-card::before{
+    content:'';position:absolute;top:-50%;left:-10%;width:120%;height:200%;
+    background:radial-gradient(circle,rgba(95,159,214,.14),transparent 55%);
+    animation:quoteDrift 14s ease-in-out infinite alternate;
+    pointer-events:none;
+  }
+  .cta-card h2{font-size:clamp(24px,3.6vw,32px);margin-bottom:12px;font-weight:800;position:relative}
+  .cta-card > p{color:var(--text-dim);margin-bottom:26px;position:relative;font-size:15px}
+  .cta-card .hero-btns{position:relative;justify-content:center}
+
+  /* ---------- 页脚 ---------- */
+  footer{
+    position:relative;z-index:1;
+    border-top:1px solid rgba(95,159,214,.12);
+    padding:36px 24px;
+  }
+  .footer-inner{
+    max-width:1120px;margin:0 auto;
+    display:flex;flex-direction:column;align-items:center;gap:16px;text-align:center;
+  }
+  .footer-brand{display:flex;align-items:center;gap:10px;font-weight:700;color:#C8DDF2;font-size:16px}
+  .footer-links{display:flex;gap:24px;flex-wrap:wrap;justify-content:center}
+  .footer-links a{
+    color:var(--text-dim);text-decoration:none;font-size:13.5px;
+    transition:color .2s;
+  }
+  .footer-links a:hover{color:var(--primary-bright)}
+  .footer-copy{color:var(--text-dimmer);font-size:12.5px}
+
+  /* ---------- 回到顶部 ---------- */
+  .back-top{
+    position:fixed;right:24px;bottom:24px;z-index:150;
+    width:46px;height:46px;border-radius:12px;
+    border:1px solid rgba(95,159,214,.35);
+    background:rgba(10,20,35,.85);
+    backdrop-filter:blur(10px);
+    color:var(--primary-bright);font-size:18px;cursor:pointer;
+    display:flex;align-items:center;justify-content:center;
+    opacity:0;visibility:hidden;translate:0 12px;
+    transition:opacity .3s,visibility .3s,translate .3s,background .2s;
+  }
+  .back-top.show{opacity:1;visibility:visible;translate:0 0}
+  .back-top:hover{background:rgba(95,159,214,.18)}
+
+  /* ---------- 动效 ---------- */
+  .reveal{
+    opacity:0;translate:0 26px;
+    transition:opacity .8s cubic-bezier(.2,.7,.2,1),translate .8s cubic-bezier(.2,.7,.2,1);
+  }
+  .reveal.in{opacity:1;translate:0 0}
+
+  /* ---------- 响应式 ---------- */
+  @media (max-width:1060px){
+    .nav-links{display:none}
+    .nav-inner{gap:16px}
+    .nav-cta{margin-left:auto}
+  }
+  @media (max-width:900px){
+    .hero-grid{grid-template-columns:1fr;gap:36px}
+    .hero-right{max-width:560px;width:100%}
+    .hero{padding-top:60px}
+    .philosophy-card{grid-template-columns:1fr;gap:24px;padding:32px 26px}
+    .ph-right{border-left:none;border-top:1px solid rgba(95,159,214,.18);padding-left:0;padding-top:24px}
+    .feature-grid,.contest-grid{grid-template-columns:1fr}
+    .problem-grid{grid-template-columns:repeat(2,1fr)}
+    .info-grid{grid-template-columns:repeat(2,1fr)}
+    .spotlight{display:none}
+    .poem-naming-grid{grid-template-columns:1fr;gap:16px}
+  }
+  @media (max-width:640px){
+    .stats{grid-template-columns:repeat(2,1fr)}
+    .hero{padding-top:48px}
+    .section{padding:52px 20px}
+    #philosophy{padding-top:44px;padding-bottom:44px}
+    .poem-card,.naming-card,.philosophy-card,.cta-card{padding:28px 22px}
+    .hero-brand-row{gap:14px}
+    .hex-logo-wrap{width:72px;height:80px}
+    .hex-logo{width:62px;height:70px}
+    .hex-logo .bb{font-size:21px}
+    .hero-title{font-size:clamp(38px,11vw,56px)}
+    .hero-cn{letter-spacing:.16em}
+    .hero-side-cards{grid-template-columns:repeat(3,1fr)}
+    .side-card{padding:9px 6px}
+    .side-card strong{font-size:11.5px}
+    .hf1,.hf2,.hf3{display:none}
+    .back-top{right:16px;bottom:16px}
+    .problem-grid,.gallery-grid{grid-template-columns:1fr}
+    .lightbox{padding:16px}
+    .lightbox-close{top:12px;right:12px;width:38px;height:38px;font-size:17px}
+  }
+  @media (prefers-reduced-motion:reduce){
+    html{scroll-behavior:auto}
+    .reveal,.poem-line,.term-line{opacity:1;translate:0 0;transition:none}
+    .hex-float,.hex-logo-wrap::before,.hex-logo,.hero-title,.philosophy-card::before,.cta-card::before,.marquee-track{animation:none!important}
+    .spotlight{display:none}
+    #bgCanvas{display:none}
+    .gallery-frame img{transition:none}
+    .gallery-item:hover .gallery-frame img{transform:none}
+  }
+</style>
+</head>
+<body>
+
+<div class="progress-bar" id="progressBar"></div>
+<canvas id="bgCanvas"></canvas>
+<div class="bg-grid"></div>
+<div class="bg-glow glow-1"></div>
+<div class="bg-glow glow-2"></div>
+<div class="bg-glow glow-3"></div>
+<div class="spotlight" id="spotlight"></div>
+
+<!-- 导航 -->
+<nav class="nav" id="nav">
+  <div class="nav-inner">
+    <a class="brand" href="#top">
+      <span class="hex-mini"></span>
+      <span class="brand-text bb">𝕄𝕋𝕆𝕁</span>
+    </a>
+    <div class="nav-links">
+      <a href="#philosophy">理念</a>
+      <a href="#features">特点</a>
+      <a href="#poem-naming">诗与野史</a>
+      <a href="#contests">比赛</a>
+      <a href="#problems">趣题</a>
+      <a href="#gallery">板绘</a>
+      <a href="#about">关于</a>
+    </div>
+    <a class="nav-cta" href="https://www.oi-coding.cn/d/system_MT_/" target="_blank" rel="noopener">进入 OJ</a>
+  </div>
+</nav>
+
+<!-- Hero -->
+<header class="hero" id="top">
+  <div class="hex-float hf1"></div>
+  <div class="hex-float hf2"></div>
+  <div class="hex-float hf3"></div>
+
+  <div class="hero-grid">
+    <div class="hero-left">
+      <div class="hero-badge reveal">Hydro 高级域 · 邀请制</div>
+
+      <div class="hero-brand-row reveal">
+        <div class="hex-logo-wrap">
+          <div class="hex-logo"><span class="bb">𝕄𝕋</span></div>
+        </div>
+        <h1 class="hero-title bb">𝕄𝕋𝕆𝕁</h1>
+      </div>
+
+      <p class="hero-cn reveal">在相思树下的域</p>
+      <p class="hero-slogan reveal">坚持用人阴人，传承神经精神</p>
+      <p class="hero-desc reveal">并非 OI 的 OJ。当你闲得慌时，<span class="bb">𝕄𝕋𝕆𝕁</span> 是个很好的乐子。</p>
+
+      <div class="hero-btns reveal">
+        <a class="btn btn-pink" href="https://www.oi-coding.cn/d/system_MT_/" target="_blank" rel="noopener">进入 𝕄𝕋𝕆𝕁</a>
+        <a class="btn btn-ghost" href="https://oj.hex-c.uk/" target="_blank" rel="noopener">前往 HexOJ</a>
+      </div>
+      <p class="hero-hint reveal"><span class="bb">𝕄𝕋𝕆𝕁</span> 为邀请制，需“关系”入场；HexOJ 可自行注册。</p>
+    </div>
+
+    <div class="hero-right">
+      <div class="terminal reveal" id="terminal">
+        <div class="term-bar">
+          <span class="term-dot r"></span>
+          <span class="term-dot y"></span>
+          <span class="term-dot g"></span>
+          <span class="term-title">mtoj — zsh</span>
+        </div>
+        <div class="term-body">
+          <div class="term-line"><span class="term-prompt">$</span> <span class="term-cmd">./mtoj --motto</span></div>
+          <div class="term-line"><span class="term-out">&gt; 坚持用人阴人，传承神经精神</span></div>
+          <div class="term-line"><span class="term-prompt">$</span> <span class="term-cmd">./mtoj --status</span></div>
+          <div class="term-line"><span class="term-out">&gt; 并非 OI · 用爱发电 · 邀请制</span></div>
+          <div class="term-line"><span class="term-prompt">$</span> <span class="term-cursor"></span></div>
+        </div>
+      </div>
+
+      <div class="hero-side-cards reveal">
+        <div class="side-card"><span>系统</span><strong>Hydro 高级域</strong></div>
+        <div class="side-card"><span>加入</span><strong>邀请制</strong></div>
+        <div class="side-card"><span>语言</span><strong>Python &amp; C++</strong></div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- 数据条 -->
+<section class="stats">
+  <div class="stat reveal"><div class="stat-num" data-count="70" data-suffix="+">70+</div><div class="stat-label">题目</div></div>
+  <div class="stat reveal"><div class="stat-num" data-count="10" data-suffix="+">10+</div><div class="stat-label">比赛</div></div>
+  <div class="stat reveal"><div class="stat-num" data-count="200" data-suffix="+">200+</div><div class="stat-label">评测</div></div>
+  <div class="stat reveal"><div class="stat-num">2</div><div class="stat-label">种语言 · Python / C++</div></div>
+</section>
+
+<!-- Marquee -->
+<div class="marquee" aria-hidden="true">
+  <div class="marquee-track">
+    <div class="marquee-group">
+      <span class="bb">𝕄𝕋𝕆𝕁</span><span>坚持用人阴人</span><span>传承神经精神</span><span>并非 OI</span><span>用爱发电</span><span>在相思树下的域</span><span class="bb">𝕄𝕋𝕆𝕀</span><span>缘分缘分啊</span>
+    </div>
+    <div class="marquee-group">
+      <span class="bb">𝕄𝕋𝕆𝕁</span><span>坚持用人阴人</span><span>传承神经精神</span><span>并非 OI</span><span>用爱发电</span><span>在相思树下的域</span><span class="bb">𝕄𝕋𝕆𝕀</span><span>缘分缘分啊</span>
+    </div>
+  </div>
+</div>
+
+<!-- 理念 -->
+<section class="section" id="philosophy">
+  <div class="philosophy-card reveal">
+    <div class="ph-left">
+      <span class="kicker">PHILOSOPHY</span>
+      <h2>坚持用人阴人<br>传承神经精神</h2>
+    </div>
+    <div class="ph-right">
+      <p class="ph-quote">“当你闲得慌时，<span class="bb">𝕄𝕋𝕆𝕁</span> 是个很好的乐子。”</p>
+      <p class="ph-desc">这是一个认真做乐子的地方。并非 OI，用爱发电，邀请制入场。你可以随便出题，也可以在比赛里当一回选手。</p>
+      <div class="ph-tags">
+        <span class="ph-tag">并非 OI</span>
+        <span class="ph-tag">用爱发电</span>
+        <span class="ph-tag">邀请制</span>
+        <span class="ph-tag">不设 AI 禁令</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 特点 -->
+<section class="section" id="features">
+  <div class="section-head reveal">
+    <span class="kicker">FEATURES</span>
+    <h2>它大概不是你以为的那种 OJ</h2>
+    <p>四个关键词，足够说明一切。</p>
+  </div>
+  <div class="feature-grid">
+    <article class="feature-card reveal tilt">
+      <span class="feat-bg-num">01</span>
+      <div class="feat-icon">01</div>
+      <h3>并非 OI</h3>
+      <p>2025.9.30，站长向选手征集“是否需要删去难度大于普及的题目”，最终“同意”以总共 1 票的《明显优势》胜出。自 MTR5 以后，赛题基本不再有传统 OI，取而代之的是以提交答案形式呈现的剧本杀与解谜。</p>
+    </article>
+    <article class="feature-card reveal tilt">
+      <span class="feat-bg-num">02</span>
+      <div class="feat-icon">02</div>
+      <h3>用爱发电</h3>
+      <p>随便出题。除主办方外，选手也可以创建自己的比赛。没有繁琐审批的浪漫，只有想写就写的自由。</p>
+    </article>
+    <article class="feature-card reveal tilt">
+      <span class="feat-bg-num">03</span>
+      <div class="feat-icon">03</div>
+      <h3>关系入场</h3>
+      <p><span class="bb">𝕄𝕋𝕆𝕁</span> 为邀请制，无法自行注册，需“关系”。想围观？隔壁 HexOJ 敞开大门，可自行注册。</p>
+    </article>
+    <article class="feature-card reveal tilt">
+      <span class="feat-bg-num">04</span>
+      <div class="feat-icon">04</div>
+      <h3>不设 AI 禁令</h3>
+      <p>比赛未禁止使用 AI —— 因为 AI 未必写得出来。这里和 AI 没关系，我们只和题目过不去。</p>
+    </article>
+  </div>
+</section>
+
+<!-- 诗歌 + 命名野史（并排） -->
+<section class="section" id="poem-naming">
+  <div class="poem-naming-grid">
+    <!-- 左：诗歌 -->
+    <div class="poem-card reveal">
+      <span class="kicker">THE POEM</span>
+      <h2>在相思树下</h2>
+      <div class="poem" id="poem-text">
+        <span class="poem-line"><p>年年桃树下</p></span>
+        <span class="poem-line"><p>常看一个变成俩</p></span>
+        <span class="poem-line"><p>小小心愿常比划</p></span>
+        <span class="poem-line"><p>快快实现吧</p></span>
+        <span class="poem-line"><p>却没看到他也在树下</p></span>
+        <span class="poem-line"><p>相逢二字纵使隔天涯</p></span>
+        <span class="poem-line"><p>转角总会遇上他</p></span>
+        <span class="poem-line"><p>缘分缘分啊</p></span>
+      </div>
+      <p class="poem-note">
+        2024 年暑假集训 Day4 模拟赛 C 题背景。一半神圣，一半雷霆；又多重人格，又精神分裂，让人不知所云、意义不明。后来被 UID 105 改编出无数劲爆猎奇版本，反而把原版从梦话拉上了神坛。
+      </p>
+    </div>
+
+    <!-- 右：命名野史 -->
+    <div class="naming-card reveal">
+      <span class="kicker">NAMING</span>
+      <h2>命名野史</h2>
+      <p class="naming-sub">一个歧义直译，如何长成一堆不明物种。</p>
+      <div class="timeline">
+        <div class="tl-item warn">
+          <div class="tl-dot"></div>
+          <div class="tl-body">
+            <h3>“在相思树下的域”</h3>
+            <p><span class="bb">𝕄𝕋𝕆𝕁</span> 曾是站长在码力王国 / <a href="https://www.oi-coding.cn/" target="_blank" rel="noopener">oi-coding.cn</a> 盗取 SU 账号后创建的域。为了玩梗，把域名写成了“在相思树下的域”。</p>
+          </div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-dot"></div>
+          <div class="tl-body">
+            <h3>“Miss Tree OI”</h3>
+            <p>站长的同学 qzl / 千年生蚝精 首次提出这个概念 —— 显然是个有歧义的直译。</p>
+          </div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-dot"></div>
+          <div class="tl-body">
+            <h3>站长偏偏采用了它</h3>
+            <p>于是 <span class="bb">𝕄𝕋𝕆𝕁</span> 诞生，全称“在相思树下的域”。后来陆续衍生出 <span class="bb">𝕄𝕋𝕆𝕁</span>、<span class="bb">𝕄𝕋𝕆𝕀</span> 等不明物种。</p>
+          </div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-dot"></div>
+          <div class="tl-body">
+            <h3><span class="bb">𝕄𝕋𝕆𝕀</span> 寄生 HexOJ</h3>
+            <p>如今 <span class="bb">𝕄𝕋𝕆𝕀</span> 也寄生于 HexOJ（oj.hex-c.uk）—— 一个可以自行注册的地方。</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 往届精选比赛 -->
+<section class="section" id="contests">
+  <div class="section-head reveal">
+    <span class="kicker">SELECTED CONTESTS</span>
+    <h2>往届精选比赛</h2>
+    <p>从这里开始，理解 <span class="bb">𝕄𝕋𝕆𝕁</span> 到底在搞什么。</p>
+  </div>
+  <div class="contest-grid">
+    <a class="contest-card reveal tilt" href="https://www.oi-coding.cn/d/system_MT_/contest/68cbf4c50761bf20508de3e6/problems" target="_blank" rel="noopener">
+      <span class="contest-num">01</span>
+      <div class="contest-tag">MTR1</div>
+      <h3>CSP 主题赛</h3>
+      <p class="contest-preview">“CSP考完了……”</p>
+      <span class="contest-arrow">进入比赛 →</span>
+    </a>
+    <a class="contest-card reveal tilt" href="https://www.oi-coding.cn/d/system_MT_/contest/691768b7c89190747122a99c" target="_blank" rel="noopener">
+      <span class="contest-num">05</span>
+      <div class="contest-tag">MTR5</div>
+      <h3>记忆重构：虚白之间</h3>
+      <p class="contest-preview">“请不要相信 5 月 10 日之后的所有日记”</p>
+      <span class="contest-arrow">进入比赛 →</span>
+    </a>
+    <a class="contest-card reveal tilt" href="https://www.oi-coding.cn/d/system_MT_/contest/6a413d7b9c4b4476480237ec" target="_blank" rel="noopener">
+      <span class="contest-num">07</span>
+      <div class="contest-tag">MTR7</div>
+      <h3>TRAP</h3>
+      <p class="contest-preview">Loading pitfalls. . .</p>
+      <span class="contest-arrow">进入比赛 →</span>
+    </a>
+    <a class="contest-card reveal tilt" href="https://www.oi-coding.cn/d/system_MT_/contest/6a47c0f69c4b447648025a2e" target="_blank" rel="noopener">
+      <span class="contest-num">08</span>
+      <div class="contest-tag">MTR8</div>
+      <h3>算法税：消失的 GPA</h3>
+      <p class="contest-preview">AC 不是终点。你才是。</p>
+      <span class="contest-arrow">进入比赛 →</span>
+    </a>
+  </div>
+</section>
+
+<!-- 一些有趣的题 -->
+<section class="section" id="problems">
+  <div class="section-head reveal">
+    <span class="kicker">FUN PROBLEMS</span>
+    <h2>一些有趣的题</h2>
+    <p>点进去之前，请先确认你的精神状态。</p>
+  </div>
+  <div class="problem-grid">
+    <a class="problem-card reveal tilt" href="https://www.oi-coding.cn/d/system_MT_/p/P0005" target="_blank" rel="noopener">
+      <div class="problem-top">
+        <span class="p-tag">P0005</span>
+        <span class="p-idx">危险</span>
+      </div>
+      <h3>请不要运行！</h3>
+      <div class="p-preview"><span class="p-line">千万别运行！如电脑受损请向 qzl 索赔。</span></div>
+      <span class="p-open">打开题目 →</span>
+    </a>
+    <a class="problem-card reveal tilt" href="https://www.oi-coding.cn/d/system_MT_/p/P0011" target="_blank" rel="noopener">
+      <div class="problem-top">
+        <span class="p-tag">P0011</span>
+        <span class="p-idx">多选</span>
+      </div>
+      <h3>YOU HAVE NO EGG！</h3>
+      <div class="p-preview">
+        <span class="p-line">1. 该程序 check 函数最大的作用为？</span>
+        <span class="p-line">A. 尝试是否符合条件 / B. 体检</span>
+        <span class="p-line">C. 骂人 / D. 让你碎成小可</span>
+      </div>
+      <span class="p-open">打开题目 →</span>
+    </a>
+    <a class="problem-card reveal tilt" href="https://www.oi-coding.cn/d/system_MT_/p/P0030" target="_blank" rel="noopener">
+      <div class="problem-top">
+        <span class="p-tag">P0030</span>
+        <span class="p-idx">哲学</span>
+      </div>
+      <h3>“我是谁？”</h3>
+      <div class="p-preview">
+        <span class="p-line">如果你是我，输出我的名字。</span>
+        <span class="p-line">如果你是他，输出他的名字。</span>
+        <span class="p-line">如果你是它，输出它的名字。</span>
+        <span class="p-line">否则，输出你的名字。</span>
+      </div>
+      <span class="p-open">打开题目 →</span>
+    </a>
+    <a class="problem-card reveal tilt" href="https://www.oi-coding.cn/d/system_MT_/p/P0055" target="_blank" rel="noopener">
+      <div class="problem-top">
+        <span class="p-tag">P0055</span>
+        <span class="p-idx">乱码</span>
+      </div>
+      <h3>遍҈布҈互҈联҈网҈的҈神҈秘҈电҈波҈</h3>
+      <div class="p-preview"><span class="p-line">是的，你屏幕被蓝翔挖掘机挖坏了。</span></div>
+      <span class="p-open">打开题目 →</span>
+    </a>
+    <a class="problem-card reveal tilt" href="https://www.oi-coding.cn/d/system_MT_/p/P0072" target="_blank" rel="noopener">
+      <div class="problem-top">
+        <span class="p-tag">P0072</span>
+        <span class="p-idx">空</span>
+      </div>
+      <h3>何にもない（空无一物）</h3>
+      <div class="p-preview"><span class="p-line">没有输入，没有输出，没有样例，没有数据范围，连出题人的良心都看不见。</span></div>
+      <span class="p-open">打开题目 →</span>
+    </a>
+    <a class="problem-card reveal tilt" href="https://www.oi-coding.cn/d/system_MT_/p/P0074" target="_blank" rel="noopener">
+      <div class="problem-top">
+        <span class="p-tag">P0074</span>
+        <span class="p-idx">封锁</span>
+      </div>
+      <h3>此 A+B 已被封锁</h3>
+      <div class="p-preview"><span class="p-line">但是我是 gay，你有本事就写。</span></div>
+      <span class="p-open">打开题目 →</span>
+    </a>
+  </div>
+</section>
+
+<!-- 精选板绘 -->
+<section class="section" id="gallery">
+  <div class="section-head reveal">
+    <span class="kicker">GALLERY</span>
+    <h2>精选板绘</h2>
+    <p><span class="bb">𝕄𝕋𝕆𝕀</span> 精选比赛头图 · 点击查看大图。</p>
+  </div>
+  <div class="gallery-grid">
+    <div class="gallery-item reveal" data-full="https://www.oi-coding.cn/d/system_MT_/p/22/file/MTOI_Round3_%E5%A4%B4%E5%9B%BE.png?type=additional_file" data-name="MTR3 头图">
+      <div class="gallery-frame">
+        <img src="https://www.oi-coding.cn/d/system_MT_/p/22/file/MTOI_Round3_%E5%A4%B4%E5%9B%BE.png?type=additional_file"
+             alt="MTR3 比赛头图" loading="lazy" referrerpolicy="no-referrer"
+             onerror="this.closest('.gallery-frame').classList.add('img-error')">
+        <div class="gallery-fallback">
+          图片加载失败<br>
+          <a href="https://www.oi-coding.cn/d/system_MT_/p/22/file/MTOI_Round3_%E5%A4%B4%E5%9B%BE.png?type=additional_file" target="_blank" rel="noopener">在新窗口打开原图 ↗</a>
+        </div>
+      </div>
+      <div class="gallery-caption">
+        <span class="gallery-tag">MTR3</span>
+        <span class="gallery-name">比赛头图</span>
+        <span class="gallery-zoom">点击放大 ⤢</span>
+      </div>
+    </div>
+
+    <div class="gallery-item reveal" data-full="https://www.oi-coding.cn/d/system_MT_/p/22/file/MTOI_Round5_%E5%A4%B4%E5%9B%BE.png?type=additional_file" data-name="MTR5 头图">
+      <div class="gallery-frame">
+        <img src="https://www.oi-coding.cn/d/system_MT_/p/22/file/MTOI_Round5_%E5%A4%B4%E5%9B%BE.png?type=additional_file"
+             alt="MTR5 比赛头图" loading="lazy" referrerpolicy="no-referrer"
+             onerror="this.closest('.gallery-frame').classList.add('img-error')">
+        <div class="gallery-fallback">
+          图片加载失败<br>
+          <a href="https://www.oi-coding.cn/d/system_MT_/p/22/file/MTOI_Round5_%E5%A4%B4%E5%9B%BE.png?type=additional_file" target="_blank" rel="noopener">在新窗口打开原图 ↗</a>
+        </div>
+      </div>
+      <div class="gallery-caption">
+        <span class="gallery-tag">MTR5</span>
+        <span class="gallery-name">比赛头图</span>
+        <span class="gallery-zoom">点击放大 ⤢</span>
+      </div>
+    </div>
+
+    <div class="gallery-item reveal" data-full="https://www.oi-coding.cn/d/system_MT_/p/22/file/MTOI_Round7_%E5%A4%B4%E5%9B%BE.png?type=additional_file" data-name="MTR7 头图">
+      <div class="gallery-frame">
+        <img src="https://www.oi-coding.cn/d/system_MT_/p/22/file/MTOI_Round7_%E5%A4%B4%E5%9B%BE.png?type=additional_file"
+             alt="MTR7 比赛头图" loading="lazy" referrerpolicy="no-referrer"
+             onerror="this.closest('.gallery-frame').classList.add('img-error')">
+        <div class="gallery-fallback">
+          图片加载失败<br>
+          <a href="https://www.oi-coding.cn/d/system_MT_/p/22/file/MTOI_Round7_%E5%A4%B4%E5%9B%BE.png?type=additional_file" target="_blank" rel="noopener">在新窗口打开原图 ↗</a>
+        </div>
+      </div>
+      <div class="gallery-caption">
+        <span class="gallery-tag">MTR7</span>
+        <span class="gallery-name">比赛头图</span>
+        <span class="gallery-zoom">点击放大 ⤢</span>
+      </div>
+    </div>
+
+    <div class="gallery-item reveal" data-full="https://www.oi-coding.cn/d/system_MT_/p/22/file/MTR8%E5%A4%B4%E5%9B%BE.png?type=additional_file" data-name="MTR8 头图">
+      <div class="gallery-frame">
+        <img src="https://www.oi-coding.cn/d/system_MT_/p/22/file/MTR8%E5%A4%B4%E5%9B%BE.png?type=additional_file"
+             alt="MTR8 比赛头图" loading="lazy" referrerpolicy="no-referrer"
+             onerror="this.closest('.gallery-frame').classList.add('img-error')">
+        <div class="gallery-fallback">
+          图片加载失败<br>
+          <a href="https://www.oi-coding.cn/d/system_MT_/p/22/file/MTR8%E5%A4%B4%E5%9B%BE.png?type=additional_file" target="_blank" rel="noopener">在新窗口打开原图 ↗</a>
+        </div>
+      </div>
+      <div class="gallery-caption">
+        <span class="gallery-tag">MTR8</span>
+        <span class="gallery-name">比赛头图</span>
+        <span class="gallery-zoom">点击放大 ⤢</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 关于 -->
+<section class="section" id="about">
+  <div class="section-head reveal">
+    <span class="kicker">ABOUT</span>
+    <h2>一些事实</h2>
+  </div>
+  <div class="info-grid">
+    <div class="info-card reveal"><h4>系统</h4><p>Hydro 高级域</p></div>
+    <div class="info-card reveal"><h4>语言</h4><p>Python / C++</p></div>
+    <div class="info-card reveal"><h4>加入方式</h4><p><span class="bb">𝕄𝕋𝕆𝕁</span> 邀请制 · HexOJ 开放注册</p></div>
+    <div class="info-card reveal"><h4>AI</h4><p>与 AI 无关</p></div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section">
+  <div class="cta-card reveal">
+    <h2>闲得慌？那就来点乐子。</h2>
+    <p><span class="bb">𝕄𝕋𝕆𝕁</span> 邀请制入场，HexOJ 敞开大门。</p>
+    <div class="hero-btns">
+      <a class="btn btn-pink" href="https://www.oi-coding.cn/d/system_MT_/" target="_blank" rel="noopener">进入 𝕄𝕋𝕆𝕁</a>
+      <a class="btn btn-ghost" href="https://oj.hex-c.uk/" target="_blank" rel="noopener">前往 HexOJ</a>
+    </div>
+  </div>
+</section>
+
+<!-- 页脚 -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-brand"><span class="hex-mini"></span> <span class="bb">𝕄𝕋𝕆𝕁</span> · 在相思树下的域</div>
+    <div class="footer-links">
+      <a href="https://www.oi-coding.cn/d/system_MT_/" target="_blank" rel="noopener">𝕄𝕋𝕆𝕁 主站</a>
+      <a href="https://oj.hex-c.uk/" target="_blank" rel="noopener">HexOJ</a>
+    </div>
+    <p class="footer-copy">坚持用人阴人，传承神经精神。</p>
+  </div>
+</footer>
+
+<button class="back-top" id="backTop" aria-label="回到顶部">↑</button>
+
+<!-- 灯箱 -->
+<div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="图片预览">
+  <button class="lightbox-close" id="lightboxClose" aria-label="关闭">✕</button>
+  <img id="lightboxImg" src="" alt="">
+  <div class="lightbox-cap">
+    <span id="lightboxCap"></span>
+    <a id="lightboxOpen" href="#" target="_blank" rel="noopener">新窗口打开原图 ↗</a>
+  </div>
+</div>
+
+<script>
+(function () {
+  var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  var nav = document.getElementById('nav');
+  var progressBar = document.getElementById('progressBar');
+  var backTop = document.getElementById('backTop');
+
+  function onScroll() {
+    var y = window.scrollY || document.documentElement.scrollTop;
+    nav.classList.toggle('scrolled', y > 20);
+    backTop.classList.toggle('show', y > 600);
+
+    var docH = document.documentElement.scrollHeight - window.innerHeight;
+    progressBar.style.width = docH > 0 ? (y / docH * 100) + '%' : '0%';
+  }
+  window.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+
+  backTop.addEventListener('click', function () {
+    window.scrollTo({ top: 0, behavior: reduceMotion ? 'auto' : 'smooth' });
+  });
+
+  var spot = document.getElementById('spotlight');
+  if (!reduceMotion && window.matchMedia('(pointer:fine)').matches) {
+    var sx = 0, sy = 0, cx = 0, cy = 0, spotActive = false;
+    window.addEventListener('mousemove', function (e) {
+      sx = e.clientX; sy = e.clientY;
+      if (!spotActive) { spotActive = true; spot.style.opacity = '1'; }
+    });
+    (function loop() {
+      cx += (sx - cx) * 0.12;
+      cy += (sy - cy) * 0.12;
+      spot.style.transform = 'translate(' + cx + 'px,' + cy + 'px) translate(-50%,-50%)';
+      requestAnimationFrame(loop);
+    })();
+  } else {
+    spot.style.display = 'none';
+  }
+
+  var canvas = document.getElementById('bgCanvas');
+  if (!reduceMotion && canvas && canvas.getContext) {
+    var ctx = canvas.getContext('2d');
+    var w = 0, h = 0, particles = [], raf = null;
+    var DPR = Math.min(window.devicePixelRatio || 1, 2);
+
+    function resizeCanvas() {
+      w = canvas.width = window.innerWidth * DPR;
+      h = canvas.height = window.innerHeight * DPR;
+      canvas.style.width = window.innerWidth + 'px';
+      canvas.style.height = window.innerHeight + 'px';
+      var count = Math.min(72, Math.max(28, Math.floor(window.innerWidth / 22)));
+      particles = [];
+      for (var i = 0; i < count; i++) {
+        particles.push({
+          x: Math.random() * w,
+          y: Math.random() * h,
+          vx: (Math.random() - 0.5) * 0.28 * DPR,
+          vy: (Math.random() - 0.5) * 0.28 * DPR,
+          r: (Math.random() * 1.3 + 0.6) * DPR
+        });
+      }
+    }
+
+    function drawCanvas() {
+      ctx.clearRect(0, 0, w, h);
+      var maxDist = 140 * DPR;
+      for (var i = 0; i < particles.length; i++) {
+        var p = particles[i];
+        p.x += p.vx; p.y += p.vy;
+        if (p.x < 0 || p.x > w) p.vx *= -1;
+        if (p.y < 0 || p.y > h) p.vy *= -1;
+
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+        ctx.fillStyle = 'rgba(95,159,214,.55)';
+        ctx.fill();
+
+        for (var j = i + 1; j < particles.length; j++) {
+          var q = particles[j];
+          var dx = p.x - q.x, dy = p.y - q.y;
+          var d = Math.sqrt(dx * dx + dy * dy);
+          if (d < maxDist) {
+            ctx.beginPath();
+            ctx.moveTo(p.x, p.y);
+            ctx.lineTo(q.x, q.y);
+            ctx.strokeStyle = 'rgba(95,159,214,' + ((1 - d / maxDist) * 0.18).toFixed(3) + ')';
+            ctx.lineWidth = DPR * 0.6;
+            ctx.stroke();
+          }
+        }
+      }
+      raf = requestAnimationFrame(drawCanvas);
+    }
+
+    resizeCanvas();
+    drawCanvas();
+    var resizeTimer = null;
+    window.addEventListener('resize', function () {
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(function () {
+        cancelAnimationFrame(raf);
+        resizeCanvas();
+        drawCanvas();
+      }, 200);
+    });
+    document.addEventListener('visibilitychange', function () {
+      if (document.hidden) cancelAnimationFrame(raf);
+      else { cancelAnimationFrame(raf); drawCanvas(); }
+    });
+  } else if (canvas) {
+    canvas.style.display = 'none';
+  }
+
+  var revealEls = document.querySelectorAll('.reveal');
+  if ('IntersectionObserver' in window && !reduceMotion) {
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (e.isIntersecting) {
+          e.target.classList.add('in');
+          io.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+    revealEls.forEach(function (el) { io.observe(el); });
+
+    document.querySelectorAll('.feature-grid, .contest-grid, .problem-grid, .gallery-grid, .info-grid, .stats, .hero-side-cards').forEach(function (grid) {
+      Array.prototype.forEach.call(grid.children, function (el, i) {
+        if (el.classList.contains('reveal')) {
+          el.style.transitionDelay = (i * 70) + 'ms';
+        }
+      });
+    });
+  } else {
+    revealEls.forEach(function (el) { el.classList.add('in'); });
+  }
+
+  var counters = document.querySelectorAll('.stat-num[data-count]');
+  if ('IntersectionObserver' in window && !reduceMotion) {
+    var cio = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (!e.isIntersecting) return;
+        var el = e.target;
+        var target = parseInt(el.dataset.count, 10);
+        var suffix = el.dataset.suffix || '';
+        var dur = 1200;
+        var start = performance.now();
+        el.textContent = '0' + suffix;
+        function tick(now) {
+          var p = Math.min((now - start) / dur, 1);
+          var eased = 1 - Math.pow(1 - p, 3);
+          el.textContent = Math.round(target * eased) + suffix;
+          if (p < 1) requestAnimationFrame(tick);
+        }
+        requestAnimationFrame(tick);
+        cio.unobserve(el);
+      });
+    }, { threshold: 0.5 });
+    counters.forEach(function (c) { cio.observe(c); });
+  }
+
+  var term = document.getElementById('terminal');
+  if (term) {
+    var lines = term.querySelectorAll('.term-line');
+    if ('IntersectionObserver' in window && !reduceMotion) {
+      var tio = new IntersectionObserver(function (entries) {
+        entries.forEach(function (e) {
+          if (!e.isIntersecting) return;
+          lines.forEach(function (ln, i) {
+            setTimeout(function () { ln.classList.add('on'); }, i * 380);
+          });
+          tio.unobserve(term);
+        });
+      }, { threshold: 0.4 });
+      tio.observe(term);
+    } else {
+      lines.forEach(function (ln) { ln.classList.add('on'); });
+    }
+  }
+
+  var poem = document.getElementById('poem-text');
+  if (poem) {
+    var poemLines = poem.querySelectorAll('.poem-line');
+    if ('IntersectionObserver' in window && !reduceMotion) {
+      var pio = new IntersectionObserver(function (entries) {
+        entries.forEach(function (e) {
+          if (!e.isIntersecting) return;
+          poemLines.forEach(function (ln, i) {
+            setTimeout(function () { ln.classList.add('on'); }, i * 260);
+          });
+          pio.unobserve(poem);
+        });
+      }, { threshold: 0.35 });
+      pio.observe(poem);
+    } else {
+      poemLines.forEach(function (ln) { ln.classList.add('on'); });
+    }
+  }
+
+  if (!reduceMotion && window.matchMedia('(pointer:fine)').matches) {
+    document.querySelectorAll('.tilt').forEach(function (card) {
+      var rafId = null;
+      var rx = 0, ry = 0, tRx = 0, tRy = 0;
+
+      function render() {
+        rx += (tRx - rx) * 0.18;
+        ry += (tRy - ry) * 0.18;
+        card.style.transform = 'perspective(900px) rotateX(' + rx.toFixed(2) + 'deg) rotateY(' + ry.toFixed(2) + 'deg) translateY(-4px)';
+        if (Math.abs(tRx - rx) > 0.05 || Math.abs(tRy - ry) > 0.05) {
+          rafId = requestAnimationFrame(render);
+        } else {
+          rafId = null;
+        }
+      }
+
+      card.addEventListener('mousemove', function (e) {
+        var r = card.getBoundingClientRect();
+        var x = e.clientX - r.left;
+        var y = e.clientY - r.top;
+        card.style.setProperty('--mx', x + 'px');
+        card.style.setProperty('--my', y + 'px');
+        tRx = ((y / r.height) - 0.5) * -6;
+        tRy = ((x / r.width) - 0.5) * 6;
+        if (!rafId) rafId = requestAnimationFrame(render);
+      });
+
+      card.addEventListener('mouseleave', function () {
+        tRx = 0; tRy = 0;
+        if (!rafId) rafId = requestAnimationFrame(render);
+        card.style.transform = '';
+        card.style.removeProperty('--mx');
+        card.style.removeProperty('--my');
+      });
+    });
+  }
+
+  var navLinks = document.querySelectorAll('.nav-links a[href^="#"]');
+  var sections = [];
+  navLinks.forEach(function (a) {
+    var id = a.getAttribute('href').slice(1);
+    var sec = document.getElementById(id);
+    if (sec) sections.push({ link: a, sec: sec });
+  });
+  if ('IntersectionObserver' in window && sections.length) {
+    var sio = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (!e.isIntersecting) return;
+        sections.forEach(function (s) {
+          s.link.classList.toggle('active', s.sec === e.target);
+        });
+      });
+    }, { rootMargin: '-45% 0px -50% 0px', threshold: 0 });
+    sections.forEach(function (s) { sio.observe(s.sec); });
+  }
+
+  var lightbox = document.getElementById('lightbox');
+  var lightboxImg = document.getElementById('lightboxImg');
+  var lightboxCap = document.getElementById('lightboxCap');
+  var lightboxOpen = document.getElementById('lightboxOpen');
+  var lightboxClose = document.getElementById('lightboxClose');
+  var lastFocus = null;
+
+  function openLightbox(item) {
+    var full = item.getAttribute('data-full');
+    var name = item.getAttribute('data-name') || '';
+    lightboxImg.src = full;
+    lightboxImg.alt = name;
+    lightboxCap.textContent = name;
+    lightboxOpen.href = full;
+    lastFocus = document.activeElement;
+    lightbox.classList.add('open');
+    document.body.style.overflow = 'hidden';
+    lightboxClose.focus();
+  }
+
+  function closeLightbox() {
+    lightbox.classList.remove('open');
+    document.body.style.overflow = '';
+    lightboxImg.src = '';
+    if (lastFocus && lastFocus.focus) lastFocus.focus();
+  }
+
+  document.querySelectorAll('.gallery-item').forEach(function (item) {
+    item.addEventListener('click', function (e) {
+      if (e.target.closest('a')) return;
+      openLightbox(item);
+    });
+    item.setAttribute('tabindex', '0');
+    item.setAttribute('role', 'button');
+    item.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        openLightbox(item);
+      }
+    });
+  });
+
+  lightboxClose.addEventListener('click', closeLightbox);
+  lightbox.addEventListener('click', function (e) {
+    if (e.target === lightbox) closeLightbox();
+  });
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape' && lightbox.classList.contains('open')) closeLightbox();
+  });
+})();
+</script>
+</body>
+</html>
