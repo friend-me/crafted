@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>战争：€€￡</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css">
 <style>
   :root{
     --bg:#05060a;
@@ -65,7 +66,7 @@
     background:repeating-linear-gradient(0deg,transparent,transparent 2px,var(--scan) 2px,var(--scan) 4px);
     opacity:.35;
   }
-  /* 星星 */
+  /* 星星粒子 */
   .sparkles{position:fixed;top:0;left:0;width:100%;height:100%;z-index:0;pointer-events:none;overflow:hidden;}
   .sparkle{position:absolute;width:2px;height:2px;border-radius:50%;background:#fff;animation:sparkleTwinkle ease-in-out infinite;}
   @keyframes sparkleTwinkle{
@@ -81,20 +82,72 @@
     transition:opacity .35s ease;
   }
   #start-screen.hidden{display:none;}
+
+  /* 头像容器 - 精确还原参考站双层传送环 */
+  .avatar-container{
+    position:relative;
+    width:160px;height:160px;
+    display:flex;align-items:center;justify-content:center;
+  }
   .start-avatar{
-    width:100px;height:100px;border-radius:50%;padding:4px;
-    background:conic-gradient(from 0deg,var(--cyan),var(--crimson),var(--purple),var(--neon),var(--cyan));
-    box-shadow:0 0 24px rgba(0,240,255,.6),0 0 48px rgba(255,0,102,.35),0 0 80px rgba(167,139,250,.2),inset 0 0 16px rgba(0,240,255,.3);
-    position:relative;animation:startAvatarPulse 3s ease-in-out infinite alternate;
-    display:flex;align-items:center;justify-content:center;font-size:48px;
+    width:100%;height:100%;border-radius:50%;padding:4px;
+    background:conic-gradient(from 0deg,var(--cyan),var(--crimson),var(--purple),var(--cyan));
+    box-shadow:
+      0 0 32px rgba(0,240,255,.5),
+      0 0 64px rgba(255,0,102,.3),
+      0 0 96px rgba(167,139,250,.2),
+      inset 0 0 20px rgba(0,240,255,.3);
+    position:relative;
+    display:flex;align-items:center;justify-content:center;
+    overflow:hidden;
+    animation:avatarPulse 4s ease-in-out infinite alternate, avatarRotate 12s linear infinite;
+    z-index:2;
   }
-  .start-avatar::before{content:"";position:absolute;inset:-8px;border-radius:50%;border:2px solid transparent;border-top-color:var(--cyan);border-bottom-color:var(--crimson);animation:avatarSpin 4s linear infinite;opacity:.6;}
-  .start-avatar::after{content:"";position:absolute;inset:-16px;border-radius:50%;border:1px solid transparent;border-top-color:var(--neon);border-bottom-color:var(--purple);animation:avatarSpin 6s linear infinite reverse;opacity:.4;}
-  @keyframes startAvatarPulse{
-    0%{box-shadow:0 0 24px rgba(0,240,255,.5),0 0 48px rgba(255,0,102,.3),inset 0 0 16px rgba(0,240,255,.3);}
-    100%{box-shadow:0 0 36px rgba(0,240,255,.8),0 0 72px rgba(255,0,102,.5),0 0 110px rgba(167,139,250,.35),inset 0 0 22px rgba(0,240,255,.5);}
+  /* 参考站同款双层传送光环 */
+  .teleport-ring{
+    position:absolute;
+    top:50%;left:50%;
+    width:220px;height:220px;
+    margin:-110px 0 0 -110px;
+    border-radius:50%;
+    border:2px solid transparent;
+    border-top-color:var(--cyan);
+    border-bottom-color:var(--crimson);
+    animation: spin 3s linear infinite;
+    pointer-events:none;
+    opacity:.6;
+    z-index:1;
   }
-  @keyframes avatarSpin{to{transform:rotate(360deg);}}
+  .teleport-ring.r2{
+    width:260px;height:260px;
+    margin:-130px 0 0 -130px;
+    border-top-color:var(--purple);
+    border-bottom-color:var(--neon);
+    animation: spin 4s linear infinite reverse;
+    opacity:.4;
+    z-index:0;
+  }
+  @keyframes spin{
+    to{ transform:rotate(360deg); }
+  }
+  @keyframes avatarPulse{
+    0%{ box-shadow: 0 0 32px rgba(0,240,255,.5), 0 0 64px rgba(255,0,102,.3), 0 0 96px rgba(167,139,250,.2), inset 0 0 20px rgba(0,240,255,.3); }
+    100%{ box-shadow: 0 0 48px rgba(0,240,255,.7), 0 0 80px rgba(255,0,102,.45), 0 0 120px rgba(167,139,250,.3), inset 0 0 28px rgba(0,240,255,.5); }
+  }
+  @keyframes avatarRotate{
+    from{ background:conic-gradient(from 0deg, var(--cyan), var(--crimson), var(--purple), var(--cyan)); }
+    to{ background:conic-gradient(from 360deg, var(--cyan), var(--crimson), var(--purple), var(--cyan)); }
+  }
+  .start-avatar img{
+    width:100%;height:100%;object-fit:cover;border-radius:50%;
+    filter:contrast(1.08) brightness(1.08);
+    animation: avatarInnerPulse 4s ease-in-out infinite alternate;
+  }
+  @keyframes avatarInnerPulse{
+    0%{ filter:contrast(1.05) brightness(1.05); }
+    100%{ filter:contrast(1.1) brightness(1.12) drop-shadow(0 0 12px rgba(255,0,102,.4)); }
+  }
+
   .start-title{
     font-size:42px;font-weight:900;letter-spacing:.08em;
     background:linear-gradient(90deg,#00f0ff,#ff0066);
@@ -106,7 +159,14 @@
     0%{text-shadow:0 0 20px rgba(0,240,255,.2),0 0 40px rgba(255,0,102,.1);filter:brightness(1);}
     100%{text-shadow:0 0 40px rgba(0,240,255,.55),0 0 80px rgba(255,0,102,.4),0 0 120px rgba(167,139,250,.25);filter:brightness(1.2);}
   }
-  .start-sub{font-size:14px;color:var(--text-dim);letter-spacing:.15em;text-align:center;}
+  .start-sub{font-size:14px;color:var(--text-dim);letter-spacing:.15em;text-align:center;animation:textGlow 3s ease-in-out infinite alternate;}
+  @keyframes textGlow{
+    0%{ text-shadow:0 0 20px rgba(0,240,255,.15); }
+    100%{ text-shadow:0 0 30px rgba(0,240,255,.3), 0 0 40px rgba(167,139,250,.2); }
+  }
+  .start-links{
+    display:flex;gap:12px;flex-wrap:wrap;justify-content:center;
+  }
   .start-card{
     width:min(780px,100%);padding:28px 24px;border-radius:16px;
     background:var(--bg-card);backdrop-filter:var(--glass-blur);-webkit-backdrop-filter:var(--glass-blur);
@@ -126,20 +186,115 @@
   .rules-block::-webkit-scrollbar{width:6px;}
   .rules-block::-webkit-scrollbar-track{background:transparent;}
   .rules-block::-webkit-scrollbar-thumb{background:rgba(0,240,255,.3);border-radius:3px;}
-  .start-btn{
-    display:inline-block;padding:14px 42px;border-radius:10px;border:2px solid;
-    font-family:inherit;font-size:17px;font-weight:800;letter-spacing:.08em;
-    cursor:pointer;transition:all .2s ease;position:relative;overflow:hidden;
-    background:linear-gradient(180deg,rgba(0,240,255,.20),rgba(0,240,255,.05));
-    border-color:rgba(0,240,255,.60);color:#33f5ff;
-    text-shadow:0 0 10px rgba(0,240,255,.45);
-    box-shadow:0 6px 0 rgba(0,240,255,.20),0 10px 28px -4px rgba(0,240,255,.30),0 0 24px rgba(0,240,255,.25),inset 0 1px 1px rgba(255,255,255,.15);
+
+  /* 参考站同款流光按钮特效 */
+  .glow-btn{
+    position:relative;
+    display:inline-flex;
+    align-items:center;
+    gap:10px;
+    padding:18px 48px;
+    border-radius:14px;
+    border:2px solid var(--cyan);
+    background:linear-gradient(180deg, rgba(0,240,255,.15), rgba(0,240,255,.03));
+    color:var(--cyan);
+    font-family:inherit;
+    font-size:26px;
+    font-weight:800;
+    letter-spacing:.08em;
+    text-decoration:none;
+    cursor:pointer;
+    transition:all .25s ease;
+    box-shadow:
+      0 6px 0 rgba(0,240,255,.2),
+      0 0 32px rgba(0,240,255,.2),
+      inset 0 0 20px rgba(0,240,255,.05);
+    text-shadow:0 0 16px rgba(0,240,255,.5);
     align-self:center;
+    overflow:hidden;
   }
-  .start-btn:hover{transform:translateY(-4px);background:linear-gradient(180deg,rgba(0,240,255,.35),rgba(0,240,255,.08));box-shadow:0 6px 0 rgba(0,240,255,.32),0 14px 36px -4px rgba(0,240,255,.5),0 0 36px rgba(0,240,255,.4),inset 0 1px 1px rgba(255,255,255,.25);border-color:#66f8ff;}
-  .start-btn:active{transform:translateY(4px);box-shadow:0 2px 0 rgba(0,240,255,.15);}
-  .start-btn::after{content:"";position:absolute;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,.10) 2px,rgba(0,0,0,.10) 4px);pointer-events:none;opacity:.4;}
-  .start-divider{width:100%;height:1px;background:linear-gradient(90deg,transparent,rgba(251,191,36,.35),transparent);}
+  .glow-btn::before{
+    content:"";
+    position:absolute;
+    top:0; left:-100%;
+    width:100%; height:100%;
+    background:linear-gradient(90deg, transparent, rgba(255,255,255,.1), transparent);
+    animation: shimmer 3s ease-in-out infinite;
+  }
+  @keyframes shimmer{
+    0%{ left:-100%; }
+    50%,100%{ left:100%; }
+  }
+  .glow-btn:hover{
+    transform:translateY(-4px);
+    background:linear-gradient(180deg, rgba(0,240,255,.28), rgba(0,240,255,.06));
+    border-color:#fff;
+    color:#fff;
+    box-shadow:
+      0 8px 0 rgba(0,240,255,.35),
+      0 0 48px rgba(0,240,255,.5),
+      0 0 80px rgba(167,139,250,.3),
+      inset 0 0 30px rgba(0,240,255,.1);
+    text-shadow:0 0 24px rgba(0,240,255,.8), 0 0 48px rgba(167,139,250,.4);
+  }
+  .glow-btn:active{
+    transform:translateY(2px);
+    box-shadow:0 2px 0 rgba(0,240,255,.2), 0 0 20px rgba(0,240,255,.3);
+  }
+  .glow-btn .arrow{
+    font-size:28px;
+    animation: arrowBounce 1.2s ease-in-out infinite;
+  }
+  @keyframes arrowBounce{
+    0%,100%{ transform:translateX(0); }
+    50%{ transform:translateX(6px); }
+  }
+
+  /* 链接按钮同款流光效果 */
+  .link-btn{
+    position:relative;
+    display:inline-flex;align-items:center;gap:8px;
+    padding:12px 24px;border-radius:10px;border:2px solid;
+    font-family:inherit;font-size:15px;font-weight:700;letter-spacing:.05em;
+    cursor:pointer;transition:all .25s ease;
+    text-decoration:none;
+    overflow:hidden;
+  }
+  .link-btn::before{
+    content:"";
+    position:absolute;
+    top:0; left:-100%;
+    width:100%; height:100%;
+    background:linear-gradient(90deg, transparent, rgba(255,255,255,.12), transparent);
+    animation: shimmer 3s ease-in-out infinite;
+  }
+  .link-friend{
+    background:linear-gradient(180deg,rgba(167,139,250,.15),rgba(167,139,250,.03));
+    border-color:var(--purple);color:#d4c7ff;
+    text-shadow:0 0 12px rgba(167,139,250,.4);
+    box-shadow:0 5px 0 rgba(167,139,250,.15),0 0 24px rgba(167,139,250,.2);
+  }
+  .link-friend:hover{
+    transform:translateY(-3px);
+    border-color:#fff;color:#fff;
+    background:linear-gradient(180deg,rgba(167,139,250,.28),rgba(167,139,250,.06));
+    box-shadow:0 7px 0 rgba(167,139,250,.3),0 0 36px rgba(167,139,250,.45),0 0 60px rgba(167,139,250,.2);
+  }
+  .link-friend:active{transform:translateY(2px);box-shadow:0 2px 0 rgba(167,139,250,.15);}
+  .link-star{
+    background:linear-gradient(180deg,rgba(251,191,36,.15),rgba(251,191,36,.03));
+    border-color:var(--gold);color:#ffdf66;
+    text-shadow:0 0 12px rgba(251,191,36,.4);
+    box-shadow:0 5px 0 rgba(251,191,36,.15),0 0 24px rgba(251,191,36,.2);
+  }
+  .link-star:hover{
+    transform:translateY(-3px);
+    border-color:#fff;color:#fff;
+    background:linear-gradient(180deg,rgba(251,191,36,.28),rgba(251,191,36,.06));
+    box-shadow:0 7px 0 rgba(251,191,36,.3),0 0 36px rgba(251,191,36,.45),0 0 60px rgba(251,191,36,.2);
+  }
+  .link-star:active{transform:translateY(2px);box-shadow:0 2px 0 rgba(251,191,36,.15);}
+  .start-divider{width:100%;height:1px;background:linear-gradient(90deg,transparent,rgba(0,240,255,.35),transparent);}
 
   /* ======= 游戏主界面 ======= */
   .app{
@@ -150,17 +305,37 @@
   .topbar{display:flex;align-items:center;justify-content:space-between;gap:14px;padding-bottom:16px;border-bottom:1px solid var(--border);position:relative;flex-wrap:wrap;}
   .topbar::after{content:"";position:absolute;bottom:-1px;left:0;width:140px;height:2px;background:linear-gradient(90deg,var(--cyan),var(--crimson));box-shadow:0 0 12px var(--cyan),0 0 20px var(--crimson);border-radius:2px;}
   .brand{display:flex;align-items:center;gap:14px;min-width:0;}
+  /* 顶部迷你头像带小光环 */
+  .mini-avatar-container{position:relative;width:54px;height:54px;flex:none;}
   .mini-avatar{
-    width:54px;height:54px;border-radius:50%;padding:3px;
+    width:100%;height:100%;border-radius:50%;padding:3px;
     background:conic-gradient(from 0deg,var(--cyan),var(--crimson),var(--cyan));
     box-shadow:0 0 14px rgba(0,240,255,.5),0 0 28px rgba(255,0,102,.25);
-    display:flex;align-items:center;justify-content:center;font-size:26px;flex:none;
+    display:flex;align-items:center;justify-content:center;
     position:relative;animation:miniAvatarGlow 4s ease-in-out infinite alternate;
+    overflow:hidden;
+    z-index:2;
   }
-  .mini-avatar::before{content:"";position:absolute;inset:-5px;border-radius:50%;border:2px solid transparent;border-top-color:var(--cyan);border-bottom-color:var(--crimson);animation:avatarSpin 4s linear infinite;opacity:.5;}
+  .mini-ring{
+    position:absolute;
+    top:50%;left:50%;
+    width:70px;height:70px;
+    margin:-35px 0 0 -35px;
+    border-radius:50%;
+    border:2px solid transparent;
+    border-top-color:var(--cyan);
+    border-bottom-color:var(--crimson);
+    animation: spin 3s linear infinite;
+    pointer-events:none;
+    opacity:.5;
+    z-index:1;
+  }
   @keyframes miniAvatarGlow{
     0%{box-shadow:0 0 14px rgba(0,240,255,.5),0 0 28px rgba(255,0,102,.25);}
     100%{box-shadow:0 0 24px rgba(0,240,255,.7),0 0 44px rgba(255,0,102,.4),0 0 70px rgba(167,139,250,.25);}
+  }
+  .mini-avatar img{
+    width:100%;height:100%;object-fit:cover;border-radius:50%;
   }
   .brand-text h1{
     margin:0;font-size:22px;font-weight:900;letter-spacing:.04em;
@@ -169,6 +344,43 @@
   }
   .brand-text p{margin:3px 0 0;font-size:12.5px;color:var(--text-dim);letter-spacing:.1em;font-weight:600;}
   .top-actions{display:flex;align-items:center;gap:10px;flex:none;flex-wrap:wrap;}
+  .top-link{
+    position:relative;
+    display:inline-flex;align-items:center;gap:6px;
+    padding:8px 16px;border-radius:8px;border:1.5px solid;
+    font-size:12.5px;font-weight:700;letter-spacing:.04em;
+    cursor:pointer;transition:all .25s ease;
+    text-decoration:none;font-family:inherit;
+    overflow:hidden;
+  }
+  .top-link::before{
+    content:"";
+    position:absolute;
+    top:0;left:-100%;
+    width:100%;height:100%;
+    background:linear-gradient(90deg, transparent, rgba(255,255,255,.12), transparent);
+    animation: shimmer 3s ease-in-out infinite;
+  }
+  .top-link-friend{
+    background:rgba(167,139,250,.08);border-color:rgba(167,139,250,.45);color:#bda4ff;
+    text-shadow:0 0 8px rgba(167,139,250,.3);
+    box-shadow:0 3px 0 rgba(167,139,250,.12),0 0 12px rgba(167,139,250,.15);
+  }
+  .top-link-friend:hover{
+    transform:translateY(-2px);border-color:#d4c7ff;color:#d4c7ff;
+    background:rgba(167,139,250,.16);
+    box-shadow:0 5px 0 rgba(167,139,250,.22),0 0 20px rgba(167,139,250,.3);
+  }
+  .top-link-star{
+    background:rgba(251,191,36,.08);border-color:rgba(251,191,36,.45);color:#ffcf4d;
+    text-shadow:0 0 8px rgba(251,191,36,.3);
+    box-shadow:0 3px 0 rgba(251,191,36,.12),0 0 12px rgba(251,191,36,.15);
+  }
+  .top-link-star:hover{
+    transform:translateY(-2px);border-color:#ffdf66;color:#ffdf66;
+    background:rgba(251,191,36,.16);
+    box-shadow:0 5px 0 rgba(251,191,36,.22),0 0 20px rgba(251,191,36,.3);
+  }
   .stage-box{
     display:flex;flex-direction:column;align-items:center;gap:2px;
     padding:8px 20px;border-radius:10px;
@@ -273,9 +485,17 @@
   .btn-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:10px;}
   .act-btn{
     padding:12px 14px;border-radius:10px;border:2px solid;font-family:inherit;
-    text-align:left;cursor:pointer;transition:all .18s ease;position:relative;overflow:hidden;
+    text-align:left;cursor:pointer;transition:all .25s ease;position:relative;overflow:hidden;
     display:flex;flex-direction:column;gap:3px;
     -webkit-tap-highlight-color:transparent;
+  }
+  .act-btn::before{
+    content:"";
+    position:absolute;
+    top:0; left:-100%;
+    width:100%; height:100%;
+    background:linear-gradient(90deg, transparent, rgba(255,255,255,.08), transparent);
+    animation: shimmer 4s ease-in-out infinite;
   }
   .act-btn:disabled{opacity:.35;cursor:not-allowed;filter:grayscale(.5);}
   .act-btn:not(:disabled):hover{transform:translateY(-3px);}
@@ -352,13 +572,45 @@
   .modal:not(.win) .modal-title{color:var(--crimson);text-shadow:0 0 20px rgba(255,0,102,.6);}
   .modal-msg{color:var(--text-mid);font-size:14px;line-height:1.7;margin-bottom:20px;}
   .modal-msg .punish{color:var(--crimson);font-weight:700;}
-  .modal-btn{padding:12px 32px;border-radius:10px;border:2px solid;font-family:inherit;font-size:15px;font-weight:800;letter-spacing:.06em;cursor:pointer;transition:all .2s;background:linear-gradient(180deg,rgba(0,240,255,.20),rgba(0,240,255,.05));border-color:rgba(0,240,255,.60);color:#33f5ff;text-shadow:0 0 10px rgba(0,240,255,.45);box-shadow:0 5px 0 rgba(0,240,255,.20),0 0 20px rgba(0,240,255,.25);}
-  .modal-btn:hover{transform:translateY(-2px);box-shadow:0 5px 0 rgba(0,240,255,.32),0 0 30px rgba(0,240,255,.4);}
+  .modal-btn{
+    position:relative;padding:14px 36px;border-radius:12px;border:2px solid;
+    font-family:inherit;font-size:17px;font-weight:800;letter-spacing:.06em;cursor:pointer;transition:all .25s;
+    background:linear-gradient(180deg, rgba(0,240,255,.18), rgba(0,240,255,.04));
+    border-color:var(--cyan);color:var(--cyan);
+    text-shadow:0 0 14px rgba(0,240,255,.5);
+    box-shadow:0 6px 0 rgba(0,240,255,.2),0 0 28px rgba(0,240,255,.25);
+    overflow:hidden;
+  }
+  .modal-btn::before{
+    content:"";
+    position:absolute;
+    top:0; left:-100%;
+    width:100%; height:100%;
+    background:linear-gradient(90deg, transparent, rgba(255,255,255,.12), transparent);
+    animation: shimmer 3s ease-in-out infinite;
+  }
+  .modal-btn:hover{
+    transform:translateY(-3px);
+    border-color:#fff;color:#fff;
+    box-shadow:0 8px 0 rgba(0,240,255,.3),0 0 40px rgba(0,240,255,.45),0 0 60px rgba(167,139,250,.25);
+  }
+  .modal-btn:active{transform:translateY(2px);box-shadow:0 2px 0 rgba(0,240,255,.2);}
 
   /* 菜单面板 */
   .menu-panel{display:grid;grid-template-columns:1fr;gap:10px;}
   .menu-desc{font-size:13px;color:var(--text-dim);line-height:1.7;padding:12px 14px;border-radius:8px;background:rgba(0,0,0,.2);border:1px solid rgba(255,255,255,.05);}
   .menu-desc b{color:var(--cyan);}
+
+  /* 响应式适配 */
+  @media(max-width:600px){
+    .avatar-container{width:120px;height:120px;}
+    .teleport-ring{width:170px;height:170px;margin:-85px 0 0 -85px;}
+    .teleport-ring.r2{width:200px;height:200px;margin:-100px 0 0 -100px;}
+    .start-title{font-size:30px;}
+    .glow-btn{font-size:20px;padding:14px 32px;}
+    .start-links{flex-direction:column;width:100%;max-width:300px;}
+    .link-btn{justify-content:center;}
+  }
 </style>
 </head>
 <body>
@@ -367,9 +619,23 @@
 
 <!-- 开始界面 -->
 <div id="start-screen">
-  <div class="start-avatar">⚔️</div>
-  <h1 class="start-title">大 战 € € ￡</h1>
+  <div class="avatar-container">
+    <div class="teleport-ring"></div>
+    <div class="teleport-ring r2"></div>
+    <div class="start-avatar">
+      <img src="https://www.oi-coding.cn/file/264/CCF_quanwei.png" alt="CCF">
+    </div>
+  </div>
+  <h1 class="start-title">战 争 ： € € ￡</h1>
   <div class="start-sub">3 A 级 游 戏 大 作 · 文 字 R P G 网 页 版</div>
+  <div class="start-links">
+    <a href="https://friend-me.github.io/crafted/ccfwar.html" target="_blank" class="link-btn link-friend">
+      <i class="fa fa-gamepad"></i> 你和€€￡巴巴博弈
+    </a>
+    <a href="https://github.com/friend-me/crafted" target="_blank" class="link-btn link-star">
+      <i class="fa fa-star"></i> GitHub Star
+    </a>
+  </div>
   <div class="start-card">
     <div class="rules-block">
       <p><span class="hl">▶ 游戏说明</span></p>
@@ -386,7 +652,9 @@
       <p><span class="hd">⚠ 死亡惩罚：</span>挑战小怪死亡会随机清空食物、药水或弹药中的一项！</p>
     </div>
     <div class="start-divider"></div>
-    <button class="start-btn" id="btn-start">开 始 游 戏</button>
+    <button class="glow-btn" id="btn-start">
+      开 始 游 戏 <span class="arrow">→</span>
+    </button>
   </div>
 </div>
 
@@ -394,13 +662,24 @@
 <div class="app hidden" id="app">
   <div class="topbar">
     <div class="brand">
-      <div class="mini-avatar">⚔️</div>
+      <div class="mini-avatar-container">
+        <div class="mini-ring"></div>
+        <div class="mini-avatar">
+          <img src="https://www.oi-coding.cn/file/264/CCF_quanwei.png" alt="CCF">
+        </div>
+      </div>
       <div class="brand-text">
-        <h1>大 战 € € ￡</h1>
+        <h1>战 争 ： € € ￡</h1>
         <p>CODE · COMBAT · GLORY</p>
       </div>
     </div>
     <div class="top-actions">
+      <a href="https://friend-me.github.io/crafted/ccfwar.html" target="_blank" class="top-link top-link-friend">
+        <i class="fa fa-link"></i> 你和€€￡巴巴博弈
+      </a>
+      <a href="https://github.com/friend-me/crafted" target="_blank" class="top-link top-link-star">
+        <i class="fa fa-star"></i> GitHub Star
+      </a>
       <div class="stage-box">
         <div class="stage-label" id="stage-label">主 菜 单</div>
         <div class="stage-num" id="stage-num">MENU</div>
@@ -433,644 +712,585 @@
 
       <!-- 背包 -->
       <div class="glass">
-        <div class="section-title gold">🎒 背包物品</div>
-        <div class="inv-grid" id="inv-grid"></div>
+        <div class="section-title purple">🎒 背包物品</div>
+        <div class="inv-grid">
+          <div class="inv-item"><span class="name"><span class="icon">🍖</span>美味食物</span><span class="qty green" id="inv-mw">0</span></div>
+          <div class="inv-item"><span class="name"><span class="icon">🍞</span>普通食物</span><span class="qty green" id="inv-pt">0</span></div>
+          <div class="inv-item"><span class="name"><span class="icon">🧀</span>发霉食物</span><span class="qty crimson" id="inv-fm">0</span></div>
+          <div class="inv-item"><span class="name"><span class="icon">💊</span>治疗药水</span><span class="qty green" id="inv-zl">0</span></div>
+          <div class="inv-item"><span class="name"><span class="icon">⚗️</span>力量药水</span><span class="qty gold" id="inv-ll">0</span></div>
+          <div class="inv-item"><span class="name"><span class="icon">💨</span>闪避药水</span><span class="qty green" id="inv-sb">0</span></div>
+          <div class="inv-item"><span class="name"><span class="icon">📜</span>算法</span><span class="qty purple" id="inv-zd">0</span></div>
+          <div class="inv-item"><span class="name"><span class="icon">🎖️</span>总司令</span><span class="qty gold" id="inv-sl">0</span></div>
+          <div class="inv-item"><span class="name"><span class="icon">🔧</span>维修包</span><span class="qty" id="inv-wx">0</span></div>
+          <div class="inv-item"><span class="name"><span class="icon">💰</span>金币</span><span class="qty gold" id="inv-coin">0</span></div>
+        </div>
       </div>
 
       <!-- 属性 -->
       <div class="glass">
-        <div class="section-title purple">📊 角色属性</div>
-        <div class="stat-list" id="stat-list"></div>
+        <div class="section-title">⚔️ 角色属性</div>
+        <div class="stat-list">
+          <div class="stat-item"><span class="k">血量上限</span><span class="v" id="stat-xl">75</span></div>
+          <div class="stat-item"><span class="k">暴力伤害</span><span class="v" id="stat-shh">15</span></div>
+          <div class="stat-item"><span class="k">暴击伤害</span><span class="v" id="stat-bj">35</span></div>
+          <div class="stat-item"><span class="k">暴击概率</span><span class="v" id="stat-bjgl">15%</span></div>
+          <div class="stat-item"><span class="k">算法伤害</span><span class="v" id="stat-qs">40</span></div>
+          <div class="stat-item"><span class="k">暴戾伤害</span><span class="v" id="stat-bl">75</span></div>
+          <div class="stat-item"><span class="k">反噬概率</span><span class="v" id="stat-gl">50%</span></div>
+        </div>
       </div>
     </div>
 
-    <!-- 右侧：操作 + 日志 -->
+    <!-- 右侧：战斗日志+操作 -->
     <div class="side-right">
-      <!-- 操作面板 -->
-      <div class="glass action-panel" id="action-panel">
-        <!-- 动态渲染 -->
-      </div>
-
-      <!-- 日志 -->
       <div class="log-box">
         <div class="log-header">
-          <div class="section-title">📜 战 斗 日 志</div>
-          <button class="log-clear" id="btn-clearlog">清空</button>
+          <div class="section-title">📜 战斗日志</div>
+          <button class="log-clear" id="log-clear">清空</button>
         </div>
         <div class="log-body" id="log-body"></div>
+      </div>
+      <div class="glass action-panel">
+        <div class="section-title gold">🎮 可执行操作</div>
+        <div id="action-area"></div>
       </div>
     </div>
   </div>
 </div>
 
-<!-- 结算遮罩 -->
+<!-- 结算弹窗 -->
 <div class="modal-mask" id="modal-mask">
   <div class="modal" id="modal">
     <div class="modal-title" id="modal-title"></div>
     <div class="modal-msg" id="modal-msg"></div>
-    <button class="modal-btn" id="modal-btn">返 回 主 菜 单</button>
+    <button class="modal-btn" id="modal-btn">确 定</button>
   </div>
 </div>
 
 <script>
-// ========== 游戏状态 ==========
+// ============ 全局游戏状态 ============
 const state = {
-  // 食物
-  mw:0, pt:0, fm:0,
-  // 武器属性
-  shh:15, bj:35, bjgl:15,
-  qs:40, zd:0,
-  bl:75, gl:50,
   // 资源
-  coin:0, xl:75, sl:0, dl:0, wx:0,
-  hp:75,
-  // 药水
-  zl:0, ll:0, sb:0,
-  // buff
-  strTurns:0,   // 力量回合剩余
-  fstTurns:0,   // 闪避回合剩余
-  // 关卡
-  stage:'menu', // menu / fighting / reward
-  currentLevel:0,
-  enemyHp:0, enemyMaxHp:0, enemyAtk:0, enemyName:'',
-  phase:'',     // use / attack / enemyTurn
+  mw:0, pt:0, fm:0,          // 食物
+  zl:0, ll:0, sb:0,          // 药水
+  zd:0, sl:0,                 // 弹药
+  wx:0, coin:0,               // 维修包/金币
+  // 属性
+  xl:75, hp:75,              // 血量上限/当前血量
+  shh:15, bj:35, bjgl:15,    // 暴力代码：基础/暴击/暴击率
+  qs:40,                       // 算法伤害
+  bl:75, gl:50,                // 暴戾：伤害/反噬率
+  // 战斗临时状态
+  inBattle:false,
+  enemyHp:0, enemyMaxHp:0, enemyAtk:0, enemyLevel:0,
+  turn:1, strBuff:0, fstBuff:0,
+  phase:'menu' // menu / consume / attack / gesp-cleared
 };
 
-// ========== 工具函数 ==========
-const $ = sel => document.querySelector(sel);
-const rand = (min, max) => Math.floor(Math.random()*(max-min+1))+min;
-const clamp = (v,mn,mx) => Math.max(mn, Math.min(mx,v));
+// ============ DOM 引用 ============
+const $ = id => document.getElementById(id);
+const startScreen = $('start-screen');
+const app = $('app');
+const logBody = $('log-body');
 
+// ============ 工具函数 ============
+function rand(min, max){ return Math.floor(Math.random()*(max-min+1))+min; }
 function log(text, cls=''){
-  const el = document.createElement('div');
-  el.className = 'log-line ' + cls;
-  el.innerHTML = text;
-  const box = $('#log-body');
-  box.appendChild(el);
-  box.scrollTop = box.scrollHeight;
+  const div = document.createElement('div');
+  div.className = 'log-line ' + cls;
+  div.textContent = text;
+  logBody.appendChild(div);
+  logBody.scrollTop = logBody.scrollHeight;
 }
-function logSep(){
-  const el = document.createElement('div');
-  el.className = 'log-line sep';
-  el.textContent = '─'.repeat(40);
-  $('#log-body').appendChild(el);
-  $('#log-body').scrollTop = $('#log-body').scrollHeight;
-}
-function logBig(text, cls='big'){
-  const el = document.createElement('div');
-  el.className = 'log-line ' + cls;
-  el.textContent = text;
-  $('#log-body').appendChild(el);
-  $('#log-body').scrollTop = $('#log-body').scrollHeight;
-}
+function logBig(text, cls='big'){ log(text, cls); }
+function logSep(){ log('─────────────────────────────────', 'sep'); }
 
-// ========== 渲染UI ==========
-function render(){
-  // 玩家血量
-  $('#p-hp').textContent = state.hp;
-  $('#p-maxhp').textContent = state.xl;
-  const pPct = clamp(state.hp/state.xl*100, 0, 100);
-  const pBar = $('#p-hpbar');
-  pBar.style.width = pPct+'%';
-  pBar.classList.toggle('low', pPct < 30);
+// ============ 界面更新 ============
+function updateUI(){
+  // 玩家HP
+  $('p-hp').textContent = Math.max(0, state.hp);
+  $('p-maxhp').textContent = state.xl;
+  const pPct = Math.max(0, Math.min(100, state.hp/state.xl*100));
+  $('p-hpbar').style.width = pPct + '%';
+  $('p-hpbar').classList.toggle('low', pPct < 30);
 
-  // 敌人
-  if(state.stage==='fighting'){
-    $('#enemy-panel').style.display='';
-    $('#e-name').textContent = state.enemyName;
-    $('#e-hp').textContent = Math.max(0,state.enemyHp);
-    $('#e-maxhp').textContent = state.enemyMaxHp;
-    const ePct = clamp(state.enemyHp/state.enemyMaxHp*100, 0, 100);
-    const eBar = $('#e-hpbar');
-    eBar.style.width = ePct+'%';
-    eBar.classList.toggle('low', ePct < 30);
-    $('#stage-label').textContent = '战 斗 中';
-    $('#stage-num').textContent = 'L'+state.currentLevel;
+  // 敌人HP
+  if(state.inBattle){
+    $('enemy-panel').style.display = '';
+    $('e-name').textContent = `👾 GESP ${state.enemyLevel}级怪`;
+    $('e-hp').textContent = Math.max(0, state.enemyHp);
+    $('e-maxhp').textContent = state.enemyMaxHp;
+    const ePct = Math.max(0, state.enemyHp/state.enemyMaxHp*100);
+    $('e-hpbar').style.width = ePct + '%';
+    $('e-hpbar').classList.toggle('low', ePct < 30);
+    $('stage-label').textContent = '战 斗 中';
+    $('stage-num').textContent = `L${state.enemyLevel}`;
   } else {
-    $('#enemy-panel').style.display='none';
-    if(state.stage==='menu'){
-      $('#stage-label').textContent = '主 菜 单';
-      $('#stage-num').textContent = 'MENU';
-    } else if(state.stage==='reward'){
-      $('#stage-label').textContent = '结 算';
-      $('#stage-num').textContent = 'WIN';
-    }
+    $('enemy-panel').style.display = 'none';
+    $('stage-label').textContent = state.phase === 'gesp-cleared' ? '通 关' : '主 菜 单';
+    $('stage-num').textContent = state.phase === 'gesp-cleared' ? 'WIN' : 'MENU';
   }
 
-  // buff
-  const buffs = $('#p-buffs');
-  buffs.innerHTML='';
-  if(state.strTurns>0){
+  // buff标签
+  const pBuffs = $('p-buffs');
+  pBuffs.innerHTML = '';
+  if(state.strBuff > 0){
     const c = document.createElement('span');
-    c.className='chip chip-power';
-    c.textContent='💪 力量×'+state.strTurns;
-    buffs.appendChild(c);
+    c.className = 'chip chip-power';
+    c.textContent = `💪 力量x${state.strBuff}`;
+    pBuffs.appendChild(c);
   }
-  if(state.fstTurns>0){
+  if(state.fstBuff > 0){
     const c = document.createElement('span');
-    c.className='chip chip-dodge';
-    c.textContent='🌀 闪避×'+state.fstTurns;
-    buffs.appendChild(c);
+    c.className = 'chip chip-dodge';
+    c.textContent = `🛡️ 闪避x${state.fstBuff}`;
+    pBuffs.appendChild(c);
   }
 
   // 背包
-  const inv = $('#inv-grid');
-  const items = [
-    {icon:'🍖', name:'美味食物', qty:state.mw, cls:''},
-    {icon:'🍞', name:'普通食物', qty:state.pt, cls:''},
-    {icon:'🧀', name:'发霉食物', qty:state.fm, cls:'crimson'},
-    {icon:'💊', name:'治疗药水', qty:state.zl, cls:'green'},
-    {icon:'⚗️', name:'力量药水', qty:state.ll, cls:'gold'},
-    {icon:'💨', name:'闪避药水', qty:state.sb, cls:'purple'},
-    {icon:'📜', name:'算法', qty:state.zd, cls:'purple'},
-    {icon:'🎖️', name:'总司令', qty:state.sl, cls:'gold'},
-    {icon:'🔧', name:'维修包', qty:state.wx, cls:'green'},
-    {icon:'🪙', name:'金币', qty:state.coin, cls:'gold'},
-  ];
-  inv.innerHTML = items.map(it => `
-    <div class="inv-item">
-      <div class="name"><span class="icon">${it.icon}</span>${it.name}</div>
-      <div class="qty ${it.cls}">×${it.qty}</div>
-    </div>
-  `).join('');
+  $('inv-mw').textContent = state.mw;
+  $('inv-pt').textContent = state.pt;
+  $('inv-fm').textContent = state.fm;
+  $('inv-zl').textContent = state.zl;
+  $('inv-ll').textContent = state.ll;
+  $('inv-sb').textContent = state.sb;
+  $('inv-zd').textContent = state.zd;
+  $('inv-sl').textContent = state.sl;
+  $('inv-wx').textContent = state.wx;
+  $('inv-coin').textContent = state.coin;
 
   // 属性
-  const stat = $('#stat-list');
-  stat.innerHTML = `
-    <div class="stat-item"><span class="k">血量上限</span><span class="v" style="color:var(--green)">${state.xl}</span></div>
-    <div class="stat-item"><span class="k">暴力代码伤害</span><span class="v" style="color:var(--cyan)">${state.shh}±10</span></div>
-    <div class="stat-item"><span class="k">暴击伤害</span><span class="v" style="color:var(--crimson)">${state.bj}</span></div>
-    <div class="stat-item"><span class="k">暴击概率</span><span class="v" style="color:var(--gold)">${state.bjgl}%</span></div>
-    <div class="stat-item"><span class="k">算法伤害</span><span class="v" style="color:var(--purple)">${state.qs}</span></div>
-    <div class="stat-item"><span class="k">暴戾代码伤害</span><span class="v" style="color:var(--crimson)">${state.bl}</span></div>
-    <div class="stat-item"><span class="k">反噬概率</span><span class="v" style="color:var(--crimson)">${state.gl}%</span></div>
-    <div class="stat-item"><span class="k">已修复道路</span><span class="v">${state.dl}/8</span></div>
-  `;
-
-  renderActions();
+  $('stat-xl').textContent = state.xl;
+  $('stat-shh').textContent = state.shh;
+  $('stat-bj').textContent = state.bj;
+  $('stat-bjgl').textContent = state.bjgl + '%';
+  $('stat-qs').textContent = state.qs;
+  $('stat-bl').textContent = state.bl;
+  $('stat-gl').textContent = state.gl + '%';
 }
 
-function renderActions(){
-  const panel = $('#action-panel');
-  panel.innerHTML='';
+// ============ 按钮渲染 ============
+function renderButtons(btns){
+  const area = $('action-area');
+  area.innerHTML = '';
+  // 先移除旧hint
+  const oldHint = area.querySelector('.action-hint');
+  if(oldHint) oldHint.remove();
 
-  if(state.stage==='menu'){
+  if(btns.hint){
     const hint = document.createElement('div');
-    hint.className='action-hint';
-    hint.textContent='选择你的行动';
-    panel.appendChild(hint);
-
-    const grid = document.createElement('div');
-    grid.className='btn-grid';
-    grid.innerHTML = `
-      <button class="act-btn btn-crimson" data-act="gesp">
-        <span class="t">⚔️ 挑战 GESP 小怪</span>
-        <span class="d">共8只，实力递增，掉落食物/算法/药水/附魔书</span>
-      </button>
-      <button class="act-btn btn-disabled" disabled>
-        <span class="t">👹 挑战 CSP 精英怪</span>
-        <span class="d">测试版本暂未开放</span>
-      </button>
-      <button class="act-btn btn-disabled" disabled>
-        <span class="t">🛣️ 修复道路</span>
-        <span class="d">测试版本暂未开放</span>
-      </button>
-      <button class="act-btn btn-disabled" disabled>
-        <span class="t">💀 挑战 Boss €€￡</span>
-        <span class="d">测试版本暂未开放</span>
-      </button>
-      <button class="act-btn btn-disabled" disabled>
-        <span class="t">🍬 前往糖果店</span>
-        <span class="d">测试版本暂未开放</span>
-      </button>
-    `;
-    panel.appendChild(grid);
-    return;
+    hint.className = 'action-hint';
+    hint.textContent = btns.hint;
+    area.appendChild(hint);
   }
-
-  if(state.stage==='fighting'){
-    if(state.phase==='use'){
-      const hint = document.createElement('div');
-      hint.className='action-hint';
-      hint.textContent=`【第一阶段】使用食物或药水（第 ${state.currentLevel} 关 · 回合使用阶段）`;
-      panel.appendChild(hint);
-
-      const grid = document.createElement('div');
-      grid.className='btn-grid';
-      grid.innerHTML = `
-        <button class="act-btn btn-green" data-use="mw" ${state.mw<=0?'disabled':''}>
-          <span class="t">🍖 吃美味食物</span>
-          <span class="d">回复60点血量（剩 ${state.mw}）</span>
-        </button>
-        <button class="act-btn btn-green" data-use="pt" ${state.pt<=0?'disabled':''}>
-          <span class="t">🍞 吃普通食物</span>
-          <span class="d">回复25~35点血量（剩 ${state.pt}）</span>
-        </button>
-        <button class="act-btn btn-crimson" data-use="fm" ${state.fm<=0?'disabled':''}>
-          <span class="t">🧀 吃发霉食物</span>
-          <span class="d">血量变化-5~+15（剩 ${state.fm}）</span>
-        </button>
-        <button class="act-btn btn-green" data-use="zl" ${state.zl<=0?'disabled':''}>
-          <span class="t">💊 使用治疗药水</span>
-          <span class="d">血量回满（剩 ${state.zl}）</span>
-        </button>
-        <button class="act-btn btn-gold" data-use="ll" ${state.ll<=0?'disabled':''}>
-          <span class="t">⚗️ 使用力量药水</span>
-          <span class="d">接下来3回合伤害翻倍（剩 ${state.ll}）</span>
-        </button>
-        <button class="act-btn btn-purple" data-use="sb" ${state.sb<=0?'disabled':''}>
-          <span class="t">💨 使用闪避药水</span>
-          <span class="d">接下来3回合免疫伤害（剩 ${state.sb}）</span>
-        </button>
-        <button class="act-btn btn-ghost2" data-use="skip">
-          <span class="t">⏭️ 跳过使用</span>
-          <span class="d">不使用任何物品，直接攻击</span>
-        </button>
-      `;
-      panel.appendChild(grid);
-    }
-    else if(state.phase==='attack'){
-      const hint = document.createElement('div');
-      hint.className='action-hint';
-      hint.textContent='【第二阶段】选择攻击方式';
-      panel.appendChild(hint);
-
-      const grid = document.createElement('div');
-      grid.className='btn-grid';
-      const dmgMul = state.strTurns>0 ? '×2' : '';
-      grid.innerHTML = `
-        <button class="act-btn btn-cyan" data-atk="1">
-          <span class="t">💻 暴力代码</span>
-          <span class="d">基础 ${state.shh}±10 伤害，暴击 ${state.bj}，暴击率 ${state.bjgl}% ${dmgMul?'<b style="color:var(--gold)">（力量'+dmgMul+'）</b>':''}</span>
-        </button>
-        <button class="act-btn btn-purple" data-atk="2" ${state.zd<=0?'disabled':''}>
-          <span class="t">📜 算法攻击</span>
-          <span class="d">固定 ${state.qs} 点伤害（剩 ${state.zd}）${dmgMul?'<b style="color:var(--gold)"> （力量'+dmgMul+'）</b>':''}</span>
-        </button>
-        <button class="act-btn btn-crimson" data-atk="3">
-          <span class="t">🤬 暴戾代码</span>
-          <span class="d">造成 ${state.bl} 伤害，但 ${state.gl}% 概率反噬50~100${dmgMul?'<b style="color:var(--gold)"> （力量'+dmgMul+'）</b>':''}</span>
-        </button>
-        <button class="act-btn btn-gold" data-atk="4" ${state.sl<=0?'disabled':''}>
-          <span class="t">🎖️ 使用总司令</span>
-          <span class="d">45%概率造成150点伤害（剩 ${state.sl}）${dmgMul?'<b style="color:var(--gold)"> （力量'+dmgMul+'）</b>':''}</span>
-        </button>
-      `;
-      panel.appendChild(grid);
-    }
-  }
+  const grid = document.createElement('div');
+  grid.className = 'btn-grid';
+  btns.items.forEach(b => {
+    const btn = document.createElement('button');
+    btn.className = 'act-btn ' + (b.color || 'btn-cyan');
+    btn.disabled = !!b.disabled;
+    btn.innerHTML = `<div class="t">${b.icon ? b.icon+' ' : ''}${b.title}</div><div class="d">${b.desc||''}</div>`;
+    if(!b.disabled) btn.onclick = b.onClick;
+    grid.appendChild(btn);
+  });
+  area.appendChild(grid);
 }
 
-// ========== 游戏逻辑 ==========
+// ============ 游戏逻辑 ============
 function startGame(){
-  // 初始化状态（C++初始值）
-  state.mw=0; state.pt=0; state.fm=0;
-  state.shh=15; state.bj=35; state.bjgl=15;
-  state.qs=40; state.zd=0;
-  state.bl=75; state.gl=50;
-  state.coin=0; state.xl=75; state.sl=0; state.dl=0; state.wx=0;
-  state.zl=0; state.ll=0; state.sb=0;
-  state.hp=state.xl;
-  state.strTurns=0; state.fstTurns=0;
-  state.stage='menu';
-  state.currentLevel=0;
+  startScreen.classList.add('hidden');
+  app.classList.remove('hidden');
+  state.hp = state.xl;
+  updateUI();
+  showMainMenu();
+}
 
-  $('#start-screen').classList.add('hidden');
-  $('#app').classList.remove('hidden');
-  $('#log-body').innerHTML='';
-  logBig('欢 迎 来 到 大 战 € € ￡','big');
-  log('此版本开放 <b style="color:var(--crimson)">挑战GESP小怪</b> 玩法。其余内容敬请期待。','warn');
-  log('提示：每回合先选择是否使用物品，再选择攻击方式。死亡会随机清空一类物品！','warn');
+function showMainMenu(){
+  state.inBattle = false;
+  state.phase = 'menu';
+  state.hp = state.xl;
   logSep();
-  render();
+  logBig('=== 主 菜 单 ===');
+  updateUI();
+  renderButtons({
+    hint: '请选择你要进行的行动：',
+    items: [
+      {icon:'⚔️', title:'挑战GESP小怪', desc:'连续挑战8只递进难度小怪，掉落装备和道具', color:'btn-crimson', onClick: startGesp},
+      {icon:'👹', title:'挑战CSP精英怪', desc:'测试版本暂未开放', color:'btn-disabled', disabled:true},
+      {icon:'🛠️', title:'修复道路', desc:'测试版本暂未开放', color:'btn-disabled', disabled:true},
+      {icon:'💀', title:'挑战Boss €€￡', desc:'测试版本暂未开放', color:'btn-disabled', disabled:true},
+      {icon:'🍬', title:'前往糖果店', desc:'测试版本暂未开放', color:'btn-disabled', disabled:true},
+    ]
+  });
 }
 
-function startGESP(){
-  logBig('━━━ 挑 战 G E S P 小 怪 ━━━','big');
-  log('GESP小怪共8只，实力递增。一级怪血量25、攻击3，10%触发1.5倍暴击。往后每级血量+5、攻击+2。','player');
-  log('固定掉落食物（低级发霉→中级普通→高级美味），额外掉落概率逐级提升，高级怪额外掉药水。','player');
+function startGesp(){
   logSep();
-  state.currentLevel = 1;
-  startLevel();
+  logBig('=== GESP 小 怪 挑 战 ===');
+  log('GESP小怪共有八只，实力依次递增。', 'warn');
+  log('一级怪血量25，攻击力3，10%触发1.5倍暴击，每升一级血量+5、攻击+2');
+  log('每个小怪必掉食物：1-2级发霉、3-5级普通、6-8级美味');
+  log('一级怪30%概率额外掉落，每级+10%；额外物30%美味/30%金币/30%算法/10%附魔');
+  log('7级60%掉药水，8级80%掉药水；通关后额外获得维修包或附魔书');
+  logBig('--- 战斗开始！ ---');
+  state.phase = 'battle';
+  nextGespEnemy(1);
 }
 
-function startLevel(){
-  const dj = state.currentLevel;
-  state.enemyMaxHp = 20 + dj*5;
-  state.enemyHp = state.enemyMaxHp;
-  state.enemyAtk = 1 + dj*2;
-  state.enemyName = `👾 GESP ${dj}级怪`;
-  state.stage = 'fighting';
-  state.phase = 'use';
-  state.hp = state.xl; // C++: 在gesp()没有每关回满，但main里每次主菜单重置时hp=xl。战斗中gespx循环也不重置，只有死亡或胜利返回。
-  // 按C++逻辑，hp在战斗中保持，战斗结束后回满。但每关开始不需要重置。
-  // 仔细看C++: 每关调用gespx(i)，只有胜利后才继续下一关，gespx里hp不会回满（战斗中扣血继续）。主循环hp=xl是在主菜单进入gesp之前设置。
-  // 所以只有第一次进gesp回满血，中途每关不回。这里已经在startGESP之前由菜单进入时设置？
-  // 修正：main里while(1){ hp=xl; ... if op==1 gesp(); } 即每次进gesp前回满，gesp内8关之间不回。
-  logBig(`— 第 ${dj} 关 · ${state.enemyName} —`,'big');
-  log(`敌人出现！HP: ${state.enemyMaxHp}，攻击: ${state.enemyAtk}`,'enemy');
-  render();
+function nextGespEnemy(level){
+  state.enemyLevel = level;
+  state.enemyHp = 20 + level*5;
+  state.enemyMaxHp = state.enemyHp;
+  state.enemyAtk = 1 + level*2;
+  state.inBattle = true;
+  state.turn = 1;
+  state.strBuff = 0;
+  state.fstBuff = 0;
+  state.hp = state.xl; // 每只怪开始前回满血（原作逻辑：一轮战斗结束后回满）
+  logSep();
+  log(`⚔️ 遭遇 ${level} 级GESP怪！血量${state.enemyMaxHp}，攻击${state.enemyAtk}`, 'enemy');
+  updateUI();
+  startConsumePhase();
 }
 
-// 使用物品
-function doUse(kind){
-  if(kind==='skip'){
-    log('你选择不使用物品。','player');
-  } else if(kind==='mw'){
-    state.mw--;
-    state.hp = Math.min(state.hp+60, state.xl);
-    log(`🍖 你使用了<b>美味食物</b>，恢复了 <b style="color:var(--green)">60</b> 点血量。当前血量：${state.hp}/${state.xl}`,'heal');
-    log(`剩余美味食物：${state.mw}`,'');
-  } else if(kind==='pt'){
-    state.pt--;
-    const heal = rand(25,35);
-    state.hp = Math.min(state.hp+heal, state.xl);
-    log(`🍞 你使用了<b>普通食物</b>，恢复了 <b style="color:var(--green)">${heal}</b> 点血量。当前血量：${state.hp}/${state.xl}`,'heal');
-    log(`剩余普通食物：${state.pt}`,'');
-  } else if(kind==='fm'){
-    state.fm--;
-    const delta = rand(-5,15);
-    state.hp = Math.min(state.hp+delta, state.xl);
-    if(delta>=0) log(`🧀 你使用了<b>发霉食物</b>，恢复了 <b style="color:var(--green)">${delta}</b> 点血量。当前血量：${state.hp}/${state.xl}`,'heal');
-    else log(`🧀 你使用了<b>发霉食物</b>，<b style="color:var(--crimson)">扣了 ${-delta} 点血量</b>！当前血量：${state.hp}/${state.xl}`,'enemy');
-    log(`剩余发霉食物：${state.fm}`,'');
-    if(state.hp<=0){ die(); return; }
-  } else if(kind==='zl'){
-    state.zl--;
-    state.hp = state.xl;
-    log(`💊 你使用了<b>治疗药水</b>，血量回满！当前血量：${state.hp}/${state.xl}`,'heal');
-    log(`剩余治疗药水：${state.zl}`,'');
-  } else if(kind==='ll'){
-    state.ll--;
-    state.strTurns = 3;
-    log(`⚗️ 你使用了<b>力量药水</b>，接下来3回合伤害翻倍！`,'gold');
-    log(`剩余力量药水：${state.ll}`,'');
-  } else if(kind==='sb'){
-    state.sb--;
-    state.fstTurns = 3;
-    log(`💨 你使用了<b>闪避药水</b>，接下来3回合免疫伤害！`,'purple');
-    log(`剩余闪避药水：${state.sb}`,'');
-  }
-  state.phase='attack';
-  render();
+function startConsumePhase(){
+  updateUI();
+  const items = [
+    {icon:'🍖', title:`吃美味食物 (${state.mw})`, desc:'回复60点生命值', color:'btn-green', disabled: state.mw<=0, onClick: ()=>useItem('mw')},
+    {icon:'🍞', title:`吃普通食物 (${state.pt})`, desc:'回复25-35点生命值', color:'btn-green', disabled: state.pt<=0, onClick: ()=>useItem('pt')},
+    {icon:'🧀', title:`吃发霉食物 (${state.fm})`, desc:'回复-5~15点生命值（可能扣血）', color:'btn-crimson', disabled: state.fm<=0, onClick: ()=>useItem('fm')},
+    {icon:'💊', title:`治疗药水 (${state.zl})`, desc:'直接回满血量', color:'btn-green', disabled: state.zl<=0, onClick: ()=>useItem('zl')},
+    {icon:'⚗️', title:`力量药水 (${state.ll})`, desc:'接下来3回合攻击翻倍', color:'btn-gold', disabled: state.ll<=0, onClick: ()=>useItem('ll')},
+    {icon:'💨', title:`闪避药水 (${state.sb})`, desc:'接下来3回合免疫伤害', color:'btn-gold', disabled: state.sb<=0, onClick: ()=>useItem('sb')},
+    {icon:'⏭️', title:'跳过', desc:'不使用任何道具', color:'btn-ghost2', onClick: startAttackPhase},
+  ];
+  renderButtons({
+    hint: `第 ${state.turn} 回合 · 请选择使用道具：`,
+    items
+  });
 }
 
-// 攻击
-function doAttack(type){
-  let dmg=0, msg='';
-  const mul = state.strTurns>0 ? 2 : 1;
+function useItem(type){
+  switch(type){
+    case 'mw':
+      state.mw--;
+      state.hp = Math.min(state.xl, state.hp+60);
+      log(`🍖 你使用了美味食物，回复60HP，当前HP:${state.hp}`, 'heal');
+      log(`剩余美味食物：${state.mw}`);
+      break;
+    case 'pt':
+      state.pt--;
+      const heal = rand(25,35);
+      state.hp = Math.min(state.xl, state.hp+heal);
+      log(`🍞 你使用了普通食物，回复${heal}HP，当前HP:${state.hp}`, 'heal');
+      log(`剩余普通食物：${state.pt}`);
+      break;
+    case 'fm':
+      state.fm--;
+      const diff = rand(-5,15);
+      state.hp = Math.min(state.xl, state.hp+diff);
+      log(`🧀 你使用了发霉食物，血量变化${diff}，当前HP:${state.hp}`, diff<0?'crimson':'warn');
+      log(`剩余发霉食物：${state.fm}`);
+      if(state.hp <= 0) return handlePlayerDeath();
+      break;
+    case 'zl':
+      state.zl--;
+      state.hp = state.xl;
+      log('💊 你使用了治疗药水，血量回满！', 'heal');
+      log(`剩余治疗药水：${state.zl}`);
+      break;
+    case 'll':
+      state.ll--;
+      state.strBuff = 3;
+      log('⚗️ 你使用了力量药水！接下来3回合攻击翻倍！', 'gold');
+      log(`剩余力量药水：${state.ll}`);
+      break;
+    case 'sb':
+      state.sb--;
+      state.fstBuff = 3;
+      log('💨 你使用了闪避药水！接下来3回合免疫伤害！', 'heal');
+      log(`剩余闪避药水：${state.sb}`);
+      break;
+  }
+  updateUI();
+  startAttackPhase();
+}
 
-  if(type===1){ // 暴力代码
-    const zz = rand(1,100);
-    if(zz <= state.bjgl){
-      dmg = state.bj * mul;
-      if(mul===2) log(`💪【力量效果】你触发了<b class="crit" style="color:#ff6b6b">暴击</b>！对敌人造成 <b class="crit">${dmg}</b> 点伤害！`,'crit');
-      else log(`⚡ 你触发了<b class="crit" style="color:#ff6b6b">暴击</b>！对敌人造成 <b class="crit">${dmg}</b> 点伤害！`,'crit');
-    } else {
-      const fluct = rand(-10,10);
-      dmg = (fluct + state.shh) * mul;
-      if(mul===2) log(`💪【力量效果】你使用暴力代码攻击，造成 <b style="color:var(--cyan)">${dmg}</b> 点伤害！`,'player');
-      else log(`💻 你使用暴力代码攻击，造成 <b style="color:var(--cyan)">${dmg}</b> 点伤害！`,'player');
-    }
-    state.enemyHp -= dmg;
-  }
-  else if(type===2){ // 算法
-    state.zd--;
-    dmg = state.qs * mul;
-    state.enemyHp -= dmg;
-    if(mul===2) log(`💪【力量效果】你使用<b>算法</b>攻击，造成 <b style="color:var(--purple)">${dmg}</b> 点伤害！（剩余算法：${state.zd}）`,'purple');
-    else log(`📜 你使用<b>算法</b>攻击，造成 <b style="color:var(--purple)">${dmg}</b> 点伤害！（剩余算法：${state.zd}）`,'purple');
-  }
-  else if(type===3){ // 暴戾代码
-    const opp = rand(1,100);
-    if(opp <= state.gl){
-      const back = rand(50,100);
-      state.hp -= back;
-      log(`🤬 <b style="color:var(--crimson)">反噬！</b>暴戾代码失控，你受到了 <b style="color:var(--crimson)">${back}</b> 点伤害！当前血量：${state.hp}`,'enemy');
-      if(state.hp<=0){ render(); die(); return; }
-      render();
-      // 反噬后仍然进入敌人回合，不造成敌人伤害
-      enemyTurn();
-      return;
-    } else {
-      dmg = state.bl * mul;
-      state.enemyHp -= dmg;
-      if(mul===2) log(`💪【力量效果】你使用<b>暴戾代码</b>攻击，造成 <b style="color:var(--crimson)">${dmg}</b> 点伤害！`,'crit');
-      else log(`🤬 你使用<b>暴戾代码</b>攻击，造成 <b style="color:var(--crimson)">${dmg}</b> 点伤害！`,'player');
-    }
-  }
-  else if(type===4){ // 总司令
-    state.sl--;
-    log(`🎖️ 你使用了<b>总司令</b>！（剩余：${state.sl}）`,'gold');
-    const xx = rand(1,100);
-    if(xx<=45){
-      logBig('不 可 以 ， 总 司 令 ！ ！ ！ ！ ！','big');
-      dmg = mul===2 ? 300 : 150;
-      state.enemyHp -= dmg;
-      if(mul===2) log(`💪【力量效果】总司令触发！对敌人造成 <b class="crit">${dmg}</b> 点巨额伤害！`,'crit');
-      else log(`✨ 总司令触发！对敌人造成 <b class="crit">${dmg}</b> 点巨额伤害！`,'crit');
-    } else {
-      log(`总司令没有触发……（无事发生）`,'warn');
-    }
-  }
+function startAttackPhase(){
+  updateUI();
+  const items = [
+    {icon:'💻', title:'暴力代码', desc:'基础攻击，有概率暴击，无限使用', color:'btn-cyan', onClick: attackShh},
+    {icon:'📜', title:`算法 (${state.zd})`, desc:`固定${state.qs}点伤害，消耗品`, color:'btn-purple', disabled: state.zd<=0, onClick: attackQs},
+    {icon:'🤬', title:'暴戾代码', desc:`${state.bl}点高伤害，${state.gl}%概率反噬`, color:'btn-crimson', onClick: attackBl},
+    {icon:'🎖️', title:`总司令 (${state.sl})`, desc:'45%概率造成150点巨额伤害', color:'btn-gold', disabled: state.sl<=0, onClick: attackSl},
+  ];
+  renderButtons({
+    hint: `第 ${state.turn} 回合 · 请选择攻击方式：`,
+    items
+  });
+}
 
-  log(`敌人剩余血量：<b style="color:var(--crimson)">${Math.max(0,state.enemyHp)}</b>/${state.enemyMaxHp}`,'enemy');
+function applyDamage(dmg, buffed){
+  const finalDmg = buffed && state.strBuff>0 ? dmg*2 : dmg;
+  state.enemyHp -= finalDmg;
+  return finalDmg;
+}
 
-  if(state.enemyHp<=0){
-    render();
-    winLevel();
-    return;
+function attackShh(){
+  const isCrit = rand(1,100) <= state.bjgl;
+  let dmg;
+  if(isCrit){
+    dmg = applyDamage(state.bj, true);
+    log(`💥 暴击！你使用暴力代码造成 ${dmg} 点伤害！`, 'crit');
+  } else {
+    const base = state.shh + rand(-10,10);
+    dmg = applyDamage(base, true);
+    log(`💻 你使用暴力代码攻击，造成 ${dmg} 点伤害`, 'player');
   }
-  render();
-  // 敌人回合
-  setTimeout(enemyTurn, 450);
+  log(`敌人剩余HP：${Math.max(0,state.enemyHp)}`, 'enemy');
+  if(state.enemyHp <= 0) return enemyDefeated();
+  enemyTurn();
+}
+
+function attackQs(){
+  state.zd--;
+  const dmg = applyDamage(state.qs, true);
+  log(`📜 你使用算法攻击，造成 ${dmg} 点固定伤害`, 'purple');
+  log(`剩余算法：${state.zd}`);
+  log(`敌人剩余HP：${Math.max(0,state.enemyHp)}`, 'enemy');
+  if(state.enemyHp <= 0) return enemyDefeated();
+  enemyTurn();
+}
+
+function attackBl(){
+  const backfire = rand(1,100) <= state.gl;
+  if(backfire){
+    const hurt = rand(50,100);
+    state.hp -= hurt;
+    log(`🤬 反噬！暴戾代码失控，你受到了 ${hurt} 点伤害！`, 'crit');
+    log(`你当前HP：${Math.max(0,state.hp)}`, 'crimson');
+    updateUI();
+    if(state.hp <= 0) return handlePlayerDeath();
+  } else {
+    const dmg = applyDamage(state.bl, true);
+    log(`🤬 你使用暴戾代码，造成 ${dmg} 点高伤害！`, 'crimson');
+    log(`敌人剩余HP：${Math.max(0,state.enemyHp)}`, 'enemy');
+    if(state.enemyHp <= 0) return enemyDefeated();
+  }
+  enemyTurn();
+}
+
+function attackSl(){
+  state.sl--;
+  log('🎖️ 你呼叫了总司令支援...', 'gold');
+  log('不 可 以 ， 总 司 令 ！！！！！', 'big');
+  const trigger = rand(1,100) <= 45;
+  if(trigger){
+    const dmg = applyDamage(150, true);
+    log(`✨ 总司令天降正义！造成 ${dmg} 点巨额伤害！`, 'crit');
+    log(`敌人剩余HP：${Math.max(0,state.enemyHp)}`, 'enemy');
+    if(state.enemyHp <= 0) return enemyDefeated();
+  } else {
+    log('💨 总司令放了鸽子，什么也没发生...', 'warn');
+  }
+  log(`剩余总司令：${state.sl}`);
+  enemyTurn();
 }
 
 function enemyTurn(){
-  if(state.fstTurns>0){
-    log(`🌀 <b style="color:var(--green)">闪避成功！</b>你躲开了敌人的攻击。`,'heal');
+  updateUI();
+  if(state.fstBuff > 0){
+    log(`🛡️ 闪避生效！你免疫了敌人的攻击`, 'heal');
   } else {
-    const roll = rand(0,9); // 0-9 共10个值，9是暴击（10%）
-    let edmg;
-    if(roll===9){
-      edmg = Math.floor(state.enemyAtk * 1.5);
-      log(`💥 敌人触发<b class="crit" style="color:#ff6b6b">暴击</b>！对你造成 <b style="color:var(--crimson)">${edmg}</b> 点伤害！当前血量：${Math.max(0,state.hp-edmg)}`,'crit');
+    const isCrit = rand(1,10) === 1; // 10%暴击
+    let dmg = state.enemyAtk;
+    if(isCrit) dmg = Math.floor(dmg * 1.5);
+    state.hp -= dmg;
+    if(isCrit){
+      log(`👾 敌人暴击！对你造成 ${dmg} 点伤害`, 'crit');
     } else {
-      edmg = state.enemyAtk;
-      log(`👾 敌人攻击你，造成 <b style="color:var(--crimson)">${edmg}</b> 点伤害！当前血量：${Math.max(0,state.hp-edmg)}`,'enemy');
+      log(`👾 敌人攻击你，造成 ${dmg} 点伤害`, 'enemy');
     }
-    state.hp -= edmg;
-    if(state.hp<=0){ render(); die(); return; }
+    log(`你当前HP：${Math.max(0,state.hp)}`, state.hp<state.xl*0.3?'crimson':'player');
+    if(state.hp <= 0) return handlePlayerDeath();
   }
   // buff回合递减
-  if(state.strTurns>0) state.strTurns--;
-  if(state.fstTurns>0) state.fstTurns--;
-  state.phase='use';
-  render();
+  if(state.strBuff > 0) state.strBuff--;
+  if(state.fstBuff > 0) state.fstBuff--;
+  state.turn++;
+  updateUI();
+  setTimeout(startConsumePhase, 400);
 }
 
-// 死亡
-function die(){
-  logBig('你 死 了 ！','dead');
-  const op = rand(0,2);
-  let punish='';
-  if(op===0){ state.mw=state.pt=state.fm=0; punish='你所有的<b class="punish">食物</b>被清空了！'; }
-  else if(op===1){ state.ll=state.zl=state.sb=0; punish='你所有的<b class="punish">药水</b>被清空了！'; }
-  else { state.sl=state.zd=0; punish='你所有的<b class="punish">弹药（算法/总司令）</b>被清空了！'; }
-  log(punish,'enemy');
-  showModal(false, '你 阵 亡 了', punish, '返回主菜单');
-}
+function enemyDefeated(){
+  const lv = state.enemyLevel;
+  logSep();
+  log(`🎉 你击败了 ${lv} 级GESP怪！`, 'big');
+  // 固定食物掉落
+  if(lv <= 2){ state.fm++; log(`获得固定掉落：发霉食物 x1，现有${state.fm}`, 'warn'); }
+  else if(lv <=5){ state.pt++; log(`获得固定掉落：普通食物 x1，现有${state.pt}`, 'heal'); }
+  else { state.mw++; log(`获得固定掉落：美味食物 x1，现有${state.mw}`, 'heal'); }
 
-// 胜利单关
-function winLevel(){
-  const i = state.currentLevel;
-  logBig(`击 败 ${i} 级 怪 ！`,'big');
-
-  // 固定掉落食物
-  if(i<=2){ state.fm++; log(`🍞 固定掉落：获得1个<b>发霉食物</b>（当前${state.fm}）。`,'gold'); }
-  else if(i<=5){ state.pt++; log(`🍖 固定掉落：获得1个<b>普通食物</b>（当前${state.pt}）。`,'gold'); }
-  else { state.mw++; log(`🍖 固定掉落：获得1个<b>美味食物</b>（当前${state.mw}）。`,'gold'); }
-
-  // 额外掉落
-  const extra = rand(1,100);
-  if(extra <= 20 + i*10){
-    log(`✨ 触发<b>额外掉落</b>！`,'gold');
+  // 额外掉落判定
+  const extraChance = 20 + lv*10;
+  if(rand(1,100) <= extraChance){
+    log('✨ 触发额外掉落！', 'gold');
     dropLoot();
   }
 
-  // 7、8级额外药水
-  if(i>=7){
-    const pp = rand(1,100);
-    if((i===7 && pp<=60) || (i===8 && pp<=80)){
-      log(`🧪 高级怪额外掉落药水！`,'gold');
+  // 7、8级额外掉药水
+  if(lv >=7){
+    const potionChance = lv ===7 ? 60 : 80;
+    if(rand(1,100) <= potionChance){
+      log('🧪 高等级怪物额外掉落药水！', 'purple');
       dropPotion();
     }
   }
-  logSep();
 
-  if(i>=8){
-    // 通关GESP
-    setTimeout(winGESP, 600);
+  // 下一关/通关
+  if(lv < 8){
+    updateUI();
+    setTimeout(()=>nextGespEnemy(lv+1), 800);
   } else {
-    state.currentLevel++;
-    setTimeout(startLevel, 800);
+    gespClear();
   }
 }
 
 function dropLoot(){
-  const op = rand(1,100);
-  if(op<=30){ state.mw++; log(`  └ 获得1个<b>美味食物</b>（当前${state.mw}）。`,'gold'); }
-  else if(op<=60){ state.zd++; log(`  └ 获得1个<b>算法</b>（当前${state.zd}）。`,'purple'); }
-  else if(op<=90){ state.coin++; log(`  └ 获得1枚<b>金币</b>（当前${state.coin}）。`,'gold'); }
-  else { log(`  └ 获得1本<b>附魔书</b>！`,'purple'); doEnchant(); }
+  const roll = rand(1,100);
+  if(roll <= 30){ state.mw++; log('获得：美味食物 x1', 'heal'); }
+  else if(roll <=60){ state.zd++; log('获得：算法 x1', 'purple'); }
+  else if(roll <=90){ state.coin++; log('获得：金币 x1', 'gold'); }
+  else {
+    log('获得：附魔书 x1', 'gold');
+    applyEnchant();
+  }
 }
 
 function dropPotion(){
-  const op = rand(0,5);
-  if(op<=2){ state.zl++; log(`  └ 获得1个<b>治疗药水</b>（当前${state.zl}）。`,'green'); }
-  else if(op<=4){ state.ll++; log(`  └ 获得1个<b>力量药水</b>（当前${state.ll}）。`,'gold'); }
-  else { state.sb++; log(`  └ 获得1个<b>闪避药水</b>（当前${state.sb}）。`,'purple'); }
+  const roll = rand(0,5);
+  if(roll <=2){ state.zl++; log('获得：治疗药水 x1', 'heal'); }
+  else if(roll <=4){ state.ll++; log('获得：力量药水 x1', 'gold'); }
+  else { state.sb++; log('获得：闪避药水 x1', 'heal'); }
 }
 
-function doEnchant(){
-  // 检查是否全满
+function applyEnchant(){
+  // 全满则转金币
   if(state.xl>=175 && state.shh>=30 && state.bjgl>=50 && state.bj>=75 && state.bl>=150 && state.gl<=20 && state.qs>=100){
-    state.coin+=3;
-    log(`  └ 所有属性已满！自动转化为 <b>3金币</b>（当前${state.coin}）。`,'gold');
+    state.coin +=3;
+    log('属性全满，附魔书自动转化为3金币', 'gold');
+    updateUI();
     return;
   }
+  // 随机有效附魔
   let op;
-  // 随机直到选到未满的属性
-  while(true){
+  do {
     op = rand(0,6);
-    if(op===0 && state.xl>=175) continue;
-    if(op===1 && state.shh>=30) continue;
-    if(op===2 && state.bjgl>=50) continue;
-    if(op===3 && state.bj>=75) continue;
-    if(op===4 && state.bl>=150) continue;
-    if(op===5 && state.gl<=20) continue;
-    if(op===6 && state.qs>=100) continue;
-    break;
+  } while(
+    (op===0 && state.xl>=175) ||
+    (op===1 && state.shh>=30) ||
+    (op===2 && state.bjgl>=50) ||
+    (op===3 && state.bj>=75) ||
+    (op===4 && state.bl>=150) ||
+    (op===5 && state.gl<=20) ||
+    (op===6 && state.qs>=100)
+  );
+  switch(op){
+    case 0: state.xl = Math.min(175, state.xl+25); log(`📖 附魔【生命】：血量上限+25，当前上限${state.xl}`, 'heal'); break;
+    case 1: state.shh = Math.min(30, state.shh+5); log(`📖 附魔【暴力】：暴力伤害+5，当前${state.shh}`, 'player'); break;
+    case 2: state.bjgl = Math.min(50, state.bjgl+5); log(`📖 附魔【赌神】：暴击率+5%，当前${state.bjgl}%`, 'crit'); break;
+    case 3: state.bj = Math.min(75, state.bj+10); log(`📖 附魔【奇迹】：暴击伤害+10，当前${state.bj}`, 'crit'); break;
+    case 4: state.bl = Math.min(150, state.bl+15); log(`📖 附魔【口吐芬芳】：暴戾伤害+15，当前${state.bl}`, 'crimson'); break;
+    case 5: state.gl = Math.max(20, state.gl-10); log(`📖 附魔【贿赂】：反噬概率-10%，当前${state.gl}%`, 'gold'); break;
+    case 6: state.qs = Math.min(100, state.qs+10); log(`📖 附魔【I AK IOI】：算法伤害+10，当前${state.qs}`, 'purple'); break;
   }
-  if(op===0){ state.xl=Math.min(state.xl+25,175); log(`  └ 📕【生命附魔】血量上限 +25，当前 <b>${state.xl}</b>。`,'green'); }
-  else if(op===1){ state.shh=Math.min(state.shh+5,30); log(`  └ 📕【暴力附魔】暴力代码伤害 +5，当前 <b>${state.shh}</b>。`,'cyan'); }
-  else if(op===2){ state.bjgl=Math.min(state.bjgl+5,50); log(`  └ 📕【赌神附魔】暴击概率 +5%，当前 <b>${state.bjgl}%</b>。`,'gold'); }
-  else if(op===3){ state.bj=Math.min(state.bj+10,75); log(`  └ 📕【奇迹附魔】暴击伤害 +10，当前 <b>${state.bj}</b>。`,'crimson'); }
-  else if(op===4){ state.bl=Math.min(state.bl+15,150); log(`  └ 📕【口吐芬芳附魔】暴戾代码伤害 +15，当前 <b>${state.bl}</b>。`,'crimson'); }
-  else if(op===5){ state.gl=Math.max(state.gl-10,20); log(`  └ 📕【贿赂附魔】反噬概率 -10%，当前 <b>${state.gl}%</b>。`,'purple'); }
-  else if(op===6){ state.qs=Math.min(state.qs+10,100); log(`  └ 📕【I AK IOI附魔】算法伤害 +10，当前 <b>${state.qs}</b>。`,'purple'); }
+  updateUI();
 }
 
-// 通关GESP
-function winGESP(){
-  logBig('🎉 通 关 全 部 8 只 怪 ！ 🎉','big');
-  const op = rand(0,1);
-  if(op===0){
-    state.wx++;
-    log(`🔧 通关奖励：获得1个<b>维修包</b>！（当前${state.wx}）`,'gold');
-  } else {
-    log(`📕 通关奖励：获得1本<b>附魔书</b>！`,'gold');
-    doEnchant();
-  }
-  state.stage='reward';
-  state.hp = state.xl;
-  render();
-  setTimeout(()=>showModal(true, '🏆 通 关 成 功', '你击败了全部8只GESP小怪！<br>血量已回满，可以继续挑战或重新开始。', '返回主菜单'), 800);
-}
-
-function showModal(isWin, title, msg, btnText){
-  const mask = $('#modal-mask');
-  const modal = $('#modal');
-  $('#modal-title').textContent = title;
-  $('#modal-msg').innerHTML = msg;
-  $('#modal-btn').textContent = btnText;
-  modal.classList.toggle('win', isWin);
-  modal.classList.toggle('lose', !isWin);
-  mask.classList.add('show');
-}
-function hideModal(){
-  $('#modal-mask').classList.remove('show');
-}
-
-function backToMenu(){
-  hideModal();
-  state.stage='menu';
-  state.hp = state.xl;
-  state.strTurns=0; state.fstTurns=0;
+function gespClear(){
+  state.inBattle = false;
+  state.phase = 'gesp-cleared';
   logSep();
-  logBig('— 返回主菜单 —','big');
-  log(`血量已恢复至上限 ${state.xl}。`,'heal');
-  render();
+  logBig('🏆 GESP 挑战通关！', 'big');
+  const finalRoll = rand(0,1);
+  if(finalRoll === 0){
+    state.wx++;
+    log(`🎁 通关奖励：维修包 x1，现有${state.wx}个`, 'gold');
+  } else {
+    log('🎁 通关奖励：附魔书 x1', 'gold');
+    applyEnchant();
+  }
+  state.hp = state.xl;
+  updateUI();
+  setTimeout(()=>{
+    showModal('🏆 挑战成功', '你击败了全部8只GESP小怪，成功通关GESP挑战！', ()=>showMainMenu(), true);
+  }, 600);
 }
 
-// ========== 事件绑定 ==========
-document.addEventListener('click', e=>{
-  const t = e.target.closest('button');
-  if(!t) return;
-  if(t.id==='btn-start'){ startGame(); return; }
-  if(t.id==='btn-restart'){ if(confirm('确定要重新开始游戏吗？所有进度将丢失。')){ $('#app').classList.add('hidden'); $('#start-screen').classList.remove('hidden'); $('#log-body').innerHTML=''; } return; }
-  if(t.id==='btn-clearlog'){ $('#log-body').innerHTML=''; return; }
-  if(t.id==='modal-btn'){ backToMenu(); return; }
+function handlePlayerDeath(){
+  state.inBattle = false;
+  logSep();
+  logBig('💀 你 死 了 ！', 'dead');
+  const punish = rand(0,2);
+  let punishText = '';
+  if(punish === 0){
+    state.mw = state.pt = state.fm = 0;
+    punishText = '所有食物被清空！';
+  } else if(punish === 1){
+    state.ll = state.zl = state.sb = 0;
+    punishText = '所有药水被清空！';
+  } else {
+    state.sl = state.zd = 0;
+    punishText = '所有弹药被清空！';
+  }
+  log(`💀 死亡惩罚：${punishText}`, 'crimson');
+  state.hp = state.xl;
+  updateUI();
+  setTimeout(()=>{
+    showModal('💀 挑战失败', `你被GESP小怪击败了！<br><span class="punish">${punishText}</span>`, ()=>showMainMenu(), false);
+  }, 600);
+}
 
-  if(state.stage==='menu' && t.dataset.act==='gesp'){ startGESP(); return; }
-  if(state.stage==='fighting' && state.phase==='use' && t.dataset.use!==undefined){ doUse(t.dataset.use); return; }
-  if(state.stage==='fighting' && state.phase==='attack' && t.dataset.atk!==undefined){ doAttack(parseInt(t.dataset.atk)); return; }
-});
+// ============ 弹窗 ============
+function showModal(title, msg, onClose, isWin){
+  $('modal-title').textContent = title;
+  $('modal-msg').innerHTML = msg;
+  const modal = $('modal');
+  modal.classList.toggle('win', !!isWin);
+  $('modal-mask').classList.add('show');
+  $('modal-btn').onclick = ()=>{
+    $('modal-mask').classList.remove('show');
+    onClose && onClose();
+  };
+}
 
-// ========== 背景星星 ==========
-(function(){
-  const box = document.getElementById('sparkles');
+// ============ 星星背景生成 ============
+function generateSparkles(){
+  const container = $('sparkles');
   for(let i=0;i<60;i++){
     const s = document.createElement('div');
-    s.className='sparkle';
-    s.style.left = Math.random()*100+'%';
-    s.style.top = Math.random()*100+'%';
-    s.style.animationDuration = (2+Math.random()*4)+'s';
-    s.style.animationDelay = (Math.random()*5)+'s';
-    if(i%2) s.style.animationDuration = (4+Math.random()*5)+'s';
-    box.appendChild(s);
+    s.className = 'sparkle';
+    s.style.left = Math.random()*100 + '%';
+    s.style.top = Math.random()*100 + '%';
+    s.style.animationDuration = (2+Math.random()*4) + 's';
+    s.style.animationDelay = (Math.random()*5) + 's';
+    container.appendChild(s);
   }
-})();
+}
+
+// ============ 事件绑定 ============
+$('btn-start').onclick = startGame;
+$('btn-restart').onclick = ()=>{
+  if(confirm('确定要重新开始游戏吗？所有进度将会重置。')){
+    location.reload();
+  }
+};
+$('log-clear').onclick = ()=>{ logBody.innerHTML=''; };
+
+// 初始化
+generateSparkles();
+updateUI();
 </script>
 </body>
 </html>
