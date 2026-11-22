@@ -1,0 +1,1076 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>战争：€€￡</title>
+<style>
+  :root{
+    --bg:#05060a;
+    --bg-card:rgba(14,20,32,.55);
+    --bg-card-solid:rgba(14,20,32,.78);
+    --glass-blur:blur(20px) saturate(1.4);
+    --glass-border:1px solid rgba(255,255,255,.08);
+    --glass-hl:linear-gradient(180deg,rgba(255,255,255,.08),transparent 40%);
+    --text:#ffffff;
+    --text-dim:#94a3b8;
+    --text-mid:#cbd5e1;
+    --border:rgba(255,255,255,.08);
+    --cyan:#00f0ff;
+    --crimson:#ff0066;
+    --gold:#fbbf24;
+    --green:#34d399;
+    --purple:#a78bfa;
+    --blue:#38bdf8;
+    --neon:#00ffaa;
+    --shadow:0 8px 32px rgba(0,0,0,.5), 0 2px 8px rgba(0,0,0,.3);
+    --grid-cyan:rgba(0,240,255,.025);
+    --scan:rgba(0,0,0,.18);
+  }
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+  html,body{height:100%;}
+  body{
+    background-color:var(--bg);
+    color:var(--text);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Hiragino Sans GB","Microsoft YaHei",system-ui,sans-serif;
+    font-size:15px;
+    line-height:1.65;
+    -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+    min-height:100vh;
+    position:relative;
+  }
+  /* 赛博网格背景 */
+  body::before{
+    content:"";
+    position:fixed;inset:0;z-index:0;pointer-events:none;
+    background:
+      radial-gradient(ellipse 45% 35% at 15% 20%, rgba(0,240,255,.22), transparent 65%),
+      radial-gradient(ellipse 45% 35% at 85% 80%, rgba(255,0,102,.22), transparent 65%),
+      radial-gradient(ellipse 55% 45% at 50% 50%, rgba(167,139,250,.14), transparent 70%),
+      radial-gradient(ellipse 60% 40% at 50% 5%, rgba(0,255,170,.12), transparent 70%),
+      linear-gradient(var(--grid-cyan) 1px, transparent 1px),
+      linear-gradient(90deg, var(--grid-cyan) 1px, transparent 1px);
+    background-size:auto,auto,auto,auto,48px 48px,48px 48px;
+    animation:bgGlow 8s ease-in-out infinite alternate;
+  }
+  @keyframes bgGlow{
+    0%{opacity:.85;filter:brightness(.95);}
+    100%{opacity:1;filter:brightness(1.1);}
+  }
+  /* 扫描线 */
+  body::after{
+    content:"";
+    position:fixed;inset:0;z-index:0;pointer-events:none;
+    background:repeating-linear-gradient(0deg,transparent,transparent 2px,var(--scan) 2px,var(--scan) 4px);
+    opacity:.35;
+  }
+  /* 星星 */
+  .sparkles{position:fixed;top:0;left:0;width:100%;height:100%;z-index:0;pointer-events:none;overflow:hidden;}
+  .sparkle{position:absolute;width:2px;height:2px;border-radius:50%;background:#fff;animation:sparkleTwinkle ease-in-out infinite;}
+  @keyframes sparkleTwinkle{
+    0%,100%{opacity:0;transform:scale(0);box-shadow:none;}
+    50%{opacity:1;transform:scale(1);box-shadow:0 0 6px 1px #fff,0 0 12px 2px rgba(255,255,255,.5);}
+  }
+
+  /* ======= 开始页 ======= */
+  #start-screen{
+    position:fixed;inset:0;z-index:100;
+    display:flex;flex-direction:column;align-items:center;justify-content:center;
+    gap:22px;padding:40px 20px;overflow-y:auto;
+    transition:opacity .35s ease;
+  }
+  #start-screen.hidden{display:none;}
+  .start-avatar{
+    width:100px;height:100px;border-radius:50%;padding:4px;
+    background:conic-gradient(from 0deg,var(--cyan),var(--crimson),var(--purple),var(--neon),var(--cyan));
+    box-shadow:0 0 24px rgba(0,240,255,.6),0 0 48px rgba(255,0,102,.35),0 0 80px rgba(167,139,250,.2),inset 0 0 16px rgba(0,240,255,.3);
+    position:relative;animation:startAvatarPulse 3s ease-in-out infinite alternate;
+    display:flex;align-items:center;justify-content:center;font-size:48px;
+  }
+  .start-avatar::before{content:"";position:absolute;inset:-8px;border-radius:50%;border:2px solid transparent;border-top-color:var(--cyan);border-bottom-color:var(--crimson);animation:avatarSpin 4s linear infinite;opacity:.6;}
+  .start-avatar::after{content:"";position:absolute;inset:-16px;border-radius:50%;border:1px solid transparent;border-top-color:var(--neon);border-bottom-color:var(--purple);animation:avatarSpin 6s linear infinite reverse;opacity:.4;}
+  @keyframes startAvatarPulse{
+    0%{box-shadow:0 0 24px rgba(0,240,255,.5),0 0 48px rgba(255,0,102,.3),inset 0 0 16px rgba(0,240,255,.3);}
+    100%{box-shadow:0 0 36px rgba(0,240,255,.8),0 0 72px rgba(255,0,102,.5),0 0 110px rgba(167,139,250,.35),inset 0 0 22px rgba(0,240,255,.5);}
+  }
+  @keyframes avatarSpin{to{transform:rotate(360deg);}}
+  .start-title{
+    font-size:42px;font-weight:900;letter-spacing:.08em;
+    background:linear-gradient(90deg,#00f0ff,#ff0066);
+    -webkit-background-clip:text;background-clip:text;color:transparent;
+    text-shadow:0 0 32px rgba(0,240,255,.2);
+    text-align:center;animation:titleNeonBreath 3s ease-in-out infinite alternate;
+  }
+  @keyframes titleNeonBreath{
+    0%{text-shadow:0 0 20px rgba(0,240,255,.2),0 0 40px rgba(255,0,102,.1);filter:brightness(1);}
+    100%{text-shadow:0 0 40px rgba(0,240,255,.55),0 0 80px rgba(255,0,102,.4),0 0 120px rgba(167,139,250,.25);filter:brightness(1.2);}
+  }
+  .start-sub{font-size:14px;color:var(--text-dim);letter-spacing:.15em;text-align:center;}
+  .start-card{
+    width:min(780px,100%);padding:28px 24px;border-radius:16px;
+    background:var(--bg-card);backdrop-filter:var(--glass-blur);-webkit-backdrop-filter:var(--glass-blur);
+    border:var(--glass-border);box-shadow:var(--shadow);position:relative;overflow:hidden;
+    display:flex;flex-direction:column;gap:18px;
+  }
+  .start-card::before{content:"";position:absolute;inset:0;border-radius:16px;background:var(--glass-hl);pointer-events:none;}
+  .rules-block{
+    padding:16px;border-radius:10px;
+    background:rgba(0,0,0,.2);border:1px solid rgba(255,255,255,.06);
+    font-size:13.5px;color:var(--text-mid);line-height:1.75;max-height:280px;overflow-y:auto;
+  }
+  .rules-block p{margin-bottom:6px;}
+  .rules-block .hl{color:var(--cyan);font-weight:700;}
+  .rules-block .hk{color:var(--gold);font-weight:700;}
+  .rules-block .hd{color:var(--crimson);font-weight:700;}
+  .rules-block::-webkit-scrollbar{width:6px;}
+  .rules-block::-webkit-scrollbar-track{background:transparent;}
+  .rules-block::-webkit-scrollbar-thumb{background:rgba(0,240,255,.3);border-radius:3px;}
+  .start-btn{
+    display:inline-block;padding:14px 42px;border-radius:10px;border:2px solid;
+    font-family:inherit;font-size:17px;font-weight:800;letter-spacing:.08em;
+    cursor:pointer;transition:all .2s ease;position:relative;overflow:hidden;
+    background:linear-gradient(180deg,rgba(0,240,255,.20),rgba(0,240,255,.05));
+    border-color:rgba(0,240,255,.60);color:#33f5ff;
+    text-shadow:0 0 10px rgba(0,240,255,.45);
+    box-shadow:0 6px 0 rgba(0,240,255,.20),0 10px 28px -4px rgba(0,240,255,.30),0 0 24px rgba(0,240,255,.25),inset 0 1px 1px rgba(255,255,255,.15);
+    align-self:center;
+  }
+  .start-btn:hover{transform:translateY(-4px);background:linear-gradient(180deg,rgba(0,240,255,.35),rgba(0,240,255,.08));box-shadow:0 6px 0 rgba(0,240,255,.32),0 14px 36px -4px rgba(0,240,255,.5),0 0 36px rgba(0,240,255,.4),inset 0 1px 1px rgba(255,255,255,.25);border-color:#66f8ff;}
+  .start-btn:active{transform:translateY(4px);box-shadow:0 2px 0 rgba(0,240,255,.15);}
+  .start-btn::after{content:"";position:absolute;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,.10) 2px,rgba(0,0,0,.10) 4px);pointer-events:none;opacity:.4;}
+  .start-divider{width:100%;height:1px;background:linear-gradient(90deg,transparent,rgba(251,191,36,.35),transparent);}
+
+  /* ======= 游戏主界面 ======= */
+  .app{
+    position:relative;z-index:10;width:min(1200px,100%);margin:0 auto;
+    padding:22px 16px 56px;display:flex;flex-direction:column;gap:14px;
+  }
+  .app.hidden{display:none;}
+  .topbar{display:flex;align-items:center;justify-content:space-between;gap:14px;padding-bottom:16px;border-bottom:1px solid var(--border);position:relative;flex-wrap:wrap;}
+  .topbar::after{content:"";position:absolute;bottom:-1px;left:0;width:140px;height:2px;background:linear-gradient(90deg,var(--cyan),var(--crimson));box-shadow:0 0 12px var(--cyan),0 0 20px var(--crimson);border-radius:2px;}
+  .brand{display:flex;align-items:center;gap:14px;min-width:0;}
+  .mini-avatar{
+    width:54px;height:54px;border-radius:50%;padding:3px;
+    background:conic-gradient(from 0deg,var(--cyan),var(--crimson),var(--cyan));
+    box-shadow:0 0 14px rgba(0,240,255,.5),0 0 28px rgba(255,0,102,.25);
+    display:flex;align-items:center;justify-content:center;font-size:26px;flex:none;
+    position:relative;animation:miniAvatarGlow 4s ease-in-out infinite alternate;
+  }
+  .mini-avatar::before{content:"";position:absolute;inset:-5px;border-radius:50%;border:2px solid transparent;border-top-color:var(--cyan);border-bottom-color:var(--crimson);animation:avatarSpin 4s linear infinite;opacity:.5;}
+  @keyframes miniAvatarGlow{
+    0%{box-shadow:0 0 14px rgba(0,240,255,.5),0 0 28px rgba(255,0,102,.25);}
+    100%{box-shadow:0 0 24px rgba(0,240,255,.7),0 0 44px rgba(255,0,102,.4),0 0 70px rgba(167,139,250,.25);}
+  }
+  .brand-text h1{
+    margin:0;font-size:22px;font-weight:900;letter-spacing:.04em;
+    background:linear-gradient(90deg,var(--cyan),var(--crimson));
+    -webkit-background-clip:text;background-clip:text;color:transparent;
+  }
+  .brand-text p{margin:3px 0 0;font-size:12.5px;color:var(--text-dim);letter-spacing:.1em;font-weight:600;}
+  .top-actions{display:flex;align-items:center;gap:10px;flex:none;flex-wrap:wrap;}
+  .stage-box{
+    display:flex;flex-direction:column;align-items:center;gap:2px;
+    padding:8px 20px;border-radius:10px;
+    border:var(--glass-border);background:rgba(0,240,255,.05);
+    backdrop-filter:var(--glass-blur);-webkit-backdrop-filter:var(--glass-blur);
+    box-shadow:0 4px 16px rgba(0,0,0,.35),inset 0 0 18px rgba(0,240,255,.06);
+  }
+  .stage-label{font-size:11px;letter-spacing:.2em;color:var(--text-dim);font-weight:700;}
+  .stage-num{font:800 22px/1 ui-monospace,SFMono-Regular,monospace;color:var(--cyan);text-shadow:0 0 12px var(--cyan);animation:turnPulse 2.5s ease-in-out infinite alternate;}
+  @keyframes turnPulse{0%{text-shadow:0 0 12px var(--cyan);}100%{text-shadow:0 0 22px var(--cyan),0 0 36px rgba(0,240,255,.5);}}
+  .btn-ghost{background:rgba(255,255,255,.05);border:var(--glass-border);backdrop-filter:blur(8px);color:var(--text-mid);padding:8px 16px;border-radius:8px;cursor:pointer;font-size:13px;font-weight:700;transition:all .2s;font-family:inherit;}
+  .btn-ghost:hover{border-color:var(--crimson);color:var(--crimson);background:rgba(255,0,102,.08);}
+
+  /* 主网格 */
+  .main-grid{display:grid;grid-template-columns:minmax(300px,360px) 1fr;gap:14px;align-items:start;}
+  @media(max-width:860px){.main-grid{grid-template-columns:1fr;}}
+  .side-left,.side-right{display:flex;flex-direction:column;gap:14px;min-width:0;}
+
+  /* 玻璃卡片通用 */
+  .glass{
+    padding:16px 18px;border-radius:12px;
+    background:var(--bg-card);backdrop-filter:var(--glass-blur);-webkit-backdrop-filter:var(--glass-blur);
+    border:var(--glass-border);box-shadow:var(--shadow);position:relative;overflow:hidden;
+  }
+  .glass::before{content:"";position:absolute;inset:0;background:var(--glass-hl);pointer-events:none;}
+  .glass::after{content:"";position:absolute;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,240,255,.010) 2px,rgba(0,240,255,.010) 4px);pointer-events:none;opacity:.5;}
+  .glass > *{position:relative;z-index:1;}
+  .section-title{
+    font-size:12px;font-weight:800;letter-spacing:.18em;color:var(--cyan);
+    text-shadow:0 0 10px rgba(0,240,255,.35);margin-bottom:12px;
+    display:flex;align-items:center;gap:8px;
+  }
+  .section-title::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--cyan);box-shadow:0 0 8px var(--cyan);animation:blink 1.6s ease-in-out infinite;}
+  @keyframes blink{0%,100%{opacity:1;}50%{opacity:.35;}}
+  .section-title.gold{color:var(--gold);text-shadow:0 0 10px rgba(251,191,36,.3);}
+  .section-title.gold::before{background:var(--gold);box-shadow:0 0 8px var(--gold);}
+  .section-title.crimson{color:var(--crimson);text-shadow:0 0 10px rgba(255,0,102,.3);}
+  .section-title.crimson::before{background:var(--crimson);box-shadow:0 0 8px var(--crimson);}
+  .section-title.green{color:var(--green);text-shadow:0 0 10px rgba(52,211,153,.3);}
+  .section-title.green::before{background:var(--green);box-shadow:0 0 8px var(--green);}
+  .section-title.purple{color:var(--purple);text-shadow:0 0 10px rgba(167,139,250,.3);}
+  .section-title.purple::before{background:var(--purple);box-shadow:0 0 8px var(--purple);}
+
+  /* 战斗双方 */
+  .battle-board{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+  @media(max-width:500px){.battle-board{grid-template-columns:1fr;}}
+  .fighter{
+    padding:16px 18px;border-radius:12px;
+    background:var(--bg-card);backdrop-filter:var(--glass-blur);-webkit-backdrop-filter:var(--glass-blur);
+    border:var(--glass-border);box-shadow:var(--shadow);position:relative;overflow:hidden;
+  }
+  .fighter::before{content:"";position:absolute;inset:0;background:var(--glass-hl);pointer-events:none;}
+  .fighter.is-player{border-color:rgba(0,240,255,.32);box-shadow:0 8px 32px rgba(0,0,0,.5),0 0 22px rgba(0,240,255,.12);}
+  .fighter.is-enemy{border-color:rgba(255,0,102,.32);box-shadow:0 8px 32px rgba(0,0,0,.5),0 0 22px rgba(255,0,102,.12);}
+  .f-row{display:flex;align-items:baseline;justify-content:space-between;gap:8px;margin-bottom:10px;}
+  .f-name{font-size:15px;font-weight:800;letter-spacing:.06em;}
+  .is-player .f-name{color:var(--cyan);text-shadow:0 0 10px rgba(0,240,255,.4);}
+  .is-enemy .f-name{color:var(--crimson);text-shadow:0 0 10px rgba(255,0,102,.4);}
+  .f-hp{font-family:ui-monospace,SFMono-Regular,monospace;font-size:13px;color:var(--text-mid);white-space:nowrap;font-weight:600;}
+  .f-hp b{font-size:22px;font-weight:800;letter-spacing:-.02em;}
+  .is-player .f-hp b{color:var(--cyan);text-shadow:0 0 14px rgba(0,240,255,.4);}
+  .is-enemy .f-hp b{color:var(--crimson);text-shadow:0 0 14px rgba(255,0,102,.4);}
+  .hpbar{position:relative;height:10px;border-radius:99px;background:rgba(255,255,255,.08);overflow:hidden;box-shadow:inset 0 1px 4px rgba(0,0,0,.8);border:1px solid rgba(255,255,255,.08);}
+  .hpbar-fill{height:100%;width:100%;border-radius:99px;transition:width .5s cubic-bezier(.22,1,.36,1);}
+  .is-player .hpbar-fill{background:linear-gradient(90deg,#0066ff,var(--cyan));box-shadow:0 0 14px rgba(0,240,255,.5);}
+  .is-enemy .hpbar-fill{background:linear-gradient(90deg,#990033,var(--crimson));box-shadow:0 0 14px rgba(255,0,102,.5);}
+  .hpbar-fill.low{animation:hpDanger .8s ease-in-out infinite;}
+  @keyframes hpDanger{0%,100%{opacity:1;filter:brightness(1);}50%{opacity:.7;filter:brightness(1.5) drop-shadow(0 0 14px rgba(255,0,0,.7));}}
+  .chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px;}
+  .chip{font-size:11px;font-weight:700;letter-spacing:.06em;padding:3px 9px;border-radius:4px;border:1px solid;text-transform:uppercase;}
+  .chip-power{color:var(--gold);border-color:rgba(251,191,36,.4);background:rgba(251,191,36,.08);box-shadow:0 0 10px rgba(251,191,36,.12);}
+  .chip-dodge{color:var(--green);border-color:rgba(52,211,153,.4);background:rgba(52,211,153,.08);box-shadow:0 0 10px rgba(52,211,153,.12);}
+
+  /* 物品栏网格 */
+  .inv-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+  @media(max-width:380px){.inv-grid{grid-template-columns:1fr;}}
+  .inv-item{
+    display:flex;align-items:center;justify-content:space-between;gap:8px;
+    padding:8px 12px;border-radius:8px;
+    background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.06);
+    font-size:13px;
+  }
+  .inv-item .name{display:flex;align-items:center;gap:8px;color:var(--text-mid);font-weight:600;}
+  .inv-item .icon{font-size:16px;width:20px;text-align:center;}
+  .inv-item .qty{font-family:ui-monospace,monospace;font-weight:800;font-size:14px;color:var(--cyan);text-shadow:0 0 8px rgba(0,240,255,.4);}
+  .inv-item .qty.gold{color:var(--gold);text-shadow:0 0 8px rgba(251,191,36,.4);}
+  .inv-item .qty.crimson{color:var(--crimson);text-shadow:0 0 8px rgba(255,0,102,.4);}
+  .inv-item .qty.green{color:var(--green);text-shadow:0 0 8px rgba(52,211,153,.4);}
+  .inv-item .qty.purple{color:var(--purple);text-shadow:0 0 8px rgba(167,139,250,.4);}
+
+  /* 属性 */
+  .stat-list{display:grid;grid-template-columns:1fr 1fr;gap:6px 12px;font-size:13px;}
+  @media(max-width:380px){.stat-list{grid-template-columns:1fr;}}
+  .stat-item{display:flex;justify-content:space-between;align-items:baseline;padding:4px 0;border-bottom:1px dashed rgba(255,255,255,.05);}
+  .stat-item .k{color:var(--text-dim);font-size:12px;letter-spacing:.04em;}
+  .stat-item .v{font-family:ui-monospace,monospace;font-weight:700;color:var(--text);}
+
+  /* 操作面板 */
+  .action-panel{display:flex;flex-direction:column;gap:10px;}
+  .action-hint{font-size:13px;color:var(--gold);text-shadow:0 0 8px rgba(251,191,36,.25);padding:10px 14px;border-radius:8px;background:rgba(251,191,36,.06);border:1px solid rgba(251,191,36,.25);font-weight:600;letter-spacing:.03em;display:flex;align-items:center;gap:8px;}
+  .action-hint::before{content:"▸";color:var(--gold);}
+  .btn-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:10px;}
+  .act-btn{
+    padding:12px 14px;border-radius:10px;border:2px solid;font-family:inherit;
+    text-align:left;cursor:pointer;transition:all .18s ease;position:relative;overflow:hidden;
+    display:flex;flex-direction:column;gap:3px;
+    -webkit-tap-highlight-color:transparent;
+  }
+  .act-btn:disabled{opacity:.35;cursor:not-allowed;filter:grayscale(.5);}
+  .act-btn:not(:disabled):hover{transform:translateY(-3px);}
+  .act-btn:not(:disabled):active{transform:translateY(2px);}
+  .act-btn .t{font-size:14px;font-weight:800;letter-spacing:.03em;display:flex;align-items:center;gap:8px;}
+  .act-btn .d{font-size:12px;font-weight:500;opacity:.85;line-height:1.45;}
+  .act-btn::after{content:"";position:absolute;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,.10) 2px,rgba(0,0,0,.10) 4px);pointer-events:none;opacity:.4;}
+  /* 不同颜色按钮 */
+  .btn-cyan{background:linear-gradient(180deg,rgba(0,240,255,.16),rgba(0,240,255,.03));border-color:rgba(0,240,255,.50);color:#33f5ff;text-shadow:0 0 10px rgba(0,240,255,.35);box-shadow:0 5px 0 rgba(0,240,255,.15),0 8px 20px -4px rgba(0,240,255,.20),inset 0 1px 1px rgba(255,255,255,.12);}
+  .btn-cyan:not(:disabled):hover{background:linear-gradient(180deg,rgba(0,240,255,.28),rgba(0,240,255,.06));box-shadow:0 5px 0 rgba(0,240,255,.28),0 12px 28px -4px rgba(0,240,255,.4),0 0 22px rgba(0,240,255,.28),inset 0 1px 1px rgba(255,255,255,.2);border-color:#66f8ff;}
+  .btn-crimson{background:linear-gradient(180deg,rgba(255,0,102,.16),rgba(255,0,102,.03));border-color:rgba(255,0,102,.50);color:#ff4d94;text-shadow:0 0 10px rgba(255,0,102,.35);box-shadow:0 5px 0 rgba(255,0,102,.15),0 8px 20px -4px rgba(255,0,102,.20),inset 0 1px 1px rgba(255,255,255,.12);}
+  .btn-crimson:not(:disabled):hover{background:linear-gradient(180deg,rgba(255,0,102,.28),rgba(255,0,102,.06));box-shadow:0 5px 0 rgba(255,0,102,.28),0 12px 28px -4px rgba(255,0,102,.4),0 0 22px rgba(255,0,102,.28),inset 0 1px 1px rgba(255,255,255,.2);border-color:#ff66aa;}
+  .btn-gold{background:linear-gradient(180deg,rgba(251,191,36,.16),rgba(251,191,36,.03));border-color:rgba(251,191,36,.50);color:#ffcf4d;text-shadow:0 0 10px rgba(251,191,36,.35);box-shadow:0 5px 0 rgba(251,191,36,.15),0 8px 20px -4px rgba(251,191,36,.20),inset 0 1px 1px rgba(255,255,255,.12);}
+  .btn-gold:not(:disabled):hover{background:linear-gradient(180deg,rgba(251,191,36,.28),rgba(251,191,36,.06));box-shadow:0 5px 0 rgba(251,191,36,.28),0 12px 28px -4px rgba(251,191,36,.4),0 0 22px rgba(251,191,36,.28),inset 0 1px 1px rgba(255,255,255,.2);border-color:#ffdb66;}
+  .btn-green{background:linear-gradient(180deg,rgba(52,211,153,.16),rgba(52,211,153,.03));border-color:rgba(52,211,153,.50);color:#5ce0a8;text-shadow:0 0 10px rgba(52,211,153,.35);box-shadow:0 5px 0 rgba(52,211,153,.15),0 8px 20px -4px rgba(52,211,153,.20),inset 0 1px 1px rgba(255,255,255,.12);}
+  .btn-green:not(:disabled):hover{background:linear-gradient(180deg,rgba(52,211,153,.28),rgba(52,211,153,.06));box-shadow:0 5px 0 rgba(52,211,153,.28),0 12px 28px -4px rgba(52,211,153,.4),0 0 22px rgba(52,211,153,.28),inset 0 1px 1px rgba(255,255,255,.2);border-color:#80e8bd;}
+  .btn-purple{background:linear-gradient(180deg,rgba(167,139,250,.16),rgba(167,139,250,.03));border-color:rgba(167,139,250,.50);color:#bda4ff;text-shadow:0 0 10px rgba(167,139,250,.35);box-shadow:0 5px 0 rgba(167,139,250,.15),0 8px 20px -4px rgba(167,139,250,.20),inset 0 1px 1px rgba(255,255,255,.12);}
+  .btn-purple:not(:disabled):hover{background:linear-gradient(180deg,rgba(167,139,250,.28),rgba(167,139,250,.06));box-shadow:0 5px 0 rgba(167,139,250,.28),0 12px 28px -4px rgba(167,139,250,.4),0 0 22px rgba(167,139,250,.28),inset 0 1px 1px rgba(255,255,255,.2);border-color:#ccb8ff;}
+  .btn-ghost2{background:rgba(255,255,255,.06);border-color:rgba(255,255,255,.20);color:var(--text-mid);text-shadow:none;box-shadow:0 5px 0 rgba(255,255,255,.06),inset 0 1px 1px rgba(255,255,255,.1);}
+  .btn-ghost2:not(:disabled):hover{background:rgba(255,255,255,.12);border-color:rgba(255,255,255,.35);color:#fff;box-shadow:0 5px 0 rgba(255,255,255,.12),0 8px 20px -4px rgba(255,255,255,.15);}
+  .btn-disabled{background:rgba(255,255,255,.03);border-color:rgba(255,255,255,.10);color:var(--text-dim);text-shadow:none;box-shadow:none;}
+
+  /* 日志 */
+  .log-box{
+    padding:0;border-radius:12px;overflow:hidden;
+    background:var(--bg-card);backdrop-filter:var(--glass-blur);-webkit-backdrop-filter:var(--glass-blur);
+    border:var(--glass-border);box-shadow:var(--shadow);position:relative;
+  }
+  .log-box::before{content:"";position:absolute;inset:0;background:var(--glass-hl);pointer-events:none;z-index:2;}
+  .log-header{padding:14px 18px 10px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid rgba(255,255,255,.06);position:relative;z-index:3;}
+  .log-header .section-title{margin:0;}
+  .log-clear{background:transparent;border:1px solid rgba(255,255,255,.15);color:var(--text-dim);padding:4px 12px;border-radius:6px;font-size:12px;cursor:pointer;font-family:inherit;font-weight:600;transition:all .2s;}
+  .log-clear:hover{border-color:var(--crimson);color:var(--crimson);}
+  .log-body{
+    padding:14px 18px;max-height:340px;min-height:180px;overflow-y:auto;
+    font-family:ui-monospace,SFMono-Regular,"SF Mono",Consolas,monospace;
+    font-size:13.5px;line-height:1.7;color:var(--text-mid);position:relative;z-index:3;
+  }
+  .log-body::-webkit-scrollbar{width:6px;}
+  .log-body::-webkit-scrollbar-track{background:transparent;}
+  .log-body::-webkit-scrollbar-thumb{background:rgba(0,240,255,.25);border-radius:3px;}
+  .log-body::-webkit-scrollbar-thumb:hover{background:rgba(0,240,255,.4);}
+  .log-line{margin-bottom:2px;word-break:break-all;}
+  .log-line.player{color:var(--cyan);}
+  .log-line.enemy{color:var(--crimson);}
+  .log-line.heal{color:var(--green);}
+  .log-line.gold{color:var(--gold);}
+  .log-line.purple{color:var(--purple);}
+  .log-line.crit{color:#ff6b6b;font-weight:700;text-shadow:0 0 8px rgba(255,107,107,.5);}
+  .log-line.big{color:#fff;font-weight:800;font-size:15px;letter-spacing:.15em;text-shadow:0 0 12px rgba(255,255,255,.5);text-align:center;margin:8px 0;}
+  .log-line.warn{color:#fbbf24;}
+  .log-line.dead{color:#ff3366;font-weight:800;font-size:16px;letter-spacing:.2em;text-shadow:0 0 16px rgba(255,51,102,.7);text-align:center;margin:10px 0;}
+  .log-line.sep{color:rgba(255,255,255,.25);text-align:center;letter-spacing:.3em;margin:6px 0;}
+  .log-line.divider{border-top:1px dashed rgba(0,240,255,.2);margin:8px 0;}
+
+  /* 死亡/结算遮罩 */
+  .modal-mask{
+    position:fixed;inset:0;z-index:200;background:rgba(0,0,0,.75);
+    backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
+    display:flex;align-items:center;justify-content:center;padding:20px;
+    opacity:0;visibility:hidden;transition:all .3s;
+  }
+  .modal-mask.show{opacity:1;visibility:visible;}
+  .modal{
+    width:min(460px,100%);padding:28px 24px;border-radius:16px;
+    background:var(--bg-card-solid);backdrop-filter:var(--glass-blur);-webkit-backdrop-filter:var(--glass-blur);
+    border:2px solid var(--crimson);box-shadow:0 0 48px rgba(255,0,102,.45),0 8px 32px rgba(0,0,0,.6);
+    text-align:center;position:relative;overflow:hidden;transform:scale(.9);transition:transform .3s;
+  }
+  .modal-mask.show .modal{transform:scale(1);}
+  .modal.win{border-color:var(--green);box-shadow:0 0 48px rgba(52,211,153,.45),0 8px 32px rgba(0,0,0,.6);}
+  .modal-title{font-size:28px;font-weight:900;letter-spacing:.1em;margin-bottom:10px;}
+  .modal.win .modal-title{color:var(--green);text-shadow:0 0 20px rgba(52,211,153,.6);}
+  .modal:not(.win) .modal-title{color:var(--crimson);text-shadow:0 0 20px rgba(255,0,102,.6);}
+  .modal-msg{color:var(--text-mid);font-size:14px;line-height:1.7;margin-bottom:20px;}
+  .modal-msg .punish{color:var(--crimson);font-weight:700;}
+  .modal-btn{padding:12px 32px;border-radius:10px;border:2px solid;font-family:inherit;font-size:15px;font-weight:800;letter-spacing:.06em;cursor:pointer;transition:all .2s;background:linear-gradient(180deg,rgba(0,240,255,.20),rgba(0,240,255,.05));border-color:rgba(0,240,255,.60);color:#33f5ff;text-shadow:0 0 10px rgba(0,240,255,.45);box-shadow:0 5px 0 rgba(0,240,255,.20),0 0 20px rgba(0,240,255,.25);}
+  .modal-btn:hover{transform:translateY(-2px);box-shadow:0 5px 0 rgba(0,240,255,.32),0 0 30px rgba(0,240,255,.4);}
+
+  /* 菜单面板 */
+  .menu-panel{display:grid;grid-template-columns:1fr;gap:10px;}
+  .menu-desc{font-size:13px;color:var(--text-dim);line-height:1.7;padding:12px 14px;border-radius:8px;background:rgba(0,0,0,.2);border:1px solid rgba(255,255,255,.05);}
+  .menu-desc b{color:var(--cyan);}
+</style>
+</head>
+<body>
+
+<div class="sparkles" id="sparkles"></div>
+
+<!-- 开始界面 -->
+<div id="start-screen">
+  <div class="start-avatar">⚔️</div>
+  <h1 class="start-title">大 战 € € ￡</h1>
+  <div class="start-sub">3 A 级 游 戏 大 作 · 文 字 R P G 网 页 版</div>
+  <div class="start-card">
+    <div class="rules-block">
+      <p><span class="hl">▶ 游戏说明</span></p>
+      <p>你是一名Oier，正踏上讨伐<span class="hd">€€￡</span>的冒险之旅。此测试版本开放<span class="hk">挑战GESP小怪</span>玩法。</p>
+      <p><span class="hl">▶ 核心机制</span></p>
+      <p>每回合战斗分两步：<span class="hk">第一步使用食物或药水</span>，<span class="hk">第二步选择攻击方式</span>。战斗结束后血量自动回满。</p>
+      <p><span class="hl">▶ 武器系统</span></p>
+      <p>· <span style="color:var(--cyan)">暴力代码</span>：无限使用，有概率暴击，可附魔提升</p>
+      <p>· <span style="color:var(--purple)">算法</span>：一次性消耗品，固定伤害，可附魔提升</p>
+      <p>· <span style="color:var(--crimson)">暴戾代码</span>：高伤害但有反噬概率，可附魔提升</p>
+      <p>· <span style="color:var(--gold)">总司令</span>：稀有消耗品，45%概率造成巨额伤害</p>
+      <p><span class="hl">▶ 道具系统</span></p>
+      <p>三种食物（美味/普通/发霉）回复不等生命值；三种药水（治疗/力量/闪避）提供特殊效果；附魔书永久强化属性。</p>
+      <p><span class="hd">⚠ 死亡惩罚：</span>挑战小怪死亡会随机清空食物、药水或弹药中的一项！</p>
+    </div>
+    <div class="start-divider"></div>
+    <button class="start-btn" id="btn-start">开 始 游 戏</button>
+  </div>
+</div>
+
+<!-- 游戏主界面 -->
+<div class="app hidden" id="app">
+  <div class="topbar">
+    <div class="brand">
+      <div class="mini-avatar">⚔️</div>
+      <div class="brand-text">
+        <h1>大 战 € € ￡</h1>
+        <p>CODE · COMBAT · GLORY</p>
+      </div>
+    </div>
+    <div class="top-actions">
+      <div class="stage-box">
+        <div class="stage-label" id="stage-label">主 菜 单</div>
+        <div class="stage-num" id="stage-num">MENU</div>
+      </div>
+      <button class="btn-ghost" id="btn-restart">重 开</button>
+    </div>
+  </div>
+
+  <div class="main-grid">
+    <!-- 左侧：状态面板 -->
+    <div class="side-left">
+      <!-- 玩家血量 -->
+      <div class="fighter is-player">
+        <div class="f-row">
+          <div class="f-name">🧑‍💻 你</div>
+          <div class="f-hp">HP <b id="p-hp">75</b>/<span id="p-maxhp">75</span></div>
+        </div>
+        <div class="hpbar"><div class="hpbar-fill" id="p-hpbar" style="width:100%"></div></div>
+        <div class="chips" id="p-buffs"></div>
+      </div>
+      <!-- 敌人血量 -->
+      <div class="fighter is-enemy" id="enemy-panel" style="display:none;">
+        <div class="f-row">
+          <div class="f-name" id="e-name">👾 GESP 1级怪</div>
+          <div class="f-hp">HP <b id="e-hp">25</b>/<span id="e-maxhp">25</span></div>
+        </div>
+        <div class="hpbar"><div class="hpbar-fill" id="e-hpbar" style="width:100%"></div></div>
+        <div class="chips" id="e-buffs"></div>
+      </div>
+
+      <!-- 背包 -->
+      <div class="glass">
+        <div class="section-title gold">🎒 背包物品</div>
+        <div class="inv-grid" id="inv-grid"></div>
+      </div>
+
+      <!-- 属性 -->
+      <div class="glass">
+        <div class="section-title purple">📊 角色属性</div>
+        <div class="stat-list" id="stat-list"></div>
+      </div>
+    </div>
+
+    <!-- 右侧：操作 + 日志 -->
+    <div class="side-right">
+      <!-- 操作面板 -->
+      <div class="glass action-panel" id="action-panel">
+        <!-- 动态渲染 -->
+      </div>
+
+      <!-- 日志 -->
+      <div class="log-box">
+        <div class="log-header">
+          <div class="section-title">📜 战 斗 日 志</div>
+          <button class="log-clear" id="btn-clearlog">清空</button>
+        </div>
+        <div class="log-body" id="log-body"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 结算遮罩 -->
+<div class="modal-mask" id="modal-mask">
+  <div class="modal" id="modal">
+    <div class="modal-title" id="modal-title"></div>
+    <div class="modal-msg" id="modal-msg"></div>
+    <button class="modal-btn" id="modal-btn">返 回 主 菜 单</button>
+  </div>
+</div>
+
+<script>
+// ========== 游戏状态 ==========
+const state = {
+  // 食物
+  mw:0, pt:0, fm:0,
+  // 武器属性
+  shh:15, bj:35, bjgl:15,
+  qs:40, zd:0,
+  bl:75, gl:50,
+  // 资源
+  coin:0, xl:75, sl:0, dl:0, wx:0,
+  hp:75,
+  // 药水
+  zl:0, ll:0, sb:0,
+  // buff
+  strTurns:0,   // 力量回合剩余
+  fstTurns:0,   // 闪避回合剩余
+  // 关卡
+  stage:'menu', // menu / fighting / reward
+  currentLevel:0,
+  enemyHp:0, enemyMaxHp:0, enemyAtk:0, enemyName:'',
+  phase:'',     // use / attack / enemyTurn
+};
+
+// ========== 工具函数 ==========
+const $ = sel => document.querySelector(sel);
+const rand = (min, max) => Math.floor(Math.random()*(max-min+1))+min;
+const clamp = (v,mn,mx) => Math.max(mn, Math.min(mx,v));
+
+function log(text, cls=''){
+  const el = document.createElement('div');
+  el.className = 'log-line ' + cls;
+  el.innerHTML = text;
+  const box = $('#log-body');
+  box.appendChild(el);
+  box.scrollTop = box.scrollHeight;
+}
+function logSep(){
+  const el = document.createElement('div');
+  el.className = 'log-line sep';
+  el.textContent = '─'.repeat(40);
+  $('#log-body').appendChild(el);
+  $('#log-body').scrollTop = $('#log-body').scrollHeight;
+}
+function logBig(text, cls='big'){
+  const el = document.createElement('div');
+  el.className = 'log-line ' + cls;
+  el.textContent = text;
+  $('#log-body').appendChild(el);
+  $('#log-body').scrollTop = $('#log-body').scrollHeight;
+}
+
+// ========== 渲染UI ==========
+function render(){
+  // 玩家血量
+  $('#p-hp').textContent = state.hp;
+  $('#p-maxhp').textContent = state.xl;
+  const pPct = clamp(state.hp/state.xl*100, 0, 100);
+  const pBar = $('#p-hpbar');
+  pBar.style.width = pPct+'%';
+  pBar.classList.toggle('low', pPct < 30);
+
+  // 敌人
+  if(state.stage==='fighting'){
+    $('#enemy-panel').style.display='';
+    $('#e-name').textContent = state.enemyName;
+    $('#e-hp').textContent = Math.max(0,state.enemyHp);
+    $('#e-maxhp').textContent = state.enemyMaxHp;
+    const ePct = clamp(state.enemyHp/state.enemyMaxHp*100, 0, 100);
+    const eBar = $('#e-hpbar');
+    eBar.style.width = ePct+'%';
+    eBar.classList.toggle('low', ePct < 30);
+    $('#stage-label').textContent = '战 斗 中';
+    $('#stage-num').textContent = 'L'+state.currentLevel;
+  } else {
+    $('#enemy-panel').style.display='none';
+    if(state.stage==='menu'){
+      $('#stage-label').textContent = '主 菜 单';
+      $('#stage-num').textContent = 'MENU';
+    } else if(state.stage==='reward'){
+      $('#stage-label').textContent = '结 算';
+      $('#stage-num').textContent = 'WIN';
+    }
+  }
+
+  // buff
+  const buffs = $('#p-buffs');
+  buffs.innerHTML='';
+  if(state.strTurns>0){
+    const c = document.createElement('span');
+    c.className='chip chip-power';
+    c.textContent='💪 力量×'+state.strTurns;
+    buffs.appendChild(c);
+  }
+  if(state.fstTurns>0){
+    const c = document.createElement('span');
+    c.className='chip chip-dodge';
+    c.textContent='🌀 闪避×'+state.fstTurns;
+    buffs.appendChild(c);
+  }
+
+  // 背包
+  const inv = $('#inv-grid');
+  const items = [
+    {icon:'🍖', name:'美味食物', qty:state.mw, cls:''},
+    {icon:'🍞', name:'普通食物', qty:state.pt, cls:''},
+    {icon:'🧀', name:'发霉食物', qty:state.fm, cls:'crimson'},
+    {icon:'💊', name:'治疗药水', qty:state.zl, cls:'green'},
+    {icon:'⚗️', name:'力量药水', qty:state.ll, cls:'gold'},
+    {icon:'💨', name:'闪避药水', qty:state.sb, cls:'purple'},
+    {icon:'📜', name:'算法', qty:state.zd, cls:'purple'},
+    {icon:'🎖️', name:'总司令', qty:state.sl, cls:'gold'},
+    {icon:'🔧', name:'维修包', qty:state.wx, cls:'green'},
+    {icon:'🪙', name:'金币', qty:state.coin, cls:'gold'},
+  ];
+  inv.innerHTML = items.map(it => `
+    <div class="inv-item">
+      <div class="name"><span class="icon">${it.icon}</span>${it.name}</div>
+      <div class="qty ${it.cls}">×${it.qty}</div>
+    </div>
+  `).join('');
+
+  // 属性
+  const stat = $('#stat-list');
+  stat.innerHTML = `
+    <div class="stat-item"><span class="k">血量上限</span><span class="v" style="color:var(--green)">${state.xl}</span></div>
+    <div class="stat-item"><span class="k">暴力代码伤害</span><span class="v" style="color:var(--cyan)">${state.shh}±10</span></div>
+    <div class="stat-item"><span class="k">暴击伤害</span><span class="v" style="color:var(--crimson)">${state.bj}</span></div>
+    <div class="stat-item"><span class="k">暴击概率</span><span class="v" style="color:var(--gold)">${state.bjgl}%</span></div>
+    <div class="stat-item"><span class="k">算法伤害</span><span class="v" style="color:var(--purple)">${state.qs}</span></div>
+    <div class="stat-item"><span class="k">暴戾代码伤害</span><span class="v" style="color:var(--crimson)">${state.bl}</span></div>
+    <div class="stat-item"><span class="k">反噬概率</span><span class="v" style="color:var(--crimson)">${state.gl}%</span></div>
+    <div class="stat-item"><span class="k">已修复道路</span><span class="v">${state.dl}/8</span></div>
+  `;
+
+  renderActions();
+}
+
+function renderActions(){
+  const panel = $('#action-panel');
+  panel.innerHTML='';
+
+  if(state.stage==='menu'){
+    const hint = document.createElement('div');
+    hint.className='action-hint';
+    hint.textContent='选择你的行动';
+    panel.appendChild(hint);
+
+    const grid = document.createElement('div');
+    grid.className='btn-grid';
+    grid.innerHTML = `
+      <button class="act-btn btn-crimson" data-act="gesp">
+        <span class="t">⚔️ 挑战 GESP 小怪</span>
+        <span class="d">共8只，实力递增，掉落食物/算法/药水/附魔书</span>
+      </button>
+      <button class="act-btn btn-disabled" disabled>
+        <span class="t">👹 挑战 CSP 精英怪</span>
+        <span class="d">测试版本暂未开放</span>
+      </button>
+      <button class="act-btn btn-disabled" disabled>
+        <span class="t">🛣️ 修复道路</span>
+        <span class="d">测试版本暂未开放</span>
+      </button>
+      <button class="act-btn btn-disabled" disabled>
+        <span class="t">💀 挑战 Boss €€￡</span>
+        <span class="d">测试版本暂未开放</span>
+      </button>
+      <button class="act-btn btn-disabled" disabled>
+        <span class="t">🍬 前往糖果店</span>
+        <span class="d">测试版本暂未开放</span>
+      </button>
+    `;
+    panel.appendChild(grid);
+    return;
+  }
+
+  if(state.stage==='fighting'){
+    if(state.phase==='use'){
+      const hint = document.createElement('div');
+      hint.className='action-hint';
+      hint.textContent=`【第一阶段】使用食物或药水（第 ${state.currentLevel} 关 · 回合使用阶段）`;
+      panel.appendChild(hint);
+
+      const grid = document.createElement('div');
+      grid.className='btn-grid';
+      grid.innerHTML = `
+        <button class="act-btn btn-green" data-use="mw" ${state.mw<=0?'disabled':''}>
+          <span class="t">🍖 吃美味食物</span>
+          <span class="d">回复60点血量（剩 ${state.mw}）</span>
+        </button>
+        <button class="act-btn btn-green" data-use="pt" ${state.pt<=0?'disabled':''}>
+          <span class="t">🍞 吃普通食物</span>
+          <span class="d">回复25~35点血量（剩 ${state.pt}）</span>
+        </button>
+        <button class="act-btn btn-crimson" data-use="fm" ${state.fm<=0?'disabled':''}>
+          <span class="t">🧀 吃发霉食物</span>
+          <span class="d">血量变化-5~+15（剩 ${state.fm}）</span>
+        </button>
+        <button class="act-btn btn-green" data-use="zl" ${state.zl<=0?'disabled':''}>
+          <span class="t">💊 使用治疗药水</span>
+          <span class="d">血量回满（剩 ${state.zl}）</span>
+        </button>
+        <button class="act-btn btn-gold" data-use="ll" ${state.ll<=0?'disabled':''}>
+          <span class="t">⚗️ 使用力量药水</span>
+          <span class="d">接下来3回合伤害翻倍（剩 ${state.ll}）</span>
+        </button>
+        <button class="act-btn btn-purple" data-use="sb" ${state.sb<=0?'disabled':''}>
+          <span class="t">💨 使用闪避药水</span>
+          <span class="d">接下来3回合免疫伤害（剩 ${state.sb}）</span>
+        </button>
+        <button class="act-btn btn-ghost2" data-use="skip">
+          <span class="t">⏭️ 跳过使用</span>
+          <span class="d">不使用任何物品，直接攻击</span>
+        </button>
+      `;
+      panel.appendChild(grid);
+    }
+    else if(state.phase==='attack'){
+      const hint = document.createElement('div');
+      hint.className='action-hint';
+      hint.textContent='【第二阶段】选择攻击方式';
+      panel.appendChild(hint);
+
+      const grid = document.createElement('div');
+      grid.className='btn-grid';
+      const dmgMul = state.strTurns>0 ? '×2' : '';
+      grid.innerHTML = `
+        <button class="act-btn btn-cyan" data-atk="1">
+          <span class="t">💻 暴力代码</span>
+          <span class="d">基础 ${state.shh}±10 伤害，暴击 ${state.bj}，暴击率 ${state.bjgl}% ${dmgMul?'<b style="color:var(--gold)">（力量'+dmgMul+'）</b>':''}</span>
+        </button>
+        <button class="act-btn btn-purple" data-atk="2" ${state.zd<=0?'disabled':''}>
+          <span class="t">📜 算法攻击</span>
+          <span class="d">固定 ${state.qs} 点伤害（剩 ${state.zd}）${dmgMul?'<b style="color:var(--gold)"> （力量'+dmgMul+'）</b>':''}</span>
+        </button>
+        <button class="act-btn btn-crimson" data-atk="3">
+          <span class="t">🤬 暴戾代码</span>
+          <span class="d">造成 ${state.bl} 伤害，但 ${state.gl}% 概率反噬50~100${dmgMul?'<b style="color:var(--gold)"> （力量'+dmgMul+'）</b>':''}</span>
+        </button>
+        <button class="act-btn btn-gold" data-atk="4" ${state.sl<=0?'disabled':''}>
+          <span class="t">🎖️ 使用总司令</span>
+          <span class="d">45%概率造成150点伤害（剩 ${state.sl}）${dmgMul?'<b style="color:var(--gold)"> （力量'+dmgMul+'）</b>':''}</span>
+        </button>
+      `;
+      panel.appendChild(grid);
+    }
+  }
+}
+
+// ========== 游戏逻辑 ==========
+function startGame(){
+  // 初始化状态（C++初始值）
+  state.mw=0; state.pt=0; state.fm=0;
+  state.shh=15; state.bj=35; state.bjgl=15;
+  state.qs=40; state.zd=0;
+  state.bl=75; state.gl=50;
+  state.coin=0; state.xl=75; state.sl=0; state.dl=0; state.wx=0;
+  state.zl=0; state.ll=0; state.sb=0;
+  state.hp=state.xl;
+  state.strTurns=0; state.fstTurns=0;
+  state.stage='menu';
+  state.currentLevel=0;
+
+  $('#start-screen').classList.add('hidden');
+  $('#app').classList.remove('hidden');
+  $('#log-body').innerHTML='';
+  logBig('欢 迎 来 到 大 战 € € ￡','big');
+  log('此版本开放 <b style="color:var(--crimson)">挑战GESP小怪</b> 玩法。其余内容敬请期待。','warn');
+  log('提示：每回合先选择是否使用物品，再选择攻击方式。死亡会随机清空一类物品！','warn');
+  logSep();
+  render();
+}
+
+function startGESP(){
+  logBig('━━━ 挑 战 G E S P 小 怪 ━━━','big');
+  log('GESP小怪共8只，实力递增。一级怪血量25、攻击3，10%触发1.5倍暴击。往后每级血量+5、攻击+2。','player');
+  log('固定掉落食物（低级发霉→中级普通→高级美味），额外掉落概率逐级提升，高级怪额外掉药水。','player');
+  logSep();
+  state.currentLevel = 1;
+  startLevel();
+}
+
+function startLevel(){
+  const dj = state.currentLevel;
+  state.enemyMaxHp = 20 + dj*5;
+  state.enemyHp = state.enemyMaxHp;
+  state.enemyAtk = 1 + dj*2;
+  state.enemyName = `👾 GESP ${dj}级怪`;
+  state.stage = 'fighting';
+  state.phase = 'use';
+  state.hp = state.xl; // C++: 在gesp()没有每关回满，但main里每次主菜单重置时hp=xl。战斗中gespx循环也不重置，只有死亡或胜利返回。
+  // 按C++逻辑，hp在战斗中保持，战斗结束后回满。但每关开始不需要重置。
+  // 仔细看C++: 每关调用gespx(i)，只有胜利后才继续下一关，gespx里hp不会回满（战斗中扣血继续）。主循环hp=xl是在主菜单进入gesp之前设置。
+  // 所以只有第一次进gesp回满血，中途每关不回。这里已经在startGESP之前由菜单进入时设置？
+  // 修正：main里while(1){ hp=xl; ... if op==1 gesp(); } 即每次进gesp前回满，gesp内8关之间不回。
+  logBig(`— 第 ${dj} 关 · ${state.enemyName} —`,'big');
+  log(`敌人出现！HP: ${state.enemyMaxHp}，攻击: ${state.enemyAtk}`,'enemy');
+  render();
+}
+
+// 使用物品
+function doUse(kind){
+  if(kind==='skip'){
+    log('你选择不使用物品。','player');
+  } else if(kind==='mw'){
+    state.mw--;
+    state.hp = Math.min(state.hp+60, state.xl);
+    log(`🍖 你使用了<b>美味食物</b>，恢复了 <b style="color:var(--green)">60</b> 点血量。当前血量：${state.hp}/${state.xl}`,'heal');
+    log(`剩余美味食物：${state.mw}`,'');
+  } else if(kind==='pt'){
+    state.pt--;
+    const heal = rand(25,35);
+    state.hp = Math.min(state.hp+heal, state.xl);
+    log(`🍞 你使用了<b>普通食物</b>，恢复了 <b style="color:var(--green)">${heal}</b> 点血量。当前血量：${state.hp}/${state.xl}`,'heal');
+    log(`剩余普通食物：${state.pt}`,'');
+  } else if(kind==='fm'){
+    state.fm--;
+    const delta = rand(-5,15);
+    state.hp = Math.min(state.hp+delta, state.xl);
+    if(delta>=0) log(`🧀 你使用了<b>发霉食物</b>，恢复了 <b style="color:var(--green)">${delta}</b> 点血量。当前血量：${state.hp}/${state.xl}`,'heal');
+    else log(`🧀 你使用了<b>发霉食物</b>，<b style="color:var(--crimson)">扣了 ${-delta} 点血量</b>！当前血量：${state.hp}/${state.xl}`,'enemy');
+    log(`剩余发霉食物：${state.fm}`,'');
+    if(state.hp<=0){ die(); return; }
+  } else if(kind==='zl'){
+    state.zl--;
+    state.hp = state.xl;
+    log(`💊 你使用了<b>治疗药水</b>，血量回满！当前血量：${state.hp}/${state.xl}`,'heal');
+    log(`剩余治疗药水：${state.zl}`,'');
+  } else if(kind==='ll'){
+    state.ll--;
+    state.strTurns = 3;
+    log(`⚗️ 你使用了<b>力量药水</b>，接下来3回合伤害翻倍！`,'gold');
+    log(`剩余力量药水：${state.ll}`,'');
+  } else if(kind==='sb'){
+    state.sb--;
+    state.fstTurns = 3;
+    log(`💨 你使用了<b>闪避药水</b>，接下来3回合免疫伤害！`,'purple');
+    log(`剩余闪避药水：${state.sb}`,'');
+  }
+  state.phase='attack';
+  render();
+}
+
+// 攻击
+function doAttack(type){
+  let dmg=0, msg='';
+  const mul = state.strTurns>0 ? 2 : 1;
+
+  if(type===1){ // 暴力代码
+    const zz = rand(1,100);
+    if(zz <= state.bjgl){
+      dmg = state.bj * mul;
+      if(mul===2) log(`💪【力量效果】你触发了<b class="crit" style="color:#ff6b6b">暴击</b>！对敌人造成 <b class="crit">${dmg}</b> 点伤害！`,'crit');
+      else log(`⚡ 你触发了<b class="crit" style="color:#ff6b6b">暴击</b>！对敌人造成 <b class="crit">${dmg}</b> 点伤害！`,'crit');
+    } else {
+      const fluct = rand(-10,10);
+      dmg = (fluct + state.shh) * mul;
+      if(mul===2) log(`💪【力量效果】你使用暴力代码攻击，造成 <b style="color:var(--cyan)">${dmg}</b> 点伤害！`,'player');
+      else log(`💻 你使用暴力代码攻击，造成 <b style="color:var(--cyan)">${dmg}</b> 点伤害！`,'player');
+    }
+    state.enemyHp -= dmg;
+  }
+  else if(type===2){ // 算法
+    state.zd--;
+    dmg = state.qs * mul;
+    state.enemyHp -= dmg;
+    if(mul===2) log(`💪【力量效果】你使用<b>算法</b>攻击，造成 <b style="color:var(--purple)">${dmg}</b> 点伤害！（剩余算法：${state.zd}）`,'purple');
+    else log(`📜 你使用<b>算法</b>攻击，造成 <b style="color:var(--purple)">${dmg}</b> 点伤害！（剩余算法：${state.zd}）`,'purple');
+  }
+  else if(type===3){ // 暴戾代码
+    const opp = rand(1,100);
+    if(opp <= state.gl){
+      const back = rand(50,100);
+      state.hp -= back;
+      log(`🤬 <b style="color:var(--crimson)">反噬！</b>暴戾代码失控，你受到了 <b style="color:var(--crimson)">${back}</b> 点伤害！当前血量：${state.hp}`,'enemy');
+      if(state.hp<=0){ render(); die(); return; }
+      render();
+      // 反噬后仍然进入敌人回合，不造成敌人伤害
+      enemyTurn();
+      return;
+    } else {
+      dmg = state.bl * mul;
+      state.enemyHp -= dmg;
+      if(mul===2) log(`💪【力量效果】你使用<b>暴戾代码</b>攻击，造成 <b style="color:var(--crimson)">${dmg}</b> 点伤害！`,'crit');
+      else log(`🤬 你使用<b>暴戾代码</b>攻击，造成 <b style="color:var(--crimson)">${dmg}</b> 点伤害！`,'player');
+    }
+  }
+  else if(type===4){ // 总司令
+    state.sl--;
+    log(`🎖️ 你使用了<b>总司令</b>！（剩余：${state.sl}）`,'gold');
+    const xx = rand(1,100);
+    if(xx<=45){
+      logBig('不 可 以 ， 总 司 令 ！ ！ ！ ！ ！','big');
+      dmg = mul===2 ? 300 : 150;
+      state.enemyHp -= dmg;
+      if(mul===2) log(`💪【力量效果】总司令触发！对敌人造成 <b class="crit">${dmg}</b> 点巨额伤害！`,'crit');
+      else log(`✨ 总司令触发！对敌人造成 <b class="crit">${dmg}</b> 点巨额伤害！`,'crit');
+    } else {
+      log(`总司令没有触发……（无事发生）`,'warn');
+    }
+  }
+
+  log(`敌人剩余血量：<b style="color:var(--crimson)">${Math.max(0,state.enemyHp)}</b>/${state.enemyMaxHp}`,'enemy');
+
+  if(state.enemyHp<=0){
+    render();
+    winLevel();
+    return;
+  }
+  render();
+  // 敌人回合
+  setTimeout(enemyTurn, 450);
+}
+
+function enemyTurn(){
+  if(state.fstTurns>0){
+    log(`🌀 <b style="color:var(--green)">闪避成功！</b>你躲开了敌人的攻击。`,'heal');
+  } else {
+    const roll = rand(0,9); // 0-9 共10个值，9是暴击（10%）
+    let edmg;
+    if(roll===9){
+      edmg = Math.floor(state.enemyAtk * 1.5);
+      log(`💥 敌人触发<b class="crit" style="color:#ff6b6b">暴击</b>！对你造成 <b style="color:var(--crimson)">${edmg}</b> 点伤害！当前血量：${Math.max(0,state.hp-edmg)}`,'crit');
+    } else {
+      edmg = state.enemyAtk;
+      log(`👾 敌人攻击你，造成 <b style="color:var(--crimson)">${edmg}</b> 点伤害！当前血量：${Math.max(0,state.hp-edmg)}`,'enemy');
+    }
+    state.hp -= edmg;
+    if(state.hp<=0){ render(); die(); return; }
+  }
+  // buff回合递减
+  if(state.strTurns>0) state.strTurns--;
+  if(state.fstTurns>0) state.fstTurns--;
+  state.phase='use';
+  render();
+}
+
+// 死亡
+function die(){
+  logBig('你 死 了 ！','dead');
+  const op = rand(0,2);
+  let punish='';
+  if(op===0){ state.mw=state.pt=state.fm=0; punish='你所有的<b class="punish">食物</b>被清空了！'; }
+  else if(op===1){ state.ll=state.zl=state.sb=0; punish='你所有的<b class="punish">药水</b>被清空了！'; }
+  else { state.sl=state.zd=0; punish='你所有的<b class="punish">弹药（算法/总司令）</b>被清空了！'; }
+  log(punish,'enemy');
+  showModal(false, '你 阵 亡 了', punish, '返回主菜单');
+}
+
+// 胜利单关
+function winLevel(){
+  const i = state.currentLevel;
+  logBig(`击 败 ${i} 级 怪 ！`,'big');
+
+  // 固定掉落食物
+  if(i<=2){ state.fm++; log(`🍞 固定掉落：获得1个<b>发霉食物</b>（当前${state.fm}）。`,'gold'); }
+  else if(i<=5){ state.pt++; log(`🍖 固定掉落：获得1个<b>普通食物</b>（当前${state.pt}）。`,'gold'); }
+  else { state.mw++; log(`🍖 固定掉落：获得1个<b>美味食物</b>（当前${state.mw}）。`,'gold'); }
+
+  // 额外掉落
+  const extra = rand(1,100);
+  if(extra <= 20 + i*10){
+    log(`✨ 触发<b>额外掉落</b>！`,'gold');
+    dropLoot();
+  }
+
+  // 7、8级额外药水
+  if(i>=7){
+    const pp = rand(1,100);
+    if((i===7 && pp<=60) || (i===8 && pp<=80)){
+      log(`🧪 高级怪额外掉落药水！`,'gold');
+      dropPotion();
+    }
+  }
+  logSep();
+
+  if(i>=8){
+    // 通关GESP
+    setTimeout(winGESP, 600);
+  } else {
+    state.currentLevel++;
+    setTimeout(startLevel, 800);
+  }
+}
+
+function dropLoot(){
+  const op = rand(1,100);
+  if(op<=30){ state.mw++; log(`  └ 获得1个<b>美味食物</b>（当前${state.mw}）。`,'gold'); }
+  else if(op<=60){ state.zd++; log(`  └ 获得1个<b>算法</b>（当前${state.zd}）。`,'purple'); }
+  else if(op<=90){ state.coin++; log(`  └ 获得1枚<b>金币</b>（当前${state.coin}）。`,'gold'); }
+  else { log(`  └ 获得1本<b>附魔书</b>！`,'purple'); doEnchant(); }
+}
+
+function dropPotion(){
+  const op = rand(0,5);
+  if(op<=2){ state.zl++; log(`  └ 获得1个<b>治疗药水</b>（当前${state.zl}）。`,'green'); }
+  else if(op<=4){ state.ll++; log(`  └ 获得1个<b>力量药水</b>（当前${state.ll}）。`,'gold'); }
+  else { state.sb++; log(`  └ 获得1个<b>闪避药水</b>（当前${state.sb}）。`,'purple'); }
+}
+
+function doEnchant(){
+  // 检查是否全满
+  if(state.xl>=175 && state.shh>=30 && state.bjgl>=50 && state.bj>=75 && state.bl>=150 && state.gl<=20 && state.qs>=100){
+    state.coin+=3;
+    log(`  └ 所有属性已满！自动转化为 <b>3金币</b>（当前${state.coin}）。`,'gold');
+    return;
+  }
+  let op;
+  // 随机直到选到未满的属性
+  while(true){
+    op = rand(0,6);
+    if(op===0 && state.xl>=175) continue;
+    if(op===1 && state.shh>=30) continue;
+    if(op===2 && state.bjgl>=50) continue;
+    if(op===3 && state.bj>=75) continue;
+    if(op===4 && state.bl>=150) continue;
+    if(op===5 && state.gl<=20) continue;
+    if(op===6 && state.qs>=100) continue;
+    break;
+  }
+  if(op===0){ state.xl=Math.min(state.xl+25,175); log(`  └ 📕【生命附魔】血量上限 +25，当前 <b>${state.xl}</b>。`,'green'); }
+  else if(op===1){ state.shh=Math.min(state.shh+5,30); log(`  └ 📕【暴力附魔】暴力代码伤害 +5，当前 <b>${state.shh}</b>。`,'cyan'); }
+  else if(op===2){ state.bjgl=Math.min(state.bjgl+5,50); log(`  └ 📕【赌神附魔】暴击概率 +5%，当前 <b>${state.bjgl}%</b>。`,'gold'); }
+  else if(op===3){ state.bj=Math.min(state.bj+10,75); log(`  └ 📕【奇迹附魔】暴击伤害 +10，当前 <b>${state.bj}</b>。`,'crimson'); }
+  else if(op===4){ state.bl=Math.min(state.bl+15,150); log(`  └ 📕【口吐芬芳附魔】暴戾代码伤害 +15，当前 <b>${state.bl}</b>。`,'crimson'); }
+  else if(op===5){ state.gl=Math.max(state.gl-10,20); log(`  └ 📕【贿赂附魔】反噬概率 -10%，当前 <b>${state.gl}%</b>。`,'purple'); }
+  else if(op===6){ state.qs=Math.min(state.qs+10,100); log(`  └ 📕【I AK IOI附魔】算法伤害 +10，当前 <b>${state.qs}</b>。`,'purple'); }
+}
+
+// 通关GESP
+function winGESP(){
+  logBig('🎉 通 关 全 部 8 只 怪 ！ 🎉','big');
+  const op = rand(0,1);
+  if(op===0){
+    state.wx++;
+    log(`🔧 通关奖励：获得1个<b>维修包</b>！（当前${state.wx}）`,'gold');
+  } else {
+    log(`📕 通关奖励：获得1本<b>附魔书</b>！`,'gold');
+    doEnchant();
+  }
+  state.stage='reward';
+  state.hp = state.xl;
+  render();
+  setTimeout(()=>showModal(true, '🏆 通 关 成 功', '你击败了全部8只GESP小怪！<br>血量已回满，可以继续挑战或重新开始。', '返回主菜单'), 800);
+}
+
+function showModal(isWin, title, msg, btnText){
+  const mask = $('#modal-mask');
+  const modal = $('#modal');
+  $('#modal-title').textContent = title;
+  $('#modal-msg').innerHTML = msg;
+  $('#modal-btn').textContent = btnText;
+  modal.classList.toggle('win', isWin);
+  modal.classList.toggle('lose', !isWin);
+  mask.classList.add('show');
+}
+function hideModal(){
+  $('#modal-mask').classList.remove('show');
+}
+
+function backToMenu(){
+  hideModal();
+  state.stage='menu';
+  state.hp = state.xl;
+  state.strTurns=0; state.fstTurns=0;
+  logSep();
+  logBig('— 返回主菜单 —','big');
+  log(`血量已恢复至上限 ${state.xl}。`,'heal');
+  render();
+}
+
+// ========== 事件绑定 ==========
+document.addEventListener('click', e=>{
+  const t = e.target.closest('button');
+  if(!t) return;
+  if(t.id==='btn-start'){ startGame(); return; }
+  if(t.id==='btn-restart'){ if(confirm('确定要重新开始游戏吗？所有进度将丢失。')){ $('#app').classList.add('hidden'); $('#start-screen').classList.remove('hidden'); $('#log-body').innerHTML=''; } return; }
+  if(t.id==='btn-clearlog'){ $('#log-body').innerHTML=''; return; }
+  if(t.id==='modal-btn'){ backToMenu(); return; }
+
+  if(state.stage==='menu' && t.dataset.act==='gesp'){ startGESP(); return; }
+  if(state.stage==='fighting' && state.phase==='use' && t.dataset.use!==undefined){ doUse(t.dataset.use); return; }
+  if(state.stage==='fighting' && state.phase==='attack' && t.dataset.atk!==undefined){ doAttack(parseInt(t.dataset.atk)); return; }
+});
+
+// ========== 背景星星 ==========
+(function(){
+  const box = document.getElementById('sparkles');
+  for(let i=0;i<60;i++){
+    const s = document.createElement('div');
+    s.className='sparkle';
+    s.style.left = Math.random()*100+'%';
+    s.style.top = Math.random()*100+'%';
+    s.style.animationDuration = (2+Math.random()*4)+'s';
+    s.style.animationDelay = (Math.random()*5)+'s';
+    if(i%2) s.style.animationDuration = (4+Math.random()*5)+'s';
+    box.appendChild(s);
+  }
+})();
+</script>
+</body>
+</html>
