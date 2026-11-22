@@ -1,0 +1,2170 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head>
+<meta charset="UTF-8"><style id="qw-theme">:root {
+  --color-bg: #121218 !important;
+  --color-text: #e4e4ed !important;
+  --chat-column-base: 720px !important;
+  --chat-column-max: 720px !important;
+  --color-navbar-bg: #1a1a24 !important;
+  --color-navbar-fg: #e4e4ed !important;
+  --color-navbar-divider: #ffffff1f !important;
+  --color-leftnav-bg: #1a1a24 !important;
+  --color-bg-chat-view: #121218 !important;
+  --color-bg-secondary: #1a1a24 !important;
+  --color-bg-tertiary: #1e1e2a !important;
+  --color-bg-hover: #2a2a38 !important;
+  --color-surface: #1e1e2a !important;
+  --color-surface-hover: #2a2a38 !important;
+  --color-surface-active: #353546 !important;
+  --color-border: #ffffff1f !important;
+  --color-border-light: #ffffff0f !important;
+  --color-border-strong: #3a3a4e !important;
+  --background-toggle-off-default: #fff0 !important;
+  --color-primary: #8575ff !important;
+  --color-primary-dark: #4200db !important;
+  --color-primary-light: #8575ff !important;
+  --color-primary-bg: color-mix(in srgb, #8575ff 15%, transparent) !important;
+  --color-primary-hover-border: #4200db !important;
+  --color-nav-icon-active: #8575ff !important;
+  --color-nav-hover-border: #8575ff !important;
+  --color-primary-alpha-3: color-mix(in srgb, #8575ff 3%, transparent) !important;
+  --color-primary-alpha-5: color-mix(in srgb, #8575ff 5%, transparent) !important;
+  --color-primary-alpha-8: color-mix(in srgb, #8575ff 8%, transparent) !important;
+  --color-primary-alpha-12: color-mix(in srgb, #8575ff 12%, transparent) !important;
+  --color-primary-alpha-15: color-mix(in srgb, #8575ff 15%, transparent) !important;
+  --color-primary-alpha-20: color-mix(in srgb, #8575ff 20%, transparent) !important;
+  --color-primary-alpha-25: color-mix(in srgb, #8575ff 25%, transparent) !important;
+  --color-primary-alpha-30: color-mix(in srgb, #8575ff 30%, transparent) !important;
+  --color-primary-alpha-40: color-mix(in srgb, #8575ff 40%, transparent) !important;
+  --color-primary-alpha-50: color-mix(in srgb, #8575ff 50%, transparent) !important;
+  --color-primary-alpha-60: color-mix(in srgb, #8575ff 60%, transparent) !important;
+  --color-primary-subtle: color-mix(in srgb, #8575ff 25%, transparent) !important;
+  --color-primary-border: color-mix(in srgb, #8575ff 50%, transparent) !important;
+  --color-focus-ring: #8575ff !important;
+  --color-sidebar-hover: color-mix(in srgb, #8575ff 15%, transparent) !important;
+  --color-sidebar-hover-solid: color-mix(in srgb, #8575ff 12%, #121218) !important;
+  --block-selection-outline-offset: 2px !important;
+  --color-accent: #8575ff !important;
+  --color-accent-foreground: #8575ff !important;
+  --color-accent-dark: #4200db !important;
+  --color-accent-light: color-mix(in srgb, #8575ff 15%, transparent) !important;
+  --color-accent-inverse: #fff !important;
+  --color-link: #8575ff !important;
+  --color-brand-ai-gradient-start: #6842ff !important;
+  --color-brand-ai-gradient-mid: #d600ba !important;
+  --color-brand-ai-gradient-end: #ff4b14 !important;
+  --color-brand-kiro: #9147ff !important;
+  --color-primary-gradient-end: color-mix(in srgb, #8575ff 35%, transparent) !important;
+  --color-primary-bg-solid: #1a1530 !important;
+  --color-user-bubble: #333843 !important;
+  --color-user-bubble-text: #e4e4ed !important;
+  --color-text-secondary: #a0a0b4 !important;
+  --color-text-tertiary: #8a8a9a !important;
+  --color-text-muted: #8a8a9a !important;
+  --color-text-on-primary: #fff !important;
+  --color-success: #4ade80 !important;
+  --color-success-dark: #00802f !important;
+  --color-success-light: #d9ffd6 !important;
+  --color-success-hover: #005c26 !important;
+  --color-success-bg: #1c2c22 !important;
+  --color-success-border: #0e3d1c !important;
+  --color-success-foreground: #4ade80 !important;
+  --color-success-dark-foreground: #00802f !important;
+  --color-success-text: #4ade80 !important;
+  --color-error: #ff6b6b !important;
+  --color-error-dark: #db0000 !important;
+  --color-error-light: #ffe0e0 !important;
+  --color-error-hover: #3b1a24 !important;
+  --color-error-bg: #3b1a24 !important;
+  --color-error-border: #5e1a24 !important;
+  --color-error-active-border: #db0000 !important;
+  --color-error-foreground: #ff6b6b !important;
+  --color-error-dark-foreground: #db0000 !important;
+  --color-error-inverse: #fff !important;
+  --color-error-text: #ff6b6b !important;
+  --color-warning: #fbbf24 !important;
+  --color-warning-dark: #573a00 !important;
+  --color-warning-light: #fffbbd !important;
+  --color-warning-hover: #db9200 !important;
+  --color-warning-bg: #3d3520 !important;
+  --color-warning-border: #5e4a1a !important;
+  --color-warning-foreground: #fbbf24 !important;
+  --color-warning-dark-foreground: #573a00 !important;
+  --color-warning-inverse: #573a00 !important;
+  --color-surface-warning: #fffbbd !important;
+  --color-text-warning: #573a00 !important;
+  --color-info: #60a5fa !important;
+  --color-info-dark: #006ce0 !important;
+  --color-info-light: #d1f1ff !important;
+  --color-info-hover: #003b8f !important;
+  --color-info-bg: #1a2a42 !important;
+  --color-info-border: #0f3d6e !important;
+  --color-info-foreground: #60a5fa !important;
+  --color-info-dark-foreground: #002a66 !important;
+  --color-info-inverse: #fff !important;
+  --color-overlay: #000000b3 !important;
+  --color-shadow: #0000004d !important;
+  --color-hover: #ffffff0d !important;
+  --color-tooltip-bg: #1e1e2af2 !important;
+  --color-tooltip-text: #e4e4ed !important;
+  --color-voice-purple: #8575ff !important;
+  --color-voice-purple-dark: #4200db !important;
+  --color-voice-purple-light: #8575ff !important;
+  --color-voice-red: #ff6b6b !important;
+  --color-voice-red-dark: #db0000 !important;
+  --color-voice-amber: #fbbf24 !important;
+  --color-voice-purple-glow: #8575ff66 !important;
+  --color-voice-red-glow: #db000066 !important;
+  --font-sans: "Amazon Ember", "Helvetica Neue", "Segoe UI", Roboto, Helvetica, Arial, sans-serif !important;
+  --font-mono: "SF Mono", "Monaco", "Menlo", "Consolas", monospace !important;
+  --text-2xs: .5625rem !important;
+  --text-xs: .625rem !important;
+  --text-sm: .6875rem !important;
+  --text-base: .75rem !important;
+  --text-md: .8125rem !important;
+  --text-lg: .875rem !important;
+  --text-xl: 1rem !important;
+  --text-2xl: 1.125rem !important;
+  --text-3xl: 1.25rem !important;
+  --text-4xl: 1.5rem !important;
+  --text-5xl: 2rem !important;
+  --spacing-1: calc(.25rem * 1) !important;
+  --spacing-1-5: calc(.25rem * 1.5) !important;
+  --spacing-2: calc(.25rem * 2) !important;
+  --spacing-3: calc(.25rem * 3) !important;
+  --spacing-4: calc(.25rem * 4) !important;
+  --spacing-5: calc(.25rem * 5) !important;
+  --spacing-6: calc(.25rem * 6) !important;
+  --spacing-7: calc(.25rem * 7) !important;
+  --spacing-8: calc(.25rem * 8) !important;
+  --spacing-9: calc(.25rem * 9) !important;
+  --spacing-10: calc(.25rem * 10) !important;
+  --border-radius-rounded-lg: 8px !important;
+  --radius-sm: 6px !important;
+  --radius-md: 10px !important;
+  --radius-card: 12px !important;
+  --radius-lg: 16px !important;
+  --radius-pill: 8px !important;
+  --shadow-sm: 0 1px 2px #0003 !important;
+  --shadow-md: 0 4px 12px #0000004d !important;
+  --shadow-lg: 0 4px 16px 4px #0006, 0 2px 6px 1px #0006 !important;
+  --color-success-bg-solid: #1a3d28 !important;
+  --color-error-bg-solid: #4a2028 !important;
+  --color-error-border-solid: #5e1a24 !important;
+  --color-warning-bg-solid: #4a3a1e !important;
+  --color-warning-text: #fbbf24 !important;
+  --color-info-bg-solid: #1a3050 !important;
+  --color-info-bg-solid-alt: #222240 !important;
+  --color-info-text: #60a5fa !important;
+  --color-info-text-alt: #818cf8 !important;
+  --color-emerald: #34d399 !important;
+  --color-teal: #5eead4 !important;
+  --color-code-bg: #1e1e2a !important;
+  --color-code-header-bg: #252535 !important;
+  --color-code-text: #e4e4ed !important;
+  --color-code-border: #2e2e3e !important;
+  --color-code-muted: #6e6e82 !important;
+  --color-inline-code-bg: #1e1e2a !important;
+  --color-inline-code-text: #e4e4ed !important;
+  --color-inline-code-border: #2e2e3e !important;
+  --color-scrollbar-thumb: #3a3a4e !important;
+  --color-scrollbar-track: transparent !important;
+  --qs-data-cat-01: #6366f1 !important;
+  --qs-data-cat-02: #f59e0b !important;
+  --qs-data-cat-03: #06b6d4 !important;
+  --qs-data-cat-04: #a78bfa !important;
+  --qs-data-cat-05: #22c55e !important;
+  --qs-data-cat-06: #0284c7 !important;
+  --qs-data-cat-07: #e879f9 !important;
+  --qs-data-cat-08: #a3e635 !important;
+  --qs-data-cat-09: #60a5fa !important;
+  --qs-data-cat-10: #f9a8d4 !important;
+  --qs-data-cat-11: #f97316 !important;
+  --qs-data-cat-12: #5eead4 !important;
+  --qs-data-cat-other: #a3a3a3 !important;
+  --qs-content: #06080b !important;
+  --qs-main: #131920 !important;
+  --qs-primary-foreground: #f9f9fb !important;
+  --qs-secondary-foreground: #b4b4bb !important;
+  --qs-tertiary-foreground: #8a8a9a !important;
+  --qs-placeholder-foreground: #b4b4bb !important;
+  --qs-divider: #333843 !important;
+  --qs-default-border: #8c8c94 !important;
+  --qs-neutral-soft: #656871 !important;
+  --qs-neutral-gray-50: #1e1e2a !important;
+  --qs-tertiary-background: #1e1e2a !important;
+  --qs-action-hover: #1b232d !important;
+  --qs-primary-default: #8575ff !important;
+  --qs-primary-dark: #d2ccff !important;
+  --qs-primary-medium: #b2a8ff !important;
+  --qs-primary-light: #1b0051 !important;
+  --qs-primary-inverse: #06080b !important;
+  --qs-success-default: #2bb534 !important;
+  --qs-success-dark: #aeffa8 !important;
+  --qs-success-light: #001708 !important;
+  --qs-error-default: #ff7a7a !important;
+  --qs-error-dark: #ffe0e0 !important;
+  --qs-warning-default: #ffe347 !important;
+  --qs-warning-dark: #fffbbd !important;
+  --qs-warning-light: #271a00 !important;
+  --qs-info-default: #42b4ff !important;
+  --qs-info-dark: #b8e7ff !important;
+  --qs-font-sans: "Amazon Ember", "Helvetica Neue", "Segoe UI", Helvetica, Arial, sans-serif !important;
+  --safe-top: 0px !important;
+  --safe-bottom: 0px !important;
+  --safe-left: 0px !important;
+  --safe-right: 0px !important;
+  --qs-action-active: #1b0051 !important;
+  --qs-action-active-hover: #35009e !important;
+  --qs-action-disabled: #1b232d !important;
+  --qs-active-border: #8575ff !important;
+  --qs-application-navbar: #8575ff !important;
+  --qs-application-navbar-dark: #d2ccff !important;
+  --qs-application-navbar-foreground: #06080b !important;
+  --qs-application-navbar-light: #1b0051 !important;
+  --qs-automation-dark: #ffccf8 !important;
+  --qs-automation-default: #ff57e9 !important;
+  --qs-automation-light: #1a0015 !important;
+  --qs-automation-medium: #d600ba !important;
+  --qs-automation-soft: #660052 !important;
+  --qs-avatar-blue-bg: #000e23 !important;
+  --qs-avatar-blue-fg: #b8e7ff !important;
+  --qs-avatar-fuchsia-bg: #19001d !important;
+  --qs-avatar-fuchsia-fg: #f8c7ff !important;
+  --qs-avatar-green-bg: #001708 !important;
+  --qs-avatar-green-fg: #aeffa8 !important;
+  --qs-avatar-neutral-bg: #333843 !important;
+  --qs-avatar-neutral-fg: #f9f9fb !important;
+  --qs-avatar-orange-bg: #2b0a00 !important;
+  --qs-avatar-orange-fg: #ffc0ad !important;
+  --qs-avatar-pink-bg: #1a0015 !important;
+  --qs-avatar-pink-fg: #ffccf8 !important;
+  --qs-avatar-primary-bg: #1b0051 !important;
+  --qs-avatar-primary-fg: #d2ccff !important;
+  --qs-avatar-red-bg: #370000 !important;
+  --qs-avatar-red-fg: #ffe0e0 !important;
+  --qs-avatar-violet-bg: #180030 !important;
+  --qs-avatar-violet-fg: #e8d1ff !important;
+  --qs-avatar-yellow-bg: #271a00 !important;
+  --qs-avatar-yellow-fg: #fffbbd !important;
+  --qs-blue-100: #e2ebff !important;
+  --qs-blue-1000: #060d27 !important;
+  --qs-blue-200: #c2d5ff !important;
+  --qs-blue-300: #9fbdff !important;
+  --qs-blue-400: #7ea0fc !important;
+  --qs-blue-50: #fafbff !important;
+  --qs-blue-500: #517df6 !important;
+  --qs-blue-600: #2d5fe8 !important;
+  --qs-blue-700: #1d3cb9 !important;
+  --qs-blue-800: #162c85 !important;
+  --qs-blue-900: #102165 !important;
+  --qs-blue-950: #0b1746 !important;
+  --qs-brand: #06080b !important;
+  --qs-brand-foreground: #f9f9fb !important;
+  --qs-brand-navbar: #f9f9fb !important;
+  --qs-brand-navbar-dark: #fff !important;
+  --qs-brand-navbar-foreground: #06080b !important;
+  --qs-brand-navbar-light: #333843 !important;
+  --qs-coachmark: #42b4ff !important;
+  --qs-connection-dark: #ffc0ad !important;
+  --qs-connection-default: #ff6a3d !important;
+  --qs-connection-light: #2b0a00 !important;
+  --qs-connection-soft: #661800 !important;
+  --qs-content-inverse: #dedee3 !important;
+  --qs-content-inverse-active: #f9f9fb !important;
+  --qs-contrast-foreground: #f9f9fb !important;
+  --qs-control-selected-bg: #8575ff !important;
+  --qs-control-selected-hover-bg: #d2ccff !important;
+  --qs-darkpurple1-100: #eee1ef !important;
+  --qs-darkpurple1-1000: #130b14 !important;
+  --qs-darkpurple1-200: #dcc0dd !important;
+  --qs-darkpurple1-300: #c99ecc !important;
+  --qs-darkpurple1-400: #b57ab8 !important;
+  --qs-darkpurple1-50: #f8f2f8 !important;
+  --qs-darkpurple1-500: #97529b !important;
+  --qs-darkpurple1-600: #754078 !important;
+  --qs-darkpurple1-700: #542e57 !important;
+  --qs-darkpurple1-800: #472749 !important;
+  --qs-darkpurple1-900: #341c35 !important;
+  --qs-darkpurple1-950: #241325 !important;
+  --qs-darkpurple2-100: #f1e3fc !important;
+  --qs-darkpurple2-1000: #1b042f !important;
+  --qs-darkpurple2-200: #e7d0fb !important;
+  --qs-darkpurple2-300: #d6b0f8 !important;
+  --qs-darkpurple2-400: #be81f3 !important;
+  --qs-darkpurple2-50: #f8f1fe !important;
+  --qs-darkpurple2-500: #a652ef !important;
+  --qs-darkpurple2-600: #8e24eb !important;
+  --qs-darkpurple2-700: #7413c9 !important;
+  --qs-darkpurple2-800: #580e98 !important;
+  --qs-darkpurple2-900: #36095d !important;
+  --qs-darkpurple2-950: #260642 !important;
+  --qs-data-categorical-01: #6366f1 !important;
+  --qs-data-categorical-02: #f59e0b !important;
+  --qs-data-categorical-03: #06b6d4 !important;
+  --qs-data-categorical-04: #a78bfa !important;
+  --qs-data-categorical-05: #22c55e !important;
+  --qs-data-categorical-06: #0284c7 !important;
+  --qs-data-categorical-07: #e879f9 !important;
+  --qs-data-categorical-08: #a3e635 !important;
+  --qs-data-categorical-09: #60a5fa !important;
+  --qs-data-categorical-10: #f9a8d4 !important;
+  --qs-data-categorical-11: #f97316 !important;
+  --qs-data-categorical-12: #5eead4 !important;
+  --qs-data-categorical-other: #a3a3a3 !important;
+  --qs-data-divergent-negative: #fb923c !important;
+  --qs-data-divergent-positive: #818cf8 !important;
+  --qs-data-divergent-red-green-negative: #f87171 !important;
+  --qs-data-divergent-red-green-positive: #4ade80 !important;
+  --qs-data-missing: #404040 !important;
+  --qs-data-sentiment-neutral: #a3a3a3 !important;
+  --qs-data-sentiment-warning: #ffe347 !important;
+  --qs-data-sequential-duochromatic-high: #6366f1 !important;
+  --qs-data-sequential-duochromatic-low: #ddd6fe !important;
+  --qs-data-sequential-monochromatic-high: #818cf8 !important;
+  --qs-default-badge: #656871 !important;
+  --qs-default-badge-dot: #b4b4bb !important;
+  --qs-dimension: #8575ff !important;
+  --qs-dimension-experimental: #8575ff !important;
+  --qs-dimension-experimental-foreground: #8575ff !important;
+  --qs-dimension-foreground: #06080b !important;
+  --qs-disabled: #8c8c94 !important;
+  --qs-disabled-border: #333843 !important;
+  --qs-disabled-foreground: #656871 !important;
+  --qs-divider-light: #1b232d !important;
+  --qs-error-active-border: #ff7a7a !important;
+  --qs-error-border: #370000 !important;
+  --qs-error-foreground: #ff7a7a !important;
+  --qs-error-inverse: #06080b !important;
+  --qs-error-light: #370000 !important;
+  --qs-error-medium: #ff9e9e !important;
+  --qs-error-soft: #700000 !important;
+  --qs-focus-offset: 1px !important;
+  --qs-font-base-letter-spacing: .15px !important;
+  --qs-font-display: "Amazon Ember", "Helvetica Neue", "Segoe UI", Helvetica, Arial, sans-serif !important;
+  --qs-font-family: "Amazon Ember", "Helvetica Neue", "Segoe UI", Helvetica, Arial, sans-serif !important;
+  --qs-gradient-automation-light-stop: #1a0015 !important;
+  --qs-gradient-automation-medium-stop: #d600ba !important;
+  --qs-gradient-automation-stop: #ff57e9 !important;
+  --qs-gradient-connection-light-stop: #2b0a00 !important;
+  --qs-gradient-connection-stop: #ff6a3d !important;
+  --qs-gradient-insight-light-stop: #19001d !important;
+  --qs-gradient-insight-stop: #ec70ff !important;
+  --qs-gradient-visualization-light-stop: #180030 !important;
+  --qs-gradient-visualization-stop: #bf80ff !important;
+  --qs-green-100: #ccffd8 !important;
+  --qs-green-1000: #001409 !important;
+  --qs-green-200: #a9efba !important;
+  --qs-green-300: #84d39a !important;
+  --qs-green-400: #71c68c !important;
+  --qs-green-50: #f0fff3 !important;
+  --qs-green-500: #5bbe7a !important;
+  --qs-green-600: #3c955a !important;
+  --qs-green-700: #227340 !important;
+  --qs-green-800: #00441f !important;
+  --qs-green-900: #003317 !important;
+  --qs-green-950: #002410 !important;
+  --qs-grid-gap: 16px !important;
+  --qs-grid-gap-xl: 24px !important;
+  --qs-hero-banner-button-hover: color-mix(in srgb, #06080b, transparent 60%) !important;
+  --qs-hover-border: #dedee3 !important;
+  --qs-info-inverse: #06080b !important;
+  --qs-info-light: #000e23 !important;
+  --qs-info-medium: #75cfff !important;
+  --qs-info-soft: #002a66 !important;
+  --qs-insight-dark: #f8c7ff !important;
+  --qs-insight-default: #ec70ff !important;
+  --qs-insight-light: #19001d !important;
+  --qs-insight-soft: #590066 !important;
+  --qs-main-foreground: #f9f9fb !important;
+  --qs-main-secondary-foreground: #b4b4bb !important;
+  --qs-measure: #2bb534 !important;
+  --qs-measure-experimental: #ffe347 !important;
+  --qs-measure-experimental-foreground: #ffe347 !important;
+  --qs-measure-foreground: #06080b !important;
+  --qs-neutral-0: #fff !important;
+  --qs-neutral-100: #f5f3ef !important;
+  --qs-neutral-1000: #0b0a0a !important;
+  --qs-neutral-200: #ece9e4 !important;
+  --qs-neutral-300: #e2dfda !important;
+  --qs-neutral-400: #cdc9c1 !important;
+  --qs-neutral-50: #faf9f7 !important;
+  --qs-neutral-500: #adaaa3 !important;
+  --qs-neutral-600: #94918b !important;
+  --qs-neutral-700: #7d7a73 !important;
+  --qs-neutral-800: #5e5b56 !important;
+  --qs-neutral-900: #302f2c !important;
+  --qs-neutral-950: #151310 !important;
+  --qs-neutral-black: #fff !important;
+  --qs-neutral-dark: #dedee3 !important;
+  --qs-neutral-deep: #b4b4bb !important;
+  --qs-neutral-default: #333843 !important;
+  --qs-neutral-light: #1b232d !important;
+  --qs-neutral-lightest: #131920 !important;
+  --qs-neutral-medium: #8c8c94 !important;
+  --qs-neutral-strong: #f9f9fb !important;
+  --qs-neutral-white: #06080b !important;
+  --qs-overlay: color-mix(in srgb, #131920, transparent 50%) !important;
+  --qs-popover-border: #1b232d !important;
+  --qs-primary-inverse-foreground: #06080b !important;
+  --qs-primary-soft: #35009e !important;
+  --qs-progress-active: #8575ff !important;
+  --qs-red-100: #ffe4e1 !important;
+  --qs-red-1000: #240004 !important;
+  --qs-red-200: #ffc7c2 !important;
+  --qs-red-300: #ffa099 !important;
+  --qs-red-400: #eb6560 !important;
+  --qs-red-50: #fff6f5 !important;
+  --qs-red-500: #c33c38 !important;
+  --qs-red-600: #aa2b2b !important;
+  --qs-red-700: #8a0f0f !important;
+  --qs-red-800: #6e000d !important;
+  --qs-red-900: #57000a !important;
+  --qs-red-950: #3d0007 !important;
+  --qs-secondary: #333843 !important;
+  --qs-secondary-dark: #656871 !important;
+  --qs-secondary-light: #1b232d !important;
+  --qs-shadow: #00000029 !important;
+  --qs-shadow-lg: 0 4px 16px 4px #00000029, 0 2px 6px 1px #00000029 !important;
+  --qs-shadow-md: 0 0 2px 0 #00000029, 0 2px 8px 1px #00000029 !important;
+  --qs-shadow-pin-left: inset -4px 0 4px -4px #00000029 !important;
+  --qs-shadow-pin-right: inset 4px 0 4px -4px #00000029 !important;
+  --qs-shadow-sm: 0 0 2px 0 #00000029, 0 0 4px 0 #00000029 !important;
+  --qs-shadow-xl: 0 4px 8px 2px #00000029, 0 6px 20px 4px #00000029 !important;
+  --qs-spice: #ff9800 !important;
+  --qs-success-inverse: #06080b !important;
+  --qs-success-medium: #62ff57 !important;
+  --qs-success-soft: #00471e !important;
+  --qs-tag-default: #333843 !important;
+  --qs-tag-soft-border: #656871 !important;
+  --qs-toggle-tile-lg: calc(.25rem * 15) !important;
+  --qs-toggle-tile-md: calc(.25rem * 12) !important;
+  --qs-toggle-tile-sm: calc(.25rem * 8) !important;
+  --qs-transparent: transparent !important;
+  --qs-visualization-dark: #e8d1ff !important;
+  --qs-visualization-default: #bf80ff !important;
+  --qs-visualization-light: #180030 !important;
+  --qs-visualization-soft: #45008a !important;
+  --qs-warning-experimental: #ffe347 !important;
+  --qs-warning-experimental-light: #271a00 !important;
+  --qs-warning-experimental-light-foreground: #271a00 !important;
+  --qs-warning-inverse: #fffbbd !important;
+  --qs-warning-medium: #fef571 !important;
+  --qs-warning-soft: #855900 !important;
+  --qs-width-modal-lg: 1136px !important;
+  --qs-width-modal-md: 600px !important;
+  --qs-width-modal-sm: 384px !important;
+  --qs-yellow-100: #fff5cf !important;
+  --qs-yellow-1000: #1f1100 !important;
+  --qs-yellow-200: #ffe79e !important;
+  --qs-yellow-300: #fbd86f !important;
+  --qs-yellow-400: #facb3d !important;
+  --qs-yellow-50: #fffcf0 !important;
+  --qs-yellow-500: #e2ac36 !important;
+  --qs-yellow-600: #ca8d2b !important;
+  --qs-yellow-700: #9d672f !important;
+  --qs-yellow-800: #7a4c19 !important;
+  --qs-yellow-900: #522e00 !important;
+  --qs-yellow-950: #381f00 !important;
+  --qs-duration-reorder: .125s !important;
+  --qs-ease-reorder: ease-in-out !important;
+  --z-subtask-modal: 10000 !important;
+  --z-above-subtask-modal: 10001 !important;
+}</style>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<title>冲奖王朝 · 格斗场</title>
+<script src="https://cdn.jsdelivr.net/npm/p5@1.9.0/lib/p5.min.js"></script>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; user-select: none; }
+html, body { width: 100%; height: 100%; overflow: hidden; background: #08081a; font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif; }
+canvas { display: block; position: fixed; top: 0; left: 0; z-index: 1; }
+
+/* 选人界面 */
+#selectScreen {
+  position: fixed; inset: 0; z-index: 10;
+  background: radial-gradient(ellipse at 30% 20%, rgba(255,59,78,0.12) 0%, transparent 50%),
+              radial-gradient(ellipse at 70% 80%, rgba(61,107,255,0.12) 0%, transparent 50%),
+              linear-gradient(180deg, #0a0a1e 0%, #0d0d2a 50%, #080820 100%);
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  overflow-y: auto;
+}
+#selectScreen::before {
+  content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 200px;
+  background:
+    linear-gradient(90deg, transparent 49.5%, rgba(0,255,255,0.08) 50%, transparent 50.5%),
+    linear-gradient(0deg, rgba(0,255,255,0.06) 1px, transparent 1px);
+  background-size: 40px 40px;
+  transform: perspective(400px) rotateX(60deg);
+  transform-origin: bottom; opacity: 0.6;
+}
+.select-title {
+  font-size: clamp(28px, 5vw, 52px); font-weight: 900; color: #fff;
+  margin-bottom: 8px; text-align: center;
+  background: linear-gradient(90deg, #FF3B4E, #00BFFF, #5F9FD6, #FF3B4E);
+  background-size: 300% auto;
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  animation: gradientShift 4s linear infinite;
+  text-shadow: none;
+}
+@keyframes gradientShift { to { background-position: 300% center; } }
+.select-subtitle {
+  font-size: clamp(14px, 2vw, 20px); color: rgba(255,255,255,0.5);
+  margin-bottom: 30px; text-align: center; letter-spacing: 4px;
+}
+.pick-hint {
+  font-size: clamp(14px, 2vw, 20px); font-weight: bold;
+  margin-bottom: 24px; padding: 8px 28px; border-radius: 30px;
+  background: rgba(255,255,255,0.05); border: 2px solid;
+  transition: all 0.4s;
+}
+.char-grid {
+  display: grid; grid-template-columns: repeat(2, 1fr);
+  gap: clamp(12px, 2vw, 24px);
+  max-width: min(900px, 95vw);
+  width: min(900px, 95vw);
+  padding: 0 10px 20px;
+  position: relative; z-index: 2;
+}
+.char-card {
+  background: rgba(255,255,255,0.04);
+  backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+  border: 2px solid rgba(255,255,255,0.08);
+  border-radius: 18px; padding: clamp(14px,2vw,22px);
+  cursor: pointer; transition: all 0.3s ease; position: relative;
+  overflow: hidden;
+}
+.char-card::before {
+  content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%;
+  background: radial-gradient(circle, var(--card-color) 0%, transparent 60%);
+  opacity: 0; transition: opacity 0.4s;
+}
+.char-card:hover:not(.disabled):not(.selected-p1):not(.selected-p2) {
+  transform: translateY(-6px);
+  border-color: var(--card-color);
+  box-shadow: 0 12px 40px var(--card-shadow), 0 0 60px var(--card-shadow);
+}
+.char-card:hover:not(.disabled):not(.selected-p1):not(.selected-p2)::before { opacity: 0.12; }
+.char-card.selected-p1 {
+  border-color: #FF3B4E;
+  box-shadow: 0 0 30px rgba(255,59,78,0.4), inset 0 0 30px rgba(255,59,78,0.08);
+  background: rgba(255,59,78,0.08);
+}
+.char-card.selected-p2 {
+  border-color: #3D6BFF;
+  box-shadow: 0 0 30px rgba(61,107,255,0.4), inset 0 0 30px rgba(61,107,255,0.08);
+  background: rgba(61,107,255,0.08);
+}
+.char-card.disabled { opacity: 0.3; cursor: not-allowed; filter: grayscale(0.7); }
+.card-badge { position: absolute; top: 12px; right: 12px; padding: 3px 12px; border-radius: 20px; font-size: 12px; font-weight: bold; }
+.badge-p1 { background: #FF3B4E; color: #fff; }
+.badge-p2 { background: #3D6BFF; color: #fff; }
+.char-header { display: flex; align-items: center; gap: 14px; margin-bottom: 14px; position: relative; z-index: 1; }
+.char-avatar {
+  width: 56px; height: 56px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  border: 3px solid var(--card-color);
+  box-shadow: 0 0 20px var(--card-shadow);
+  background: rgba(0,0,0,0.3);
+  font-size: 28px;
+}
+.char-name { font-size: clamp(18px,2.2vw,24px); font-weight: bold; color: #fff; }
+.char-tag { font-size: 11px; color: var(--card-color); opacity: 0.8; letter-spacing: 2px; margin-top: 2px; }
+.char-stats { display: grid; grid-template-columns: repeat(4,1fr); gap: 6px; margin-bottom: 14px; position: relative; z-index: 1; }
+.stat { background: rgba(0,0,0,0.3); border-radius: 8px; padding: 6px 4px; text-align: center; }
+.stat-val { font-size: clamp(14px,1.8vw,18px); font-weight: bold; color: var(--card-color); }
+.stat-label { font-size: 10px; color: rgba(255,255,255,0.5); margin-top: 2px; }
+.char-skills { position: relative; z-index: 1; }
+.skill-item { display: flex; align-items: flex-start; gap: 8px; margin-bottom: 6px; font-size: clamp(11px,1.4vw,13px); color: rgba(255,255,255,0.75); line-height: 1.4; }
+.skill-key { flex-shrink: 0; background: var(--card-color); color: #000; font-weight: bold; width: 22px; height: 22px; border-radius: 5px; display: flex; align-items: center; justify-content: center; font-size: 11px; margin-top: 1px; }
+.start-btn {
+  margin-top: 10px; padding: 14px 60px; font-size: 20px; font-weight: bold; color: #fff;
+  background: linear-gradient(135deg, #FF3B4E, #3D6BFF); border: none; border-radius: 40px;
+  cursor: pointer; transition: all 0.3s;
+  box-shadow: 0 8px 30px rgba(255,59,78,0.3); position: relative; z-index: 2;
+  opacity: 0.4; pointer-events: none; letter-spacing: 3px;
+}
+.start-btn.active { opacity: 1; pointer-events: auto; }
+.start-btn.active:hover { transform: scale(1.05); box-shadow: 0 12px 40px rgba(255,59,78,0.5); }
+
+/* 技能按钮 - 游戏中 */
+#skillBar { position: fixed; bottom: 0; left: 0; right: 0; z-index: 5; pointer-events: none; display: none; padding: 8px 12px; }
+.skill-row { display: flex; justify-content: space-between; align-items: flex-end; }
+.skill-group { display: flex; gap: 6px; pointer-events: auto; }
+.skill-group.p1 .sk-btn { border-color: rgba(255,59,78,0.5); color: #FF3B4E; background: rgba(255,59,78,0.1); }
+.skill-group.p1 .sk-btn.attack { background: rgba(255,59,78,0.3); border-color: #FF3B4E; color: #fff; }
+.skill-group.p2 .sk-btn { border-color: rgba(61,107,255,0.5); color: #6688FF; background: rgba(61,107,255,0.1); }
+.skill-group.p2 .sk-btn.attack { background: rgba(61,107,255,0.3); border-color: #4466FF; color: #fff; }
+.sk-btn {
+  border: 2px solid; border-radius: 10px; padding: 6px 10px;
+  font-size: 11px; font-weight: bold; text-align: center;
+  cursor: pointer; backdrop-filter: blur(8px); transition: all 0.1s;
+  min-width: 54px; line-height: 1.3;
+}
+.sk-btn:active, .sk-btn.pressed { transform: scale(0.9); filter: brightness(1.8); box-shadow: 0 0 20px currentColor; }
+.sk-btn .k { font-size: 13px; display: block; }
+.sk-btn .n { font-size: 9px; opacity: 0.8; display: block; margin-top: 1px; }
+.sk-btn.cooling { opacity: 0.4; }
+
+/* 移动端虚拟摇杆（左右双人分控） */
+#mobileControls { position: fixed; inset: 0; z-index: 6; display: none; pointer-events: none; }
+.joy-area { position: absolute; bottom: max(16px, env(safe-area-inset-bottom)); width: 128px; height: 128px; pointer-events: auto; touch-action: none; }
+.joy-area.left { left: max(12px, env(safe-area-inset-left)); }
+.joy-area.right { right: max(12px, env(safe-area-inset-right)); }
+.joy-base { width: 128px; height: 128px; border-radius: 50%; background: rgba(255,255,255,0.07); border: 2px solid rgba(255,255,255,0.18); position: absolute; top: 0; left: 0; }
+.joy-area.left .joy-base { border-color: rgba(255,59,78,0.5); }
+.joy-area.right .joy-base { border-color: rgba(61,107,255,0.5); }
+.joy-stick { width: 56px; height: 56px; border-radius: 50%; background: rgba(255,255,255,0.25); border: 2px solid rgba(255,255,255,0.4); position: absolute; top: 36px; left: 36px; pointer-events: none; }
+.m-jump { position: absolute; width: 58px; height: 58px; border-radius: 50%; background: rgba(255,255,255,0.12); border: 2px solid rgba(255,255,255,0.3); color: #fff; font-size: 14px; font-weight: bold; display: flex; align-items: center; justify-content: center; pointer-events: auto; touch-action: none; }
+.m-jump.p1 { left: 150px; bottom: max(30px, env(safe-area-inset-bottom)); border-color: rgba(255,59,78,0.65); }
+.m-jump.p2 { right: 150px; bottom: max(30px, env(safe-area-inset-bottom)); border-color: rgba(61,107,255,0.65); }
+.m-jump:active { background: rgba(255,255,255,0.35); }
+.m-skills { position: absolute; bottom: max(152px, calc(env(safe-area-inset-bottom) + 136px)); display: flex; flex-wrap: wrap; gap: 8px; width: 184px; pointer-events: auto; }
+.m-skills.p1 { left: max(12px, env(safe-area-inset-left)); }
+.m-skills.p2 { right: max(12px, env(safe-area-inset-right)); justify-content: flex-end; }
+.m-sk-btn { width: 52px; height: 52px; border-radius: 50%; border: 2px solid; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: bold; color: #fff; background: rgba(0,0,0,0.25); pointer-events: auto; touch-action: none; }
+.m-sk-btn.p1 { border-color: rgba(255,59,78,0.75); background: rgba(255,59,78,0.22); }
+.m-sk-btn.p2 { border-color: rgba(61,107,255,0.75); background: rgba(61,107,255,0.22); }
+.m-sk-btn.active { background: rgba(255,255,255,0.4); }
+@media (max-width: 799px) { #skillBar { display: none !important; } }
+
+/* 胜利画面 */
+#winScreen { position: fixed; inset: 0; z-index: 20; display: none; background: rgba(0,0,0,0.75); backdrop-filter: blur(8px); align-items: center; justify-content: center; flex-direction: column; }
+.win-text { font-size: clamp(36px,8vw,72px); font-weight: 900; margin-bottom: 30px; }
+.win-sub { font-size: 20px; color: rgba(255,255,255,0.6); margin-bottom: 36px; }
+.restart-btn { padding: 14px 50px; font-size: 20px; font-weight: bold; color: #fff; background: linear-gradient(135deg,#FF3B4E,#3D6BFF); border: none; border-radius: 40px; cursor: pointer; }
+.restart-btn:hover { transform: scale(1.05); }
+
+/* ===== UI 优化 ===== */
+#selectScreen { justify-content: flex-start; padding: 36px 0 40px; }
+#selectScreen > .select-title { margin-top: auto; }
+#selectScreen > .start-hint { margin-bottom: auto; }
+.vs-bar { display:flex; align-items:center; gap:14px; margin-bottom:22px; position:relative; z-index:2; }
+.vs-slot { min-width:170px; padding:10px 18px; border-radius:14px; text-align:center; font-weight:bold; font-size:15px;
+  background:rgba(255,255,255,0.04); border:2px dashed rgba(255,255,255,0.15); color:rgba(255,255,255,0.4); transition:all .3s; }
+.vs-slot.p1.ready { border:2px solid #FF3B4E; color:#FFC2CA; background:rgba(255,59,78,0.12); box-shadow:0 0 24px rgba(255,59,78,0.35); }
+.vs-slot.p2.ready { border:2px solid #3D6BFF; color:#B8C8FF; background:rgba(61,107,255,0.12); box-shadow:0 0 24px rgba(61,107,255,0.35); }
+.vs-mid { font-size:26px; font-weight:900; font-style:italic; color:#fff; text-shadow:0 0 12px #FF3B4E, 0 0 24px #3D6BFF; }
+.char-card.selected-p1, .char-card.selected-p2 { transform: translateY(-4px); }
+.skill-key { width:auto !important; height:auto !important; background:none !important; gap:3px; }
+.skill-key span { display:inline-block; min-width:18px; padding:2px 4px; border-radius:5px; font-size:11px; color:#fff; text-align:center; }
+.kp1 { background:rgba(255,59,78,0.85); } .kp2 { background:rgba(61,107,255,0.9); }
+.start-hint { margin-top:12px; font-size:12px; color:rgba(255,255,255,0.35); letter-spacing:1px; text-align:center; position:relative; z-index:2; line-height:1.8; }
+.start-hint b { color:rgba(255,255,255,0.6); }
+@media (max-width: 640px) { .char-grid { grid-template-columns: 1fr; } .vs-slot { min-width:110px; font-size:13px; padding:8px 10px; } }
+#skillBar { background: linear-gradient(0deg, rgba(5,5,18,0.85), transparent); padding: 16px 16px 12px; }
+.sk-btn { min-width:58px; box-shadow:0 4px 14px rgba(0,0,0,0.35); transition: all .12s, opacity .25s, filter .25s; }
+.sk-btn .c { display:block; font-size:9px; color:#FFD54A; margin-top:1px; }
+.sk-btn.nobq { opacity:0.35; filter:grayscale(0.8); }
+.sk-btn.on { box-shadow:0 0 18px currentColor; filter:brightness(1.5); }
+.win-text { animation: popIn .5s cubic-bezier(.2,1.6,.4,1); }
+@keyframes popIn { from { transform:scale(0.3); opacity:0; } to { transform:scale(1); opacity:1; } }
+.win-stats { display:flex; gap:14px; margin-bottom:34px; }
+.win-stat { padding:10px 18px; border-radius:12px; background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.12); text-align:center; color:#fff; font-weight:bold; }
+.win-stat small { display:block; font-size:11px; color:rgba(255,255,255,0.5); font-weight:normal; margin-top:2px; }
+.win-actions { display:flex; gap:16px; flex-wrap:wrap; justify-content:center; }
+.restart-btn { transition: transform .2s; }
+.restart-btn.ghost { background:transparent; border:2px solid rgba(255,255,255,0.3); }
+
+/* ===== 降低光污染 ===== */
+.select-title { animation: none !important; background-position: 0 center; }
+#selectScreen::before { opacity: 0.25; }
+.char-card:hover:not(.disabled):not(.selected-p1):not(.selected-p2) { box-shadow: 0 8px 24px rgba(0,0,0,0.35) !important; }
+.char-card:hover:not(.disabled):not(.selected-p1):not(.selected-p2)::before { opacity: 0.05 !important; }
+.char-card.selected-p1 { box-shadow: 0 0 0 1px rgba(255,59,78,0.4) !important; }
+.char-card.selected-p2 { box-shadow: 0 0 0 1px rgba(61,107,255,0.4) !important; }
+.char-avatar { box-shadow: none !important; }
+.vs-slot.p1.ready, .vs-slot.p2.ready { box-shadow: none !important; }
+.vs-mid { text-shadow: 0 2px 0 rgba(0,0,0,0.5) !important; }
+.start-btn, .start-btn.active:hover { box-shadow: 0 6px 18px rgba(0,0,0,0.35) !important; }
+.sk-btn:active, .sk-btn.pressed { filter: brightness(1.25) !important; box-shadow: none !important; }
+.sk-btn.on { filter: brightness(1.2) !important; box-shadow: inset 0 0 0 2px currentColor !important; }
+@media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; } }
+</style>
+</head>
+<body>
+
+<div id="selectScreen">
+  <div class="select-title">⚔ 冲 奖 王 朝 ⚔</div>
+  <div class="select-subtitle">CHONGJIANG DYNASTY · 王朝格斗场</div>
+  <div class="pick-hint" id="pickHint">请玩家1选择角色</div>
+  <div class="vs-bar"><div class="vs-slot p1" id="vsP1">P1 待选择</div><div class="vs-mid">VS</div><div class="vs-slot p2" id="vsP2">P2 待选择</div></div>
+  <div class="char-grid" id="charGrid"></div>
+  <button class="start-btn" id="startBtn" onclick="startGame()">开 始 对 战</button>
+  <div class="start-hint"><b>P1</b> A/D 移动 · W 跳 · F 普攻 · Q/E/R/T 技能　|　<b>P2</b> ←/→ 移动 · ↑ 跳 · L 普攻 · U/I/O/K 技能<br>Enter 开始 · Esc / P 暂停</div>
+</div>
+
+<div id="skillBar">
+  <div class="skill-row">
+    <div class="skill-group p1" id="p1Skills"></div>
+    <div class="skill-group p2" id="p2Skills"></div>
+  </div>
+</div>
+
+<div id="mobileControls">
+  <div class="joy-area left" id="joyLeft">
+    <div class="joy-base"></div>
+    <div class="joy-stick" id="stickL"></div>
+  </div>
+  <div class="joy-area right" id="joyRight">
+    <div class="joy-base"></div>
+    <div class="joy-stick" id="stickR"></div>
+  </div>
+  <div class="m-jump p1" id="mJumpL">跳</div>
+  <div class="m-jump p2" id="mJumpR">跳</div>
+  <div class="m-skills p1" id="mSkillsP1"></div>
+  <div class="m-skills p2" id="mSkillsP2"></div>
+</div>
+
+<div id="winScreen">
+  <div class="win-text" id="winText"></div>
+  <div class="win-sub" id="winSub"></div>
+  <div class="win-stats" id="winStats"></div>
+  <div class="win-actions">
+    <button class="restart-btn" id="restartBtn">再 来 一 局</button>
+    <button class="restart-btn ghost" id="reselectBtn">重新选人</button>
+  </div>
+</div>
+
+<script>
+// ==================== 角色数据 ====================
+const CHARACTERS = {
+  speculator: {
+    name: '投机者', tag: '133 · CHH', color: '#C77DFF', emoji: '🎭',
+    hp: 300, atk: 4, bq: 300, spd: 4.2,
+    skills: [
+      { key:'Q', name:'投机', cost:50, desc:'近距离窃取对手一个技能' },
+      { key:'E', name:'贿赂', cost:100, desc:'主动：1秒无敌；被动：受击时自动花100犇气免伤' },
+      { key:'R', name:'复刻', cost:50, desc:'复制对手技能，威力为原版1/3' }
+    ]
+  },
+  rpmaniac: {
+    name: 'RP狂魔', tag: '122 · QZL', color: '#3D6BFF', emoji: '📝',
+    hp: 300, atk: 6, bq: 275, spd: 3,
+    skills: [
+      { key:'U', name:'刷RP', cost:0, desc:'原地不动，每秒+5犇气' },
+      { key:'I', name:'RP攻击', cost:0, desc:'2犇气=1伤害，发射能量弹' },
+      { key:'O', name:'做题', cost:0, desc:'每秒-10犇气，免疫一切伤害' },
+      { key:'K', name:'发题解', cost:50, desc:'恢复30点血量' }
+    ]
+  },
+  dismantler: {
+    name: '人体拆卸者', tag: '105 · TSQ', color: '#5F9FD6', emoji: '🔧',
+    hp: 325, atk: 6, bq: 300, spd: 3.4,
+    skills: [
+      { key:'U', name:'声音检测', cost:75, desc:'音波冲击造成50点伤害' },
+      { key:'I', name:'卸胳膊', cost:50, desc:'近身20伤害+减速25%持续5秒' },
+      { key:'O', name:'拆解', cost:175, desc:'近身大招造成135点巨额伤害' }
+    ]
+  },
+  corrector: {
+    name: '修正者', tag: '128 · HYZ', color: '#1369A5', emoji: '⚙️',
+    hp: 285, atk: 6.5, bq: 300, spd: 2.8,
+    skills: [
+      { key:'U', name:'修正', cost:45, desc:'恢复血量上限的1/5（57点）' },
+      { key:'I', name:'稍加修改', cost:60, desc:'敌方眩晕5秒并扣除50血量' },
+      { key:'O', name:'逃脱', cost:55, desc:'瞬移脱离包围圈，3秒无敌' }
+    ]
+  }
+};
+
+// ==================== 全局状态 ====================
+let gameState = 'select'; // select / playing / win
+let p1Char = null, p2Char = null;
+let pickingPlayer = 1;
+let p1, p2;
+let platforms = [];
+let projectiles = [];
+let particles = [];
+let shockwaves = [];
+let floatTexts = [];
+let slashEffects = [];
+let bgElements = {};
+let screenShake = 0;
+let isMobile = false;
+
+const P1_KEYS = { left:'A'.charCodeAt(0), right:'D'.charCodeAt(0), jump:'W'.charCodeAt(0),
+                  atk:70, s1:81, s2:69, s3:82 };
+// 方向键这里必须用键盘码数值（LEFT=37 / UP=38 / RIGHT=39），
+// 不要写成 p5 的 LEFT_ARROW 等常量：它们要等页面 load、p5 初始化后才挂到 window，
+// 而本脚本在页面解析时就同步执行，此时这些常量还不存在，会抛 ReferenceError
+// 导致整个脚本中断，后面的 class Fighter 无法初始化（报错就是由此而来）。
+const P1_SKILL_KEYS = ['Q','E','R','T'], P1_SKILL_CODES = [81,69,82,84];
+const P2_SKILL_KEYS = ['U','I','O','K'], P2_SKILL_CODES = [85,73,79,75];
+let hitStop = 0, countdown = 0, banner = 0, koTimer = 0, matchFrames = 0, paused = false, mobileReady = false;
+const P2_KEYS = { left:37, right:39, jump:38,
+                  atk:76, s1:85, s2:73, s3:79, s4:75 };
+
+let keys = {};
+let keyPressedOnce = {};
+
+function checkMobile(){
+  isMobile = /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent) || window.innerWidth < 800;
+}
+
+// ==================== 选人界面 ====================
+function initSelectScreen(){
+  const grid = document.getElementById('charGrid');
+  grid.innerHTML = '';
+  const ids = Object.keys(CHARACTERS);
+  ids.forEach(id => {
+    const c = CHARACTERS[id];
+    const card = document.createElement('div');
+    card.className = 'char-card';
+    card.style.setProperty('--card-color', c.color);
+    card.style.setProperty('--card-shadow', c.color+'44');
+    card.dataset.id = id;
+    let skillsHtml = c.skills.map((s,i)=>`
+      <div class="skill-item">
+        <div class="skill-key"><span class="kp1">${P1_SKILL_KEYS[i]}</span><span class="kp2">${P2_SKILL_KEYS[i]}</span></div>
+        <div><b>${s.name}</b>${s.cost>0?`(${s.cost}犇气)`:''}：${s.desc}</div>
+      </div>`).join('');
+    card.innerHTML = `
+      <div class="char-header">
+        <div class="char-avatar" style="--card-color:${c.color};--card-shadow:${c.color}66">${c.emoji}</div>
+        <div>
+          <div class="char-name" style="color:${c.color}">${c.name}</div>
+          <div class="char-tag" style="color:${c.color}">${c.tag}</div>
+        </div>
+      </div>
+      <div class="char-stats">
+        <div class="stat"><div class="stat-val" style="--card-color:${c.color}">${c.hp}</div><div class="stat-label">血量</div></div>
+        <div class="stat"><div class="stat-val" style="--card-color:${c.color}">${c.atk}</div><div class="stat-label">普攻</div></div>
+        <div class="stat"><div class="stat-val" style="--card-color:${c.color}">${c.bq}</div><div class="stat-label">犇气</div></div>
+        <div class="stat"><div class="stat-val" style="--card-color:${c.color}">${Math.round(c.spd*50/4.2*10)/10}</div><div class="stat-label">移速</div></div>
+      </div>
+      <div class="char-skills">${skillsHtml}</div>
+    `;
+    card.addEventListener('click', ()=>pickCharacter(id));
+    grid.appendChild(card);
+  });
+  updatePickHint();
+}
+
+function pickCharacter(id){
+  if(pickingPlayer === 1){
+    p1Char = id;
+    pickingPlayer = 2;
+  } else {
+    p2Char = id;
+    pickingPlayer = 1;
+  }
+  updateCards();
+  updatePickHint();
+  var btn = document.getElementById('startBtn');
+  if(p1Char && p2Char){
+    btn.classList.add('active');
+    // 直接写 style，绕过 CSS 类可能没生效的问题
+    btn.style.opacity = '1';
+    btn.style.pointerEvents = 'auto';
+    btn.style.cursor = 'pointer';
+  }
+}
+
+function updateCards(){
+  document.querySelectorAll('.char-card').forEach(card=>{
+    card.classList.remove('selected-p1','selected-p2','disabled');
+    const badge = card.querySelector('.card-badge');
+    if(badge) badge.remove();
+    if(card.dataset.id === p1Char){
+      card.classList.add('selected-p1');
+      const b = document.createElement('div');
+      b.className = 'card-badge badge-p1'; b.textContent = 'P1';
+      card.appendChild(b);
+    }
+    if(card.dataset.id === p2Char){
+      card.classList.add('selected-p2');
+      const b = document.createElement('div');
+      b.className = 'card-badge badge-p2'; b.textContent = 'P2';
+      card.appendChild(b);
+    }
+    // 同角色可选：不再禁用已被对方选择的卡片
+  });
+}
+
+function updatePickHint(){
+  const v1 = document.getElementById('vsP1'), v2 = document.getElementById('vsP2');
+  v1.textContent = p1Char ? CHARACTERS[p1Char].emoji+' '+CHARACTERS[p1Char].name : 'P1 待选择';
+  v2.textContent = p2Char ? CHARACTERS[p2Char].emoji+' '+CHARACTERS[p2Char].name : 'P2 待选择';
+  v1.classList.toggle('ready', !!p1Char); v2.classList.toggle('ready', !!p2Char);
+  const h = document.getElementById('pickHint');
+  if(pickingPlayer===1){
+    h.textContent = p1Char ? '请玩家1重新选择角色' : '🔴 请玩家1（红色方）选择角色';
+    h.style.borderColor = '#FF3B4E';
+    h.style.color = '#FF3B4E';
+    h.style.background = 'rgba(255,59,78,0.08)';
+  } else {
+    h.textContent = p2Char ? '请玩家2重新选择角色' : '🔵 请玩家2（蓝色方）选择角色';
+    h.style.borderColor = '#3D6BFF';
+    h.style.color = '#6688FF';
+    h.style.background = 'rgba(61,107,255,0.08)';
+  }
+}
+
+document.getElementById('restartBtn').addEventListener('click', rematch);
+document.getElementById('reselectBtn').addEventListener('click', ()=>location.reload());
+function rematch(){
+  document.getElementById('winScreen').style.display = 'none';
+  startGame();
+}
+window.addEventListener('blur', ()=>{ keys = {}; keyPressedOnce = {}; if(gameState==='playing') paused = true; });
+
+// ==================== 玩家类 ====================
+class Fighter {
+  constructor(x, y, charId, isP1){
+    const c = CHARACTERS[charId];
+    this.charId = charId;
+    this.isP1 = isP1;
+    this.x = x; this.y = y;
+    this.w = 40; this.h = 72;
+    this.vx = 0; this.vy = 0;
+    this.color = c.color;
+    this.teamColor = isP1 ? '#FF3B4E' : '#3D6BFF';
+    this.teamGlow = isP1 ? [255,59,78] : [61,107,255];
+    this.name = c.name;
+    this.maxHp = c.hp; this.hp = c.hp;
+    this.atk = c.atk;
+    this.maxBq = c.bq; this.bq = c.bq;
+    this.spd = c.spd;
+    this.onGround = false;
+    this.facing = isP1 ? 1 : -1;
+    this.attackCooldown = 0;
+    this.invincible = 0;
+    this.stunned = 0;
+    this.slowed = 0;
+    this.slowAmount = 0;
+    this.animFrame = 0;
+    this.walkCycle = 0;
+    this.attackAnim = 0;
+    this.hurtFlash = 0;
+    this.chargingRP = false;
+    this.immortal = false;
+    this.immortalTime = 0;
+    this.teleportInvuln = 0;
+    this.stolenSkills = [];
+    this.copiedSkill = null;
+    this.armAngle = 0;
+    this.legAngle = 0;
+  }
+
+  get effectiveSpd(){
+    let s = this.spd;
+    if(this.slowed > 0) s *= (1 - this.slowAmount);
+    return s;
+  }
+
+  update(opponent){
+    if(this.hp <= 0) return;
+    if(this.attackCooldown > 0) this.attackCooldown--;
+    if(this.invincible > 0) this.invincible--;
+    if(this.stunned > 0){ this.stunned--; this.vx *= 0.8; }
+    if(this.slowed > 0) this.slowed--;
+    if(this.hurtFlash > 0) this.hurtFlash--;
+    if(this.attackAnim > 0) this.attackAnim--;
+    if(this.teleportInvuln > 0) this.teleportInvuln--;
+
+    if(this.charId === 'rpmaniac'){
+      if(this.chargingRP){
+        this.vx = 0;
+        this.bq = Math.min(this.maxBq, this.bq + 5/60); // 每秒 +5 犇气
+        if(frameCount % 10 === 0){
+          spawnParticles(this.x, this.y - this.h/2, this.color, 2, 1);
+        }
+      }
+      if(this.immortal){
+        this.bq -= 10/60;
+        this.vx = 0;            // 做题期间锁死水平移动
+        this.vy = 0;            // 锁死垂直速度（防止重力下落中继续飘）
+        this.onGround = true;   // 做题时双脚站稳
+        if(this.bq <= 0){ this.immortal = false; this.bq = 0; }
+        if(frameCount % 6 === 0){
+          spawnParticles(this.x + random(-15,15), this.y - random(0,this.h), '#00FFFF', 1, 0.5);
+        }
+      }
+    }
+
+    // 做题（immortal）时完全不能动、不能跳，和 chargingRP 一并排除
+    if(this.stunned <= 0 && !this.chargingRP && !this.immortal){
+      const mi = this.isP1 ? mInput.p1 : mInput.p2;
+      const left = (this.isP1 ? keys[P1_KEYS.left] : keys[P2_KEYS.left]) || mi.left;
+      const right = (this.isP1 ? keys[P1_KEYS.right] : keys[P2_KEYS.right]) || mi.right;
+      let jump = this.isP1 ? keyPressedOnce[P1_KEYS.jump] : keyPressedOnce[P2_KEYS.jump];
+      if(!jump && mi.jump) jump = true;
+      mi.jump = false;
+
+      if(left){ this.vx = -this.effectiveSpd; this.facing = -1; }
+      else if(right){ this.vx = this.effectiveSpd; this.facing = 1; }
+      else this.vx *= 0.75;
+
+      if(jump && this.onGround){
+        this.vy = -11.5;
+        this.onGround = false;
+        spawnParticles(this.x, this.y, this.color, 5, 1.5);
+      }
+    }
+
+    if(!this.immortal){
+      this.vy += 0.55;
+      if(this.vy > 15) this.vy = 15;
+    }
+
+    this.x += this.vx;
+    this.handleCollisionX();
+    this.x += this.vy > 0 ? 0 : 0;
+    this.y += this.vy;
+    this.onGround = false;
+    this.handleCollisionY();
+
+    if(this.x < this.w/2) this.x = this.w/2;
+    if(this.x > width - this.w/2) this.x = width - this.w/2;
+    if(this.y > height + 100){
+      this.takeDamage(30, this.x, this.y, '#FF0044');
+      this.x = this.isP1 ? 150 : width - 150;
+      this.y = height - 200;
+      this.vx = 0; this.vy = 0;
+      this.invincible = 60;
+    }
+
+    if(Math.abs(this.vx) > 0.5 && this.onGround){
+      this.walkCycle += 0.25;
+    } else {
+      this.walkCycle *= 0.8;
+    }
+
+    if(frameCount % 30 === 0 && this.bq < this.maxBq) this.bq = Math.min(this.maxBq, this.bq + 1);
+
+    this.animFrame++;
+  }
+
+  handleCollisionX(){
+    for(let p of platforms){
+      if(this.x + this.w/2 > p.x && this.x - this.w/2 < p.x + p.w){
+        if(this.y - this.h + 2 > p.y - 2 && this.y < p.y + p.h + 2){
+          if(this.vx > 0){ this.x = p.x - this.w/2; this.vx = 0; }
+          else if(this.vx < 0){ this.x = p.x + p.w + this.w/2; this.vx = 0; }
+        }
+      }
+    }
+  }
+
+  handleCollisionY(){
+    for(let p of platforms){
+      if(this.x + this.w/2 > p.x && this.x - this.w/2 < p.x + p.w){
+        if(this.vy >= 0 && this.y >= p.y && this.y - this.vy <= p.y + 2){
+          this.y = p.y; this.vy = 0; this.onGround = true;
+        } else if(this.vy < 0 && this.y - this.h <= p.y + p.h && this.y - this.h - this.vy >= p.y + p.h - 2){
+          this.y = p.y + p.h + this.h; this.vy = 0;
+        }
+      }
+    }
+  }
+
+  takeDamage(dmg, fromX, fromY, dmgColor){
+    if(this.invincible > 0 || this.hp <= 0) return false;
+    if(this.immortal){
+      floatTexts.push({x:this.x, y:this.y-this.h-10, text:'免疫!', color:'#00FFFF', life:40, vy:-1.5});
+      spawnParticles(this.x, this.y-this.h/2, '#00FFFF', 8, 2);
+      return false;
+    }
+    if(this.teleportInvuln > 0){
+      floatTexts.push({x:this.x, y:this.y-this.h-10, text:'闪避!', color:this.color, life:40, vy:-1.5});
+      spawnParticles(this.x, this.y-this.h/2, this.color, 8, 2);
+      return false;
+    }
+    if(this.charId === 'speculator' && this.bq >= 100){
+      this.bq -= 100;
+      floatTexts.push({x:this.x, y:this.y-this.h-10, text:'贿赂!', color:'#FFD700', life:50, vy:-1.5});
+      spawnParticles(this.x, this.y-this.h/2, '#FFD700', 15, 3);
+      screenShake = 5;
+      return false;
+    }
+    const realDmg = Math.min(dmg, this.hp);
+    const foe = this === p1 ? p2 : p1; if(foe) foe.dmgDealt = (foe.dmgDealt||0) + realDmg;
+    this.hp -= dmg;
+    hitStop = Math.max(hitStop, dmg >= 50 ? 8 : 3);
+    this.hurtFlash = 12;
+    this.invincible = 20;
+    const dir = this.x > fromX ? 1 : -1;
+    this.vx = dir * 5;
+    this.vy = -3;
+    floatTexts.push({x:this.x+random(-10,10), y:this.y-this.h-5-random(0,10), text:'-'+Math.round(dmg), color:dmgColor||'#FF4444', life:50, vy:-2});
+    spawnParticles(this.x, this.y-this.h/2, dmgColor||'#FF4444', 10, 3);
+    screenShake = Math.max(screenShake, 6);
+    if(this.hp <= 0){ this.hp = 0; }
+    return true;
+  }
+
+  attack(opponent){
+    if(this.attackCooldown > 0 || this.stunned > 0 || this.chargingRP || this.immortal) return;
+    this.attackCooldown = 25;
+    this.attackAnim = 15;
+    const reach = 52;
+    const ax = this.x + this.facing * 34;
+    slashEffects.push({
+      x: ax, y: this.y - this.h/2,
+      angle: this.facing > 0 ? 0 : PI,
+      color: this.color, life: 12, maxLife: 12,
+      range: reach
+    });
+    const dist = abs(opponent.x - ax);
+    const dy = abs((opponent.y - opponent.h/2) - (this.y - this.h/2));
+    if(dist < reach && dy < 50){
+      if((this.facing > 0 && opponent.x > this.x - 5) || (this.facing < 0 && opponent.x < this.x + 5)){
+        opponent.takeDamage(this.atk, this.x, this.y, this.color);
+      }
+    }
+    spawnParticles(ax, this.y - this.h/2, this.color, 5, 2);
+  }
+
+  useSkill(idx, opponent){
+    if(this.stunned > 0) return;
+    if(this.immortal && !(this.charId === 'rpmaniac' && idx === 2)) return; // 做题期间只能按O取消
+    switch(this.charId){
+      case 'speculator': this.speculatorSkill(idx, opponent); break;
+      case 'rpmaniac': this.rpSkill(idx, opponent); break;
+      case 'dismantler': this.dismantlerSkill(idx, opponent); break;
+      case 'corrector': this.correctorSkill(idx, opponent); break;
+    }
+  }
+
+  speculatorSkill(idx, opponent){
+    const dist = abs(opponent.x - this.x);
+    if(idx === 0){
+      if(this.bq < 50){ floatTexts.push({x:this.x,y:this.y-this.h-10,text:'犇气不足',color:'#FF0',life:40,vy:-1.5}); return; }
+      if(dist > 60){ floatTexts.push({x:this.x,y:this.y-this.h-10,text:'太远了',color:'#FF0',life:40,vy:-1.5}); return; }
+      this.bq -= 50;
+      const oppSkills = CHARACTERS[opponent.charId].skills;
+      if(oppSkills.length > 0 && this.stolenSkills.length < 3){
+        const sk = oppSkills[Math.floor(Math.random()*Math.min(3,oppSkills.length))];
+        this.stolenSkills.push(sk);
+        floatTexts.push({x:this.x,y:this.y-this.h-20,text:'偷到「'+sk.name+'」',color:'#C77DFF',life:60,vy:-1.5});
+        for(let i=0;i<20;i++) spawnParticles(this.x, this.y-this.h/2, '#C77DFF', 1, 3);
+        screenShake = 8;
+      }
+    } else if(idx === 1){
+      if(this.bq < 100){ floatTexts.push({x:this.x,y:this.y-this.h-10,text:'犇气不足',color:'#FF0',life:40,vy:-1.5}); return; }
+      this.bq -= 100;
+      this.invincible = 60;
+      floatTexts.push({x:this.x,y:this.y-this.h-10,text:'贿赂防御!',color:'#FFD700',life:50,vy:-1.5});
+      for(let i=0;i<20;i++) spawnParticles(this.x, this.y-this.h/2, '#FFD700', 1, 2.5);
+    } else if(idx === 2){
+      if(this.bq < 50){ floatTexts.push({x:this.x,y:this.y-this.h-10,text:'犇气不足',color:'#FF0',life:40,vy:-1.5}); return; }
+      this.bq -= 50;
+      projectiles.push({
+        x: this.x + this.facing*20, y: this.y - this.h/2,
+        vx: this.facing * 7, vy: 0,
+        dmg: 0, color: this.color, owner: this, type: 'copy', life: 90, r: 12, trail: []
+      });
+      spawnParticles(this.x+this.facing*20, this.y-this.h/2, this.color, 8, 2);
+    }
+  }
+
+  rpSkill(idx, opponent){
+    if(this.immortal && idx !== 2) return; // 做题期间只能再按O取消，不能放其他技能
+    if(idx === 0){
+      if(this.immortal) return; // 做题中不能切刷RP
+      this.chargingRP = !this.chargingRP;
+      if(this.chargingRP){ this.vx=0; this.vy=0; floatTexts.push({x:this.x,y:this.y-this.h-10,text:'刷RP中...',color:this.color,life:40,vy:-1.5}); }
+    } else if(idx === 1){
+      if(this.bq < 2){ floatTexts.push({x:this.x,y:this.y-this.h-10,text:'犇气不足',color:'#FF0',life:40,vy:-1.5}); return; }
+      if(this.chargingRP) this.chargingRP = false;
+      const cost = Math.min(this.bq, 40);
+      const dmg = cost / 2;
+      this.bq -= cost;
+      projectiles.push({
+        x: this.x + this.facing*20, y: this.y - this.h/2,
+        vx: this.facing * 9, vy: 0,
+        dmg: dmg, color: '#0088FF', owner: this, type: 'energy', life: 80, r: 8+dmg/8, trail: []
+      });
+      spawnParticles(this.x+this.facing*20, this.y-this.h/2, '#0088FF', 10, 2);
+      screenShake = 3;
+    } else if(idx === 2){
+      if(this.bq < 10 && !this.immortal){ floatTexts.push({x:this.x,y:this.y-this.h-10,text:'犇气不足',color:'#FF0',life:40,vy:-1.5}); return; }
+      this.immortal = !this.immortal;
+      if(this.immortal){ this.chargingRP = false; this.vx=0; this.vy=0; this.onGround=true; floatTexts.push({x:this.x,y:this.y-this.h-10,text:'做题无敌!',color:'#00FFFF',life:50,vy:-1.5}); }
+      else { floatTexts.push({x:this.x,y:this.y-this.h-10,text:'答题结束',color:'#00FFFF',life:40,vy:-1.5}); }
+    } else if(idx === 3){
+      if(this.bq < 50){ floatTexts.push({x:this.x,y:this.y-this.h-10,text:'犇气不足',color:'#FF0',life:40,vy:-1.5}); return; }
+      this.bq -= 50;
+      const heal = 30;
+      this.hp = Math.min(this.maxHp, this.hp + heal);
+      floatTexts.push({x:this.x,y:this.y-this.h-10,text:'+'+heal,color:'#00FF88',life:50,vy:-1.5});
+      for(let i=0;i<15;i++) spawnParticles(this.x, this.y-this.h/2+random(-20,0), '#00FF88', 1, 2);
+    }
+  }
+
+  dismantlerSkill(idx, opponent){
+    const dist = abs(opponent.x - this.x);
+    const dy = abs((opponent.y - opponent.h/2) - (this.y - this.h/2));
+    if(idx === 0){
+      if(this.bq < 75){ floatTexts.push({x:this.x,y:this.y-this.h-10,text:'犇气不足',color:'#FF0',life:40,vy:-1.5}); return; }
+      this.bq -= 75;
+      shockwaves.push({
+        x: this.x, y: this.y - this.h/2,
+        r: 10, maxR: 250, color: '#5F9FD6', life: 40, owner: this,
+        dmg: 50, hit: new Set()
+      });
+      screenShake = 10;
+      for(let i=0;i<25;i++) spawnParticles(this.x, this.y-this.h/2, '#5F9FD6', 1, 4);
+    } else if(idx === 1){
+      if(this.bq < 50){ floatTexts.push({x:this.x,y:this.y-this.h-10,text:'犇气不足',color:'#FF0',life:40,vy:-1.5}); return; }
+      if(dist > 60 || dy > 50){ floatTexts.push({x:this.x,y:this.y-this.h-10,text:'太远了',color:'#FF0',life:40,vy:-1.5}); return; }
+      this.bq -= 50;
+      opponent.takeDamage(20, this.x, this.y, this.color);
+      opponent.slowed = 300;
+      opponent.slowAmount = 0.25;
+      floatTexts.push({x:opponent.x,y:opponent.y-opponent.h-20,text:'减速!',color:'#5F9FD6',life:60,vy:-1.5});
+      slashEffects.push({x:opponent.x,y:opponent.y-opponent.h/2,angle:0,color:'#5F9FD6',life:15,maxLife:15,range:50});
+      screenShake = 6;
+      for(let i=0;i<12;i++) spawnParticles(opponent.x, opponent.y-opponent.h/2, '#5F9FD6', 1, 3);
+    } else if(idx === 2){
+      if(this.bq < 175){ floatTexts.push({x:this.x,y:this.y-this.h-10,text:'犇气不足',color:'#FF0',life:40,vy:-1.5}); return; }
+      if(dist > 65 || dy > 55){ floatTexts.push({x:this.x,y:this.y-this.h-10,text:'太远了',color:'#FF0',life:40,vy:-1.5}); return; }
+      this.bq -= 175;
+      shockwaves.push({
+        x: (this.x+opponent.x)/2, y: opponent.y - opponent.h/2,
+        r: 5, maxR: 100, color: '#FF3333', life: 30, owner: this,
+        dmg: 135, hit: new Set(), singleTarget: opponent
+      });
+      screenShake = 15;
+      for(let i=0;i<40;i++) spawnParticles(opponent.x, opponent.y-opponent.h/2, '#FF3333', 1, 5);
+      for(let i=0;i<20;i++) spawnParticles(opponent.x, opponent.y-opponent.h/2, '#FFAA00', 1, 4);
+    }
+  }
+
+  correctorSkill(idx, opponent){
+    if(idx === 0){
+      if(this.bq < 45){ floatTexts.push({x:this.x,y:this.y-this.h-10,text:'犇气不足',color:'#FF0',life:40,vy:-1.5}); return; }
+      this.bq -= 45;
+      const heal = Math.floor(this.maxHp / 5);
+      this.hp = Math.min(this.maxHp, this.hp + heal);
+      floatTexts.push({x:this.x,y:this.y-this.h-10,text:'+'+heal,color:'#44CCFF',life:60,vy:-1.5});
+      for(let i=0;i<20;i++){
+        particles.push({
+          x: this.x + random(-20,20), y: this.y,
+          vx: random(-1,1), vy: random(-4,-2),
+          life: 40, maxLife: 40, color: '#1369A5', r: random(2,5)
+        });
+      }
+      shockwaves.push({x:this.x, y:this.y-this.h/2, r:5, maxR:80, color:'#1369A5', life:30, owner:this, dmg:0, hit:new Set()});
+    } else if(idx === 1){
+      if(this.bq < 60){ floatTexts.push({x:this.x,y:this.y-this.h-10,text:'犇气不足',color:'#FF0',life:40,vy:-1.5}); return; }
+      const dist = abs(opponent.x - this.x);
+      if(dist > 350){ floatTexts.push({x:this.x,y:this.y-this.h-10,text:'太远了',color:'#FF0',life:40,vy:-1.5}); return; }
+      this.bq -= 60;
+      projectiles.push({
+        x: this.x + this.facing*20, y: this.y - this.h/2,
+        vx: this.facing * 8, vy: 0,
+        dmg: 50, color: '#1369A5', owner: this, type: 'stun', life: 80, r: 14, trail: [], stunDur: 300
+      });
+      for(let i=0;i<10;i++) spawnParticles(this.x+this.facing*20, this.y-this.h/2, '#1369A5', 1, 2);
+    } else if(idx === 2){
+      if(this.bq < 55){ floatTexts.push({x:this.x,y:this.y-this.h-10,text:'犇气不足',color:'#FF0',life:40,vy:-1.5}); return; }
+      this.bq -= 55;
+      this.teleportInvuln = 180;
+      const dir = this.x < opponent.x ? -1 : 1;
+      const targetX = this.x + dir * 200;
+      for(let i=0;i<15;i++) spawnParticles(this.x, this.y-this.h/2, this.color, 1, 3);
+      this.x = constrain(targetX, 50, width-50);
+      this.y = this.y - 20;
+      this.vy = -5;
+      for(let i=0;i<25;i++) spawnParticles(this.x, this.y-this.h/2, this.color, 1, 4);
+      floatTexts.push({x:this.x,y:this.y-this.h-10,text:'逃脱!',color:this.color,life:50,vy:-1.5});
+      screenShake = 6;
+    }
+  }
+
+  draw(){
+    push();
+    const cx = this.x, cy = this.y;
+    // 闪避无敌时轻微闪烁（降低频率，避免刺眼）
+    if(this.teleportInvuln > 0 && frameCount % 10 < 3){ pop(); return; }
+
+    // 脚下阴影
+    fill(0, 0, 0, 100); noStroke();
+    ellipse(cx, cy+2, 34, 9);
+
+    // ===== 队伍光晕（P1红 / P2蓝）=====
+    const glowR = this.teamGlow[0], glowG = this.teamGlow[1], glowB = this.teamGlow[2];
+    const pulse = 0.6 + 0.4 * sin(frameCount * 0.08 + (this.isP1 ? 0 : PI));
+    noFill();
+    // 外层大光晕
+    strokeWeight(1);
+    stroke(glowR, glowG, glowB, 35 * pulse);
+    circle(cx, cy - this.h/2, this.h * 1.6);
+    // 中层光晕
+    strokeWeight(2);
+    stroke(glowR, glowG, glowB, 65 * pulse);
+    circle(cx, cy - this.h/2, this.h * 1.25);
+    // 内层紧贴光晕
+    strokeWeight(3);
+    stroke(glowR, glowG, glowB, 100 * pulse);
+    circle(cx, cy - this.h/2, this.h * 0.95);
+
+    // 技能状态圆环（放在光晕之后、身体之前）
+    if(this.immortal){
+      noFill(); strokeWeight(3);
+      stroke(80,220,240,110+sin(frameCount*0.1)*30);
+      circle(cx, cy - this.h/2, 86);
+    }
+    if(this.teleportInvuln > 0){
+      noFill(); strokeWeight(2);
+      stroke(red(this.color),green(this.color),blue(this.color),110);
+      circle(cx, cy - this.h/2, 80);
+    }
+    if(this.chargingRP){
+      noFill(); strokeWeight(2);
+      stroke(90,130,255,110+sin(frameCount*0.1)*30);
+      circle(cx, cy - this.h/2, 70);
+    }
+    if(this.slowed > 0){
+      noFill(); strokeWeight(2);
+      stroke(95,159,214,100);
+      circle(cx, cy - this.h/2, 76);
+    }
+
+    // ===== 绘制正常比例小人（头:躯干:腿 ≈ 1:1.1:1.4，标准人体比例）=====
+    const col = this.hurtFlash > 0 ? lerpColor(color(this.color), color(255), 0.55) : color(this.color);
+    const headR = 11;                          // 头半径
+    const headY = cy - this.h + headR;         // 头中心（靠顶部）
+    const neckY = headY + headR;               // 脖子底部
+    const shoulderY = neckY + 3;               // 肩膀Y（手臂起点）
+    const shoulderW = 8;                       // 肩宽（每侧距中线）
+    const hipY = cy - 28;                      // 胯部Y（比之前高，留出长腿）
+    const torsoBot = hipY;                     // 躯干底端 = 胯部
+    const kneeY = (hipY + cy) / 2;             // 膝盖 = 胯到脚的中点（关键：腿才长）
+    const walkSwing = sin(this.walkCycle) * 0.55;
+    const attackSwing = this.attackAnim > 0 ? sin((1-this.attackAnim/15)*PI) * 1.3 : 0;
+
+    stroke(col);
+    strokeCap(ROUND);
+
+    // === 腿（占比最大，膝盖在中间）===
+    strokeWeight(5.5);
+    const legSwing = this.onGround ? walkSwing : (this.vy < 0 ? -0.4 : 0.4);
+    const hipOffX = 6;  // 胯部左右分开一点
+    // 后腿
+    {
+      const hx = cx - hipOffX;
+      const kx = hx + sin(-legSwing)*7;
+      const fx = kx + sin(-legSwing)*12;
+      line(hx, hipY, kx, kneeY);
+      line(kx, kneeY, fx, cy);
+    }
+    // 前腿
+    {
+      const hx = cx + hipOffX;
+      const kx = hx + sin(legSwing)*7;
+      const fx = kx + sin(legSwing)*12;
+      line(hx, hipY, kx, kneeY);
+      line(kx, kneeY, fx, cy);
+    }
+
+    // === 躯干（从肩到胯，居中）===
+    strokeWeight(7);
+    line(cx, shoulderY, cx, torsoBot);
+
+    // === 手臂（起点在肩膀两侧 cx±shoulderW，不再接在肚子上）===
+    strokeWeight(4.5);
+    const armSwing = this.onGround ? -walkSwing : 0.25;
+
+    // 后手臂（上臂+前臂，自然下垂带小幅摆动）
+    {
+      const sx = cx - this.facing * shoulderW;
+      const backArmSwing = -armSwing;
+      const ex = sx + cos(backArmSwing + PI/2 + 0.2)*9;
+      const ey = shoulderY + 14;
+      const hx = ex + cos(backArmSwing + PI/2 + 0.4)*11;
+      const hy = ey + 10;
+      line(sx, shoulderY, ex, ey);
+      line(ex, ey, hx, hy);
+      noStroke(); fill(col);
+      circle(hx, hy, 6);
+      stroke(col);
+    }
+
+    // 前手臂（攻击时出拳）
+    {
+      const sx = cx + this.facing * shoulderW;
+      const baseAngle = this.facing > 0 ? 0.15 : PI - 0.15;
+      const punchAngle = this.facing > 0 ? -attackSwing*0.9 : PI + attackSwing*0.9;
+      const finalAngle = this.attackAnim > 0 ? punchAngle : baseAngle;
+      const upperLen = 13;
+      const foreLen = 14 + (this.attackAnim > 0 ? 14 : 0);
+      const ex = sx + cos(finalAngle*0.6) * upperLen;
+      const ey = shoulderY + sin(finalAngle*0.6) * upperLen + 3;
+      const hx = ex + cos(finalAngle) * foreLen;
+      const hy = ey + sin(finalAngle) * foreLen;
+      line(sx, shoulderY, ex, ey);
+      line(ex, ey, hx, hy);
+      // 拳头
+      noStroke(); fill(col);
+      circle(hx, hy, this.attackAnim > 0 ? 12 : 7);
+    }
+
+    // === 头部 ===
+    noStroke();
+    // 脖子
+    stroke(col); strokeWeight(5);
+    line(cx, shoulderY, cx, neckY);
+    // 头
+    noStroke(); fill(col);
+    circle(cx, headY, headR*2);
+    // 眼睛（面向方向）
+    fill(0);
+    circle(cx + this.facing*4, headY-1, 3);
+    // 眼睛高光
+    fill(255);
+    circle(cx + this.facing*4.5, headY-2, 1);
+
+    // 做题时显示📖
+    if(this.immortal){
+      fill(255);
+      textSize(18); textAlign(CENTER);
+      text('📖', cx, headY - headR - 12 + sin(frameCount*0.12)*3);
+    }
+
+    // 眩晕星星
+    if(this.stunned > 0){
+      fill(255,200,0);
+      textSize(16); textAlign(CENTER);
+      text('💫', cx, headY - headR - 12 + sin(frameCount*0.15)*3);
+    }
+
+    pop();
+  }
+}
+
+// ==================== 粒子/特效 ====================
+function spawnParticles(x, y, col, count, speed){
+  if(particles.length > 220) return;               // 粒子上限，防止大招时满屏
+  for(let i=0;i<count;i++){
+    if(Math.random() < 0.45) continue;              // 整体粒子量减半，降低视觉噪音
+    particles.push({
+      x, y,
+      vx: random(-speed, speed), vy: random(-speed, speed*0.5),
+      life: random(20, 40), maxLife: 40,
+      color: col, r: random(2, 5)
+    });
+  }
+}
+
+function updateParticles(){
+  for(let i=particles.length-1;i>=0;i--){
+    let p = particles[i];
+    p.x += p.vx; p.y += p.vy;
+    p.vy += 0.08; p.vx *= 0.97;
+    p.life--;
+    if(p.life<=0) particles.splice(i,1);
+  }
+}
+
+function drawParticles(){
+  noStroke();
+  for(let p of particles){
+    let c = color(p.color);
+    c.setAlpha(170 * (p.life/p.maxLife));
+    fill(c);
+    circle(p.x, p.y, p.r * (p.life/p.maxLife + 0.3) * 0.85);
+  }
+}
+
+function updateShockwaves(){
+  for(let i=shockwaves.length-1;i>=0;i--){
+    let s = shockwaves[i];
+    s.r += (s.maxR - s.r) * 0.12;
+    s.life--;
+    if(s.dmg > 0){
+      let targets = s.singleTarget ? [s.singleTarget] : [p1,p2];
+      for(let t of targets){
+        if(t === s.owner || s.hit.has(t) || t.hp<=0) continue;
+        const d = dist(s.x, s.y, t.x, t.y - t.h/2);
+        if(d < s.r + 20 && d > s.r - 30){
+          t.takeDamage(s.dmg, s.x, s.y, s.color);
+          s.hit.add(t);
+        }
+      }
+    }
+    if(s.life<=0) shockwaves.splice(i,1);
+  }
+}
+
+function drawShockwaves(){
+  noFill();
+  for(let s of shockwaves){
+    let c = color(s.color);
+    c.setAlpha(150 * (s.life/40));
+    strokeWeight(2.5); stroke(c);
+    circle(s.x, s.y, s.r*2);
+    c.setAlpha(50*(s.life/40));
+    strokeWeight(1.5); stroke(c);
+    circle(s.x, s.y, s.r*2*0.7);
+  }
+}
+
+function updateProjectiles(){
+  for(let i=projectiles.length-1;i>=0;i--){
+    let p = projectiles[i];
+    p.trail.push({x:p.x,y:p.y});
+    if(p.trail.length > 8) p.trail.shift();
+    p.x += p.vx; p.y += p.vy;
+    p.life--;
+    let hit = false;
+    for(let t of [p1,p2]){
+      if(t === p.owner || t.hp<=0) continue;
+      if(dist(p.x,p.y,t.x,t.y-t.h/2) < p.r + 15){
+        if(p.type === 'stun'){
+          t.takeDamage(p.dmg, p.x, p.y, p.color);
+          t.stunned = p.stunDur;
+          floatTexts.push({x:t.x,y:t.y-t.h-20,text:'眩晕!',color:p.color,life:60,vy:-1.5});
+          for(let j=0;j<20;j++) spawnParticles(t.x,t.y-t.h/2,p.color,1,3);
+        } else if(p.type === 'copy'){
+          t.takeDamage(p.owner.atk/3, p.x, p.y, p.color);
+          const oppSk = CHARACTERS[t.charId].skills;
+          if(oppSk.length>0 && !p.owner.copiedSkill){
+            p.owner.copiedSkill = oppSk[0];
+            floatTexts.push({x:p.owner.x,y:p.owner.y-p.owner.h-20,text:'复刻成功',color:p.color,life:50,vy:-1.5});
+          }
+        } else {
+          t.takeDamage(p.dmg, p.x, p.y, p.color);
+        }
+        for(let j=0;j<12;j++) spawnParticles(p.x,p.y,p.color,1,3);
+        screenShake = Math.max(screenShake, 4);
+        hit = true; break;
+      }
+    }
+    for(let plat of platforms){
+      if(p.x>plat.x && p.x<plat.x+plat.w && p.y>plat.y-5 && p.y<plat.y+plat.h+5){
+        hit = true;
+        for(let j=0;j<8;j++) spawnParticles(p.x,p.y,p.color,1,2);
+        break;
+      }
+    }
+    if(hit || p.life<=0 || p.x<-50 || p.x>width+50 || p.y>height+50) projectiles.splice(i,1);
+  }
+}
+
+function drawProjectiles(){
+  for(let p of projectiles){
+    noFill();
+    for(let j=0;j<p.trail.length;j++){
+      let t = p.trail[j];
+      let c = color(p.color);
+      c.setAlpha(90 * j/p.trail.length);
+      stroke(c); strokeWeight(p.r * j/p.trail.length * 0.8);
+      point(t.x,t.y);
+    }
+    noStroke();
+    let c = color(p.color);
+    fill(255,255,255,220); circle(p.x,p.y,p.r*0.6);
+    c.setAlpha(200); fill(c); circle(p.x,p.y,p.r);
+    c.setAlpha(35); fill(c); circle(p.x,p.y,p.r*1.5);
+  }
+}
+
+function updateFloatTexts(){
+  for(let i=floatTexts.length-1;i>=0;i--){
+    let t = floatTexts[i];
+    t.y += t.vy; t.vy *= 0.96; t.life--;
+    if(t.life<=0) floatTexts.splice(i,1);
+  }
+}
+
+function drawFloatTexts(){
+  textAlign(CENTER); textStyle(BOLD);
+  for(let t of floatTexts){
+    let c = color(t.color);
+    c.setAlpha(255 * min(1,t.life/20));
+    fill(c); noStroke();
+    textSize(t.text.length>4?16:20);
+    text(t.text, t.x, t.y);
+  }
+}
+
+function drawSlashEffects(advance = true){
+  for(let i=slashEffects.length-1;i>=0;i--){
+    let s = slashEffects[i];
+    if(advance) s.life--;
+    let prog = 1 - s.life/s.maxLife;
+    push();
+    translate(s.x, s.y);
+    rotate(s.angle);
+    noFill();
+    let c = color(s.color);
+    c.setAlpha(190*(1-prog));
+    stroke(c); strokeWeight(3*(1-prog)+1);
+    arc(0, 0, s.range*2, s.range*1.2, -0.6+prog*1.2, 0.6-prog*1.2);
+    c.setAlpha(60*(1-prog));
+    strokeWeight(1.5); stroke(c);
+    arc(0, 0, s.range*2*0.7, s.range*0.8, -0.5+prog*1, 0.5-prog*1);
+    pop();
+    if(s.life<=0) slashEffects.splice(i,1);
+  }
+}
+
+// ==================== 平台与背景 ====================
+function setupPlatforms(){
+  platforms = [];
+  const GY = height - 60;
+  const W = width;
+  platforms.push({x:0,y:GY,w:W,h:60,isGround:true});
+  platforms.push({x:100,y:GY-70,w:110,h:16});
+  platforms.push({x:W-210,y:GY-70,w:110,h:16});
+  platforms.push({x:60,y:GY-160,w:130,h:16});
+  platforms.push({x:W-190,y:GY-160,w:130,h:16});
+  platforms.push({x:W/2-130,y:GY-240,w:260,h:16});
+  platforms.push({x:250,y:GY-230,w:100,h:16});
+  platforms.push({x:W-350,y:GY-230,w:100,h:16});
+  platforms.push({x:W/2-50,y:GY-330,w:100,h:16});
+}
+
+let bgLayer = null;
+function setupBackground(){
+  // 静态背景只在开局/改窗口大小时画一次，存进离屏图层；
+  // 每帧整张贴图，彻底避免逐线渐变留缝导致的残影
+  if(bgLayer) bgLayer.remove();
+  bgLayer = createGraphics(width, height);
+  const g = bgLayer;
+  g.pixelDensity(pixelDensity());
+  const GY = height - 60;
+
+  // 竖向渐变（用 Canvas 原生渐变，一次填满，无缝隙）
+  const ctx = g.drawingContext;
+  const grad = ctx.createLinearGradient(0,0,0,height);
+  grad.addColorStop(0, '#0b0a1f');
+  grad.addColorStop(1, '#06070f');
+  ctx.fillStyle = grad; ctx.fillRect(0,0,width,height);
+
+  // 柔和的环境光（很淡）
+  g.noStroke();
+  const glow = (x,y,r,c)=>{
+    const rg = ctx.createRadialGradient(x,y,0,x,y,r);
+    rg.addColorStop(0,c); rg.addColorStop(1,'rgba(0,0,0,0)');
+    ctx.fillStyle = rg; ctx.fillRect(x-r,y-r,r*2,r*2);
+  };
+  glow(width*0.22, height*0.32, 320, 'rgba(120,60,200,0.07)');
+  glow(width*0.78, height*0.55, 380, 'rgba(50,80,200,0.06)');
+
+  // 星星
+  for(let i=0;i<45;i++){
+    g.fill(255,255,255,random(40,120));
+    g.circle(random(width), random(height*0.45), random(0.6,1.4));
+  }
+
+  // 远景楼群（暗、低饱和，窗户少而暗）
+  for(let i=0;i<Math.ceil(width/70)+4;i++){
+    const bw = random(40,90), bh = random(110,320);
+    const x = i*70 + random(-20,20) - 120;
+    g.fill(random(14,22), random(12,20), random(28,40));
+    g.rect(x, GY-bh, bw, bh);
+    const cols = Math.floor(bw/14), rows = Math.floor(bh/20);
+    for(let r=0;r<rows;r++) for(let c=0;c<cols;c++){
+      if(Math.random()<0.22){
+        Math.random()<0.5 ? g.fill(200,90,150,55) : g.fill(90,170,220,55);
+        g.rect(x+c*14+4, GY-bh+r*20+4, 6, 8);
+      }
+    }
+  }
+  // 地面前的雾，压暗楼群底部
+  const fog = ctx.createLinearGradient(0,GY-140,0,GY);
+  fog.addColorStop(0,'rgba(6,7,15,0)'); fog.addColorStop(1,'rgba(6,7,15,0.85)');
+  ctx.fillStyle = fog; ctx.fillRect(0,GY-140,width,140);
+
+  // 透视网格（低透明度）
+  g.stroke(0,180,255,14); g.strokeWeight(1);
+  for(let i=0;i<9;i++){ const y = GY - i*30; g.line(0,y,width,y); }
+  for(let i=-10;i<=10;i++) g.line(width/2+i*80, GY, width/2+i*350, GY-200);
+}
+
+function drawBackground(){
+  if(!bgLayer || bgLayer.width !== width || bgLayer.height !== height) setupBackground();
+  image(bgLayer, 0, 0, width, height);
+}
+
+function drawPlatforms(){
+  for(let p of platforms){
+    if(p.isGround){
+      noStroke(); fill(12,12,24); rect(p.x,p.y,p.w,p.h);
+      strokeWeight(2); stroke(190,70,160,120);
+      line(p.x,p.y,p.x+p.w,p.y);
+      stroke(255,255,255,8); strokeWeight(1);
+      for(let x=0;x<p.w;x+=40) line(p.x+x,p.y+2,p.x+x,p.y+p.h);
+    } else {
+      noStroke();
+      fill(24,24,44); rect(p.x,p.y,p.w,p.h,4);
+      fill(10,10,22,200); rect(p.x+2,p.y+p.h,p.w-4,3,2);
+      strokeWeight(2); stroke(80,200,230,140);
+      line(p.x+3,p.y+1,p.x+p.w-3,p.y+1);
+    }
+  }
+  noStroke();
+}
+
+// ==================== UI绘制 ====================
+function drawUI(){
+  const bw = min(340, width*0.36);
+  drawHealthBar(20, 18, bw, p1, true);
+  drawHealthBar(width-20-bw, 18, bw, p2, false);
+  // 中间 VS 徽章 + 对局计时
+  push();
+  textAlign(CENTER,CENTER); textStyle(BOLD); noStroke();
+  fill(10,10,30,200); rectMode(CENTER); rect(width/2, 44, 64, 44, 12);
+  stroke(255,255,255,40); noFill(); rect(width/2, 44, 64, 44, 12); noStroke();
+  fill(255); textSize(20); text(Math.floor(matchFrames/60), width/2, 40);
+  fill(255,255,255,110); textSize(9); textStyle(NORMAL); text('SEC', width/2, 58);
+  pop();
+}
+
+function drawHealthBar(x, y, w, player, isLeft){
+  const h = 62;
+  push();
+  // 面板
+  noStroke(); fill(8,8,24,190); rect(x,y,w,h,12);
+  const tc = player.teamColor || player.color;
+  noFill(); strokeWeight(1); stroke(red(color(tc)),green(color(tc)),blue(color(tc)),110); rect(x,y,w,h,12);
+
+  // 名字 + 头像
+  noStroke(); textStyle(BOLD); textSize(14);
+  const emoji = CHARACTERS[player.charId].emoji;
+  fill(255);
+  textAlign(isLeft?LEFT:RIGHT, CENTER);
+  text(emoji + ' ' + player.name + (isLeft?'  P1':''), isLeft?x+12:x+w-12, y+14);
+  if(!isLeft){ textAlign(LEFT,CENTER); fill(tc); text('P2', x+12, y+14); }
+
+  // 血条：残影（延迟掉血）
+  const bx = x+10, bwid = w-20, by = y+26, bh = 13;
+  if(player.ghostHp === undefined) player.ghostHp = player.hp;
+  if(player.ghostHp > player.hp){ player.ghostHp = max(player.hp, player.ghostHp - player.maxHp*0.004); }
+  else player.ghostHp = player.hp;
+  const hpR = player.hp/player.maxHp, ghR = player.ghostHp/player.maxHp;
+  fill(40,10,20); rect(bx,by,bwid,bh,6);
+  fill(255,230,230,200);
+  if(isLeft) rect(bx,by,bwid*ghR,bh,6); else rect(bx+bwid*(1-ghR),by,bwid*ghR,bh,6);
+  const g = drawingContext.createLinearGradient(bx,0,bx+bwid,0);
+  const low = hpR < 0.3;
+  const c1 = low ? '#FF2E4D' : tc, c2 = low ? '#FF8A3D' : '#FFFFFF';
+  if(isLeft){ g.addColorStop(0,c1); g.addColorStop(1,c2); } else { g.addColorStop(0,c2); g.addColorStop(1,c1); }
+  drawingContext.fillStyle = g;
+  if(isLeft) rect(bx,by,bwid*hpR,bh,6); else rect(bx+bwid*(1-hpR),by,bwid*hpR,bh,6);
+  drawingContext.globalAlpha = 1;
+  fill(255); textStyle(BOLD); textSize(10); textAlign(CENTER,CENTER);
+  text(Math.ceil(player.hp)+' / '+player.maxHp, bx+bwid/2, by+bh/2+1);
+
+  // 犇气条 + 技能消耗刻度
+  const qy = by+bh+6, qh = 7;
+  fill(25,25,55); rect(bx,qy,bwid,qh,4);
+  const qR = player.bq/player.maxBq;
+  fill(255,200,40);
+  if(isLeft) rect(bx,qy,bwid*qR,qh,4); else rect(bx+bwid*(1-qR),qy,bwid*qR,qh,4);
+  stroke(255,255,255,140); strokeWeight(1);
+  for(const sk of CHARACTERS[player.charId].skills){
+    if(sk.cost<=0 || sk.cost>=player.maxBq) continue;
+    const r = sk.cost/player.maxBq;
+    const tx = isLeft ? bx+bwid*r : bx+bwid*(1-r);
+    line(tx, qy-2, tx, qy+qh+2);
+  }
+  noStroke(); fill(255,210,60); textSize(9); textStyle(BOLD);
+  textAlign(isLeft?RIGHT:LEFT, CENTER);
+  text('⚡'+Math.floor(player.bq), isLeft?x+w-12:x+12, y+14);
+
+  // 状态图标
+  const icons = [];
+  if(player.chargingRP) icons.push('📝');
+  if(player.immortal) icons.push('🛡');
+  if(player.slowed>0) icons.push('🐌');
+  if(player.stunned>0) icons.push('💫');
+  if(player.teleportInvuln>0) icons.push('✨');
+  textSize(14); textAlign(isLeft?LEFT:RIGHT, TOP);
+  icons.forEach((ic,i)=> text(ic, isLeft ? x+4+i*22 : x+w-4-i*22, y+h+6));
+  pop();
+}
+
+// ==================== 技能按钮UI ====================
+function buildSkillBars(){
+  const p1s = document.getElementById('p1Skills');
+  const p2s = document.getElementById('p2Skills');
+  p1s.innerHTML = ''; p2s.innerHTML = '';
+  const p1Atk = document.createElement('div');
+  p1Atk.className='sk-btn attack'; p1Atk.id='btn-p1-atk';
+  p1Atk.innerHTML='<span class="k">F</span><span class="n">普攻</span>';
+  p1s.appendChild(p1Atk);
+  const p1Sk = CHARACTERS[p1Char].skills;
+  p1Sk.forEach((s,i)=>{
+    const b = document.createElement('div');
+    b.className = 'sk-btn'; b.id = `btn-p1-s${i}`;
+    b.innerHTML = `<span class="k">${P1_SKILL_KEYS[i]}</span><span class="n">${s.name}</span>${s.cost>0?`<span class="c">⚡${s.cost}</span>`:''}`;
+    p1s.appendChild(b);
+  });
+  const p2Atk = document.createElement('div');
+  p2Atk.className='sk-btn attack'; p2Atk.id='btn-p2-atk';
+  p2Atk.innerHTML='<span class="k">L</span><span class="n">普攻</span>';
+  p2s.appendChild(p2Atk);
+  const p2Sk = CHARACTERS[p2Char].skills;
+  p2Sk.forEach((s,i)=>{
+    const b = document.createElement('div');
+    b.className = 'sk-btn'; b.id = `btn-p2-s${i}`;
+    b.innerHTML = `<span class="k">${P2_SKILL_KEYS[i]}</span><span class="n">${s.name}</span>${s.cost>0?`<span class="c">⚡${s.cost}</span>`:''}`;
+    p2s.appendChild(b);
+  });
+  bindSkillButtons();
+}
+
+function bindSkillButtons(){
+  const addBtn = (id, keyCode) => {
+    const el = document.getElementById(id);
+    if(!el) return;
+    const down = (e)=>{ e.preventDefault(); el.classList.add('pressed'); keys[keyCode]=true; keyPressedOnce[keyCode]=true; };
+    const up = (e)=>{ e.preventDefault(); el.classList.remove('pressed'); keys[keyCode]=false; };
+    el.addEventListener('touchstart', down, {passive:false});
+    el.addEventListener('touchend', up, {passive:false});
+    el.addEventListener('touchcancel', up, {passive:false});
+    el.addEventListener('mousedown', down);
+    el.addEventListener('mouseup', up);
+    el.addEventListener('mouseleave', up);
+  };
+  addBtn('btn-p1-atk', 70);
+  addBtn('btn-p2-atk', 76);
+  P1_SKILL_CODES.forEach((kc,i)=>addBtn(`btn-p1-s${i}`, kc));
+  [85,73,79,75].forEach((kc,i)=>addBtn(`btn-p2-s${i}`, kc));
+}
+
+function highlightBtn(keyCode, pressed){
+  const map = {
+    70:'btn-p1-atk', 81:'btn-p1-s0', 69:'btn-p1-s1', 82:'btn-p1-s2', 84:'btn-p1-s3',
+    76:'btn-p2-atk', 85:'btn-p2-s0', 73:'btn-p2-s1', 79:'btn-p2-s2', 75:'btn-p2-s3'
+  };
+  const id = map[keyCode];
+  if(id){
+    const el = document.getElementById(id);
+    if(el) el.classList.toggle('pressed', pressed);
+  }
+}
+
+// ==================== 移动端控制 ====================
+const mInput = { p1:{left:false,right:false,jump:false}, p2:{left:false,right:false,jump:false} };
+
+function setupMobileControls(){
+  if(!isMobile || mobileReady) return;
+  mobileReady = true;
+  document.getElementById('mobileControls').style.display = 'block';
+
+  // 左右摇杆：左控 P1（红方），右控 P2（蓝方）
+  const bindJoy = (areaId, stickId, mi) => {
+    const area = document.getElementById(areaId);
+    const stick = document.getElementById(stickId);
+    if(!area || !stick) return;
+    let activeId = null, sx = 0, sy = 0;
+    const R = 36;
+    area.addEventListener('touchstart', e=>{
+      e.preventDefault();
+      const t = e.changedTouches[0];
+      activeId = t.identifier;
+      const r = area.getBoundingClientRect();
+      sx = r.left + r.width/2; sy = r.top + r.height/2;
+    }, {passive:false});
+    area.addEventListener('touchmove', e=>{
+      e.preventDefault();
+      for(const t of e.changedTouches){
+        if(t.identifier !== activeId) continue;
+        let dx = t.clientX - sx, dy = t.clientY - sy;
+        const d = Math.hypot(dx, dy);
+        if(d > R){ dx *= R/d; dy *= R/d; }
+        stick.style.transform = `translate(${dx}px,${dy}px)`;
+        mi.left = dx < -14; mi.right = dx > 14;
+        if(dy < -20) mi.jump = true;
+      }
+    }, {passive:false});
+    const end = e=>{
+      for(const t of e.changedTouches){
+        if(t.identifier === activeId){
+          activeId = null; stick.style.transform = '';
+          mi.left = mi.right = false;
+        }
+      }
+    };
+    area.addEventListener('touchend', end);
+    area.addEventListener('touchcancel', end);
+  };
+  bindJoy('joyLeft', 'stickL', mInput.p1);
+  bindJoy('joyRight', 'stickR', mInput.p2);
+
+  // 跳跃键
+  const bindJump = (id, mi) => {
+    const el = document.getElementById(id);
+    if(!el) return;
+    el.addEventListener('touchstart', e=>{ e.preventDefault(); mi.jump = true; }, {passive:false});
+  };
+  bindJump('mJumpL', mInput.p1);
+  bindJump('mJumpR', mInput.p2);
+
+  // 双方「普攻 + 技能」按键（与键盘、底部技能栏等效）
+  const buildSkills = (contId, cls, atkCode, skillCodes, keyLabels, charId) => {
+    const cont = document.getElementById(contId);
+    if(!cont) return;
+    cont.innerHTML = '';
+    const tap = kc => ()=>{ keys[kc]=true; keyPressedOnce[kc]=true; setTimeout(()=>{ keys[kc]=false; }, 80); };
+    const add = (label, onDown) => {
+      const b = document.createElement('div');
+      b.className = 'm-sk-btn ' + cls;
+      b.textContent = label;
+      b.addEventListener('touchstart', e=>{ e.preventDefault(); b.classList.add('active'); onDown(); }, {passive:false});
+      b.addEventListener('touchend', e=>{ e.preventDefault(); b.classList.remove('active'); }, {passive:false});
+      b.addEventListener('touchcancel', e=>{ e.preventDefault(); b.classList.remove('active'); }, {passive:false});
+      cont.appendChild(b);
+    };
+    add('攻', tap(atkCode));
+    const sk = CHARACTERS[charId].skills;
+    skillCodes.forEach((kc, i)=>{ if(i < sk.length) add(keyLabels[i], tap(kc)); });
+  };
+  buildSkills('mSkillsP1', 'p1', 70, P1_SKILL_CODES, P1_SKILL_KEYS, p1Char);
+  buildSkills('mSkillsP2', 'p2', 76, [85,73,79,75], P2_SKILL_KEYS, p2Char);
+}
+// ==================== 游戏主流程 ====================
+function startGame(){
+  if(!p1Char || !p2Char){
+    console.warn('角色未选全');
+    return;
+  }
+  try {
+    document.getElementById('selectScreen').style.display = 'none';
+    gameState = 'playing';
+    checkMobile();
+    setupPlatforms();
+    setupBackground();
+    buildSkillBars();
+    if(isMobile){
+      // 手机端：隐藏底部技能栏，改用贴身虚拟按键 + 左右摇杆
+      document.getElementById('skillBar').style.display = 'none';
+      document.getElementById('mobileControls').style.display = 'block';
+      setupMobileControls();
+    } else {
+      document.getElementById('skillBar').style.display = 'block';
+      document.getElementById('mobileControls').style.display = 'none';
+    }
+
+    var GY = height - 60;
+    p1 = new Fighter(width * 0.25, GY, p1Char, true);
+    p2 = new Fighter(width * 0.75, GY, p2Char, false);
+
+    projectiles = [];
+    particles = [];
+    shockwaves = [];
+    floatTexts = [];
+    slashEffects = [];
+    screenShake = 0;
+    hitStop = 0; koTimer = 0; matchFrames = 0; paused = false;
+    countdown = 200; banner = 0;
+    keys = {}; keyPressedOnce = {};
+    p1.dmgDealt = 0; p2.dmgDealt = 0; p1.ghostHp = p1.hp; p2.ghostHp = p2.hp;
+
+    loop();
+  } catch(e) {
+    console.error('startGame 出错:', e);
+    alert('启动游戏失败: ' + e.message);
+  }
+}
+
+function setup(){
+  let cv = createCanvas(windowWidth, windowHeight);
+  cv.parent(document.body);
+  cv.style('position','fixed');
+  cv.style('top','0'); cv.style('left','0');
+  cv.style('z-index','1');
+  noSmooth();
+  frameRate(60);
+  initSelectScreen();
+  noLoop();
+}
+
+function draw(){
+  if(gameState !== 'playing'){
+    background(8,8,22);
+    noLoop();
+    return;
+  }
+
+  // ---------- 逻辑更新：暂停 / 受击停顿 / 倒计时期间冻结 ----------
+  let freeze = paused;
+  if(!freeze && hitStop > 0 && koTimer === 0){ hitStop--; freeze = true; }
+
+  if(!freeze){
+    matchFrames++;
+    if(countdown <= 0){
+      p1.update(p2);
+      p2.update(p1);
+
+      if(keys[P1_KEYS.atk]) { p1.attack(p2); keys[P1_KEYS.atk]=false; highlightBtn(70,false); }
+      if(keys[P2_KEYS.atk]) { p2.attack(p1); keys[P2_KEYS.atk]=false; highlightBtn(76,false); }
+
+      if(koTimer === 0){
+        const checkSkill = (player, keyList, opp) => {
+          keyList.forEach((kc,i)=>{
+            if(keyPressedOnce[kc]){
+              if(i < CHARACTERS[player.charId].skills.length) player.useSkill(i, opp);
+              keyPressedOnce[kc] = false;
+              highlightBtn(kc,false);
+            }
+          });
+        };
+        checkSkill(p1, P1_SKILL_CODES, p2);
+        checkSkill(p2, P2_SKILL_CODES, p1);
+      }
+    } else {
+      matchFrames--; // 倒计时不计入对局时长
+      keys[P1_KEYS.atk] = keys[P2_KEYS.atk] = false;
+    }
+    updateProjectiles();
+    updateShockwaves();
+    updateParticles();
+    updateFloatTexts();
+  }
+
+  // ---------- 渲染：每一帧都整屏重画，杜绝残影/烧屏 ----------
+  resetCtx();
+  background(6,7,15);                       // 先整屏清空（包括震屏露出的边缘）
+  push();
+  if(screenShake > 0 && !paused){
+    const sh = min(screenShake, 8) * 0.5;   // 震屏减半并封顶
+    translate(random(-sh,sh), random(-sh,sh));
+    if(!freeze){ screenShake *= 0.82; if(screenShake < 0.5) screenShake = 0; }
+  }
+  drawBackground();
+  drawPlatforms();
+  drawShockwaves();
+  drawProjectiles();
+  drawSlashEffects(!freeze);
+  p1.draw();
+  p2.draw();
+  drawParticles();
+  drawFloatTexts();
+  pop();
+  resetCtx();
+
+  drawUI();
+  if(frameCount % 6 === 0) updateSkillButtons();
+
+  if(!freeze) for(let k in keyPressedOnce) keyPressedOnce[k] = false;
+
+  if(countdown > 0){ drawCountdown(); if(!paused) countdown--; }
+
+  if(!paused && koTimer === 0 && (p1.hp <= 0 || p2.hp <= 0)){
+    koTimer = 70; screenShake = 7;
+    frameRate(30); // KO 慢动作
+  }
+  if(koTimer > 0){
+    drawKO();
+    if(!paused) koTimer--;
+    if(koTimer === 0){
+      frameRate(60);
+      gameState = 'win';
+      noLoop();
+      showWin();
+    }
+  }
+
+  if(paused) drawPauseOverlay();
+}
+
+// 清掉可能残留的画布状态（阴影/透明度），防止发光“漏”到别的元素上
+function resetCtx(){
+  const c = drawingContext;
+  c.shadowBlur = 0; c.shadowColor = 'rgba(0,0,0,0)'; c.globalAlpha = 1;
+}
+
+function drawCountdown(){
+  const t = countdown;
+  const label = t > 150 ? '3' : t > 100 ? '2' : t > 50 ? '1' : 'FIGHT!';
+  const prog = (t % 50) / 50;               // 1 → 0
+  push();
+  noStroke(); fill(0,0,0, label==='FIGHT!' ? 70*prog : 70); rect(0,0,width,height);
+  textAlign(CENTER, CENTER); textStyle(BOLD);
+  textSize((label==='FIGHT!' ? 80 : 110) * (0.9 + prog*0.25));
+  fill(0,0,0,120); text(label, width/2+3, height/2 - 27);   // 简单投影代替发光
+  fill(label==='FIGHT!' ? color(255,120,150, 255*min(1,prog*2+0.2)) : color(240,240,255, 255*min(1,prog*2+0.2)));
+  text(label, width/2, height/2 - 30);
+  pop();
+}
+
+function drawKO(){
+  push();
+  const a = 1 - koTimer/70;
+  noStroke(); fill(0,0,0,110*min(1,a*2)); rect(0,0,width,height);
+  textAlign(CENTER, CENTER); textStyle(BOLD);
+  textSize(120 * (1.3 - min(1,a*3)*0.3));
+  fill(0,0,0,140); text('K.O.', width/2+4, height/2 - 26);
+  fill(255,90,110); text('K.O.', width/2, height/2 - 30);
+  pop();
+}
+
+function drawPauseOverlay(){
+  push();
+  noStroke(); fill(4,4,12,170); rect(0,0,width,height);   // 每帧重画整屏后只叠一次，不会越叠越黑
+  rectMode(CENTER);
+  fill(16,16,34); stroke(255,255,255,40); strokeWeight(1);
+  rect(width/2, height/2, 320, 140, 16);
+  noStroke(); fill(255); textAlign(CENTER,CENTER); textStyle(BOLD); textSize(32);
+  text('暂 停', width/2, height/2 - 20);
+  textStyle(NORMAL); textSize(14); fill(255,255,255,140);
+  text('按 Esc / P 继续', width/2, height/2 + 28);
+  pop();
+}
+
+function updateSkillButtons(){
+  if(frameCount % 6) return;
+  [[p1,'p1'],[p2,'p2']].forEach(([pl,tag])=>{
+    CHARACTERS[pl.charId].skills.forEach((sk,i)=>{
+      const el = document.getElementById(`btn-${tag}-s${i}`);
+      if(!el) return;
+      el.classList.toggle('nobq', sk.cost > 0 && pl.bq < sk.cost);
+      const on = (pl.charId==='rpmaniac' && ((i===0 && pl.chargingRP) || (i===2 && pl.immortal)));
+      el.classList.toggle('on', on);
+    });
+  });
+}
+
+function showWin(){
+  const ws = document.getElementById('winScreen');
+  const wt = document.getElementById('winText');
+  const sub = document.getElementById('winSub');
+  const winner = p1.hp>0 ? p1 : p2;
+  wt.textContent = winner.name + ' 获胜!';
+  wt.style.color = winner.color;
+  wt.style.textShadow = '0 4px 0 rgba(0,0,0,0.5)';
+  sub.textContent = (winner===p1?'玩家1（红方）':'玩家2（蓝方）')+' KO!';
+  const secs = Math.round(matchFrames/60);
+  document.getElementById('winStats').innerHTML = `
+    <div class="win-stat">${secs}s<small>对局时长</small></div>
+    <div class="win-stat" style="color:${p1.teamColor}">${Math.round(p1.dmgDealt||0)}<small>P1 造成伤害</small></div>
+    <div class="win-stat" style="color:${p2.teamColor}">${Math.round(p2.dmgDealt||0)}<small>P2 造成伤害</small></div>
+    <div class="win-stat">${Math.ceil(winner.hp)}<small>剩余血量</small></div>`;
+  ws.style.display = 'flex';
+}
+
+function keyPressed(){
+  if(gameState === 'select' && keyCode === ENTER && p1Char && p2Char){ startGame(); return false; }
+  if(gameState === 'win' && keyCode === ENTER){ rematch(); return false; }
+  if(gameState === 'playing' && (keyCode === ESCAPE || keyCode === 80) && koTimer === 0){
+    paused = !paused; keys = {}; keyPressedOnce = {}; return false;
+  }
+  if(paused) return false;
+  keys[keyCode] = true;
+  keyPressedOnce[keyCode] = true;
+  highlightBtn(keyCode, true);
+  if([32,37,38,39,40,87,65,83,68].includes(keyCode)) return false;
+}
+function keyReleased(){
+  keys[keyCode] = false;
+  highlightBtn(keyCode, false);
+}
+
+function windowResized(){
+  resizeCanvas(windowWidth, windowHeight);
+  if(gameState === 'playing'){
+    setupPlatforms();
+    setupBackground();
+  }
+}
+</script>
+
+
+<script type="module" src="https://static.cloudflareinsights.com/beacon.min.js/vce701823e78c4301a35b7e07294d87301792088814092" integrity="sha512-UKNk8GbxkABxKcXYuLkO16EleLGUkcvJWtpSNmExE0Too3ZaFAxTscNWEc1OdAv5/BikHawapSCaiD2XCmp+Bw==" data-cf-beacon='{"version":"2024.11.0","token":"763f58c597354b50a84a2d4727546753","r":1,"spa":2}' crossorigin="anonymous"></script>
+</body></html>
