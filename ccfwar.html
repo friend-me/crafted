@@ -429,7 +429,7 @@
   /* ========== 游戏主界面 ========== */
   .app{
     position:relative; z-index:1;
-    width:min(960px,100%);
+    width:min(1180px,100%);
     margin:0 auto;
     padding:24px 16px 56px;
     display:flex;
@@ -438,6 +438,54 @@
     transition:opacity .35s;
   }
   .app.hidden { display:none; opacity:0; }
+
+  /* ===== 主双栏布局（宽屏左右分栏） ===== */
+  .main-grid{
+    display:grid;
+    grid-template-columns: minmax(320px, 380px) 1fr;
+    gap:16px;
+    align-items:start;
+  }
+  .side-left, .side-right{
+    display:flex;
+    flex-direction:column;
+    gap:16px;
+    min-width:0;
+  }
+  /* 独立氧气面板（抽出到右栏） */
+  .o2-panel{
+    padding:16px 20px; border-radius:12px;
+    background:var(--bg-card); border:var(--glass-border);
+    backdrop-filter:var(--glass-blur);
+    -webkit-backdrop-filter:var(--glass-blur);
+    box-shadow:var(--shadow);
+    display:none; flex-direction:column; gap:12px;
+    position:relative; overflow:hidden;
+  }
+  .o2-panel.show{ display:flex; }
+  .o2-panel::before{
+    content:""; position:absolute; inset:0;
+    background:var(--glass-hl);
+    pointer-events:none;
+  }
+  .o2-panel::after{
+    content:""; position:absolute; inset:0;
+    background:repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(251,191,36,.010) 2px, rgba(251,191,36,.010) 4px);
+    pointer-events:none; opacity:.5;
+  }
+  body.light .o2-panel{ border-color:rgba(217,119,6,.18); box-shadow:var(--shadow);}
+  body.light .o2-panel::after{ display:none; }
+  .o2-panel-title{
+    font-size:13px; font-weight:800; letter-spacing:.1em;
+    color:var(--gold); text-shadow:0 0 10px rgba(251,191,36,.25);
+    display:flex; align-items:center; gap:8px;
+  }
+  body.light .o2-panel-title{ text-shadow:none; color:#b45309; }
+  .o2-panel-title::before{
+    content:""; width:8px; height:8px; border-radius:50%;
+    background:var(--gold); box-shadow:0 0 8px var(--gold);
+    animation:blink 1.6s ease-in-out infinite;
+  }
 
   /* 顶栏 */
   .topbar{
@@ -1071,11 +1119,18 @@
   .btn.choice:hover:not(:disabled){ border-color:var(--cyan); color:var(--cyan); background:linear-gradient(180deg,rgba(0,240,255,.15),rgba(0,240,255,.03)); }
   .btn.choice:active:not(:disabled){ transform:translateY(6px); box-shadow:0 0 0 rgba(255,255,255,.06), 0 2px 8px rgba(0,0,0,.3); }
 
+  /* 宽屏双栏；中屏（≤1100px）自动切回纵向单列 */
+  @media (max-width:1100px){
+    .app{ width:min(960px,100%); }
+    .main-grid{ grid-template-columns:1fr; }
+    .side-left, .side-right{ gap:14px; }
+  }
+
   @media (max-width:480px){
     .app{padding:16px 12px 40px;}
     .brand-text h1{font-size:20px;}
     .avatar{width:56px; height:56px;}
-    .log{height:260px;}
+    .log{height:240px;}
     .actions{grid-template-columns:1fr;}
     .tech-row{grid-template-columns:1fr; gap:8px;}
     .tech-btn{justify-self:start;}
@@ -1179,89 +1234,102 @@
     </div>
   </header>
 
-  <section class="board">
-    <article class="fighter is-player">
-      <div class="f-row">
-        <span class="f-name">你</span>
-        <span class="f-hp"><b id="playerHpNum">150</b><i> / 150</i></span>
-      </div>
-      <div class="hpbar"><div class="hpbar-fill" id="playerFill"></div></div>
-      <div class="chips" id="playerStatus"></div>
-    </article>
+  <div class="main-grid">
+    <!-- ========== 左栏：水晶/科技/背包/规则 ========== -->
+    <aside class="side-left">
+      <section class="objectives">
+        <div class="obj">
+          <div class="obj-label"><span>能量水晶</span><em id="crystalCount">8 / 8</em></div>
+          <div class="crystals" id="crystals"></div>
+        </div>
+        <div class="obj">
+          <div class="obj-label"><span>地铁线路</span><em id="subwayText">50 / 50</em></div>
+          <div class="hpbar"><div class="hpbar-fill rail" id="subwayFill"></div></div>
+        </div>
+      </section>
 
-    <article class="fighter is-boss">
-      <div class="f-row">
-        <span class="f-name">€€￡</span>
-        <span class="f-hp"><b id="bossHpNum">500</b><i> / 500</i></span>
-      </div>
-      <div class="hpbar"><div class="hpbar-fill" id="bossFill"></div></div>
-      <div class="chips" id="bossStatus"></div>
-    </article>
-  </section>
+      <!-- 科技面板 (仅新版可见)：氧气已抽到右栏 -->
+      <section class="tech-panel" id="techPanel" style="display:none;">
+        <div class="tech-title">科技树 / TECH</div>
+        <div class="tech-row">
+          <span class="tech-name">二叉树</span>
+          <div class="tech-info">
+            <span class="lv" id="treeName">Lv.0 根节点</span>
+            <span class="eff" id="treeEff">无效果</span>
+          </div>
+          <button class="tech-btn" id="treeUp">升级 (-10 HP)</button>
+        </div>
+        <div class="tech-row">
+          <span class="tech-name">数据结构</span>
+          <div class="tech-info">
+            <span class="lv" id="dsName">Lv.0 全局数组</span>
+            <span class="eff" id="dsEff">无效果</span>
+          </div>
+          <button class="tech-btn" id="dsUp">升级 (-10 HP)</button>
+        </div>
+      </section>
 
-  <section class="objectives">
-    <div class="obj">
-      <div class="obj-label"><span>能量水晶</span><em id="crystalCount">8 / 8</em></div>
-      <div class="crystals" id="crystals"></div>
-    </div>
-    <div class="obj">
-      <div class="obj-label"><span>地铁线路</span><em id="subwayText">50 / 50</em></div>
-      <div class="hpbar"><div class="hpbar-fill rail" id="subwayFill"></div></div>
-    </div>
-  </section>
+      <!-- 背包面板 (仅新版可见) -->
+      <section class="backpack-panel" id="backpackPanel" style="display:none;">
+        <div class="bp-title">背包 / BACKPACK</div>
+        <div class="bp-items" id="bpItems">
+          <div class="bp-empty">背包空空如也……道具每回合有 10% 概率掉落。</div>
+        </div>
+      </section>
 
-  <!-- 科技面板 (仅新版可见) -->
-  <section class="tech-panel" id="techPanel" style="display:none;">
-    <div class="tech-title">科技树 / TECH</div>
-    <div class="o2-row">
-      <span class="o2-label">O₂ 氧气罐</span>
-      <div class="o2-bar"><div class="o2-fill" id="o2Fill" style="width:100%"></div></div>
-      <span class="o2-val" id="o2Text">50</span>
-      <button class="tech-btn o2-btn" id="o2Btn">O₂ 优化 (-10)</button>
-    </div>
-    <div class="tech-row">
-      <span class="tech-name">二叉树</span>
-      <div class="tech-info">
-        <span class="lv" id="treeName">Lv.0 根节点</span>
-        <span class="eff" id="treeEff">无效果</span>
-      </div>
-      <button class="tech-btn" id="treeUp">升级 (-10 HP)</button>
-    </div>
-    <div class="tech-row">
-      <span class="tech-name">数据结构</span>
-      <div class="tech-info">
-        <span class="lv" id="dsName">Lv.0 全局数组</span>
-        <span class="eff" id="dsEff">无效果</span>
-      </div>
-      <button class="tech-btn" id="dsUp">升级 (-10 HP)</button>
-    </div>
-  </section>
+      <!-- 游戏规则面板（独立于战况记录） -->
+      <section class="rules-panel" id="rulesPanel">
+        <div class="rules-head" onclick="toggleRules()">
+          <span class="rules-head-text">📖 游戏规则 // RULES</span>
+          <span class="rules-toggle">▼</span>
+        </div>
+        <div class="rules-body" id="rulesBody">
+          <ul class="rules-list" id="rulesList"></ul>
+        </div>
+      </section>
+    </aside>
 
-  <!-- 背包面板 (仅新版可见) -->
-  <section class="backpack-panel" id="backpackPanel" style="display:none;">
-    <div class="bp-title">背包 / BACKPACK</div>
-    <div class="bp-items" id="bpItems">
-      <div class="bp-empty">背包空空如也……道具每回合有 10% 概率掉落。</div>
-    </div>
-  </section>
+    <!-- ========== 右栏：血量/氧气/按钮/战况 ========== -->
+    <main class="side-right">
+      <section class="board">
+        <article class="fighter is-player">
+          <div class="f-row">
+            <span class="f-name">你</span>
+            <span class="f-hp"><b id="playerHpNum">150</b><i> / 150</i></span>
+          </div>
+          <div class="hpbar"><div class="hpbar-fill" id="playerFill"></div></div>
+          <div class="chips" id="playerStatus"></div>
+        </article>
 
-  <!-- 游戏规则面板（独立于战况记录） -->
-  <section class="rules-panel" id="rulesPanel">
-    <div class="rules-head" onclick="toggleRules()">
-      <span class="rules-head-text">📖 游戏规则 // RULES</span>
-      <span class="rules-toggle">▼</span>
-    </div>
-    <div class="rules-body" id="rulesBody">
-      <ul class="rules-list" id="rulesList"></ul>
-    </div>
-  </section>
+        <article class="fighter is-boss">
+          <div class="f-row">
+            <span class="f-name">€€￡</span>
+            <span class="f-hp"><b id="bossHpNum">500</b><i> / 500</i></span>
+          </div>
+          <div class="hpbar"><div class="hpbar-fill" id="bossFill"></div></div>
+          <div class="chips" id="bossStatus"></div>
+        </article>
+      </section>
 
-  <section class="log-panel">
-    <div class="log-head"><span>战况记录 // LOG</span></div>
-    <div class="log" id="log"></div>
-  </section>
+      <!-- 独立氧气罐面板（仅新版/速通可见） -->
+      <section class="o2-panel" id="o2Panel">
+        <div class="o2-panel-title">氧气罐 // O₂</div>
+        <div class="o2-row">
+          <span class="o2-label">O₂ 氧气罐</span>
+          <div class="o2-bar"><div class="o2-fill" id="o2Fill" style="width:100%"></div></div>
+          <span class="o2-val" id="o2Text">50</span>
+          <button class="tech-btn o2-btn" id="o2Btn">O₂ 优化 (-10)</button>
+        </div>
+      </section>
 
-  <section class="actions" id="actions"></section>
+      <section class="actions" id="actions"></section>
+
+      <section class="log-panel">
+        <div class="log-head"><span>战况记录 // LOG</span></div>
+        <div class="log" id="log"></div>
+      </section>
+    </main>
+  </div>
 </div>
 
 <script>
@@ -1311,6 +1379,7 @@ const crystalsEl   = document.getElementById('crystals');
 const turnNum      = document.getElementById('turnNum');
 
 const techPanel    = document.getElementById('techPanel');
+const o2Panel      = document.getElementById('o2Panel');
 const backpackPanel= document.getElementById('backpackPanel');
 const rulesPanel   = document.getElementById('rulesPanel');
 const rulesList    = document.getElementById('rulesList');
@@ -1377,6 +1446,7 @@ function startGame(mode) {
   else if (mode === 'tsq') versionTag.textContent = '新版 (by TSQ)';
   else versionTag.textContent = '速通版 (by TSQ)';
   techPanel.style.display = isNew ? 'flex' : 'none';
+  o2Panel.classList.toggle('show', isNew);
   backpackPanel.style.display = isNew ? 'flex' : 'none';
   rulesPanel.style.display = 'flex';  // 始终显示规则面板
   newGame(mode);
