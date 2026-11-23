@@ -947,7 +947,9 @@ function nextGespEnemy(level){
   state.turn = 1;
   state.strBuff = 0;
   state.fstBuff = 0;
-  state.hp = state.xl; // 每只怪开始前回满血（原作逻辑：一轮战斗结束后回满）
+  // 【已修复】血量不再每只小怪开始时回满：整场挑战期间血量持续保留，
+  // 只有打完所有 8 只小怪（通关 gespClear）或死亡结算后才回满。
+  if(level === 1) state.hp = state.xl; // 仅在挑战开始时回满一次
   logSep();
   log(`⚔️ 遭遇 ${level} 级GESP怪！血量${state.enemyMaxHp}，攻击${state.enemyAtk}`, 'enemy');
   updateUI();
